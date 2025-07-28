@@ -1,2 +1,2 @@
 # coins2025
-Eurocoins catalog
+Eurocoins catalog 2025
