@@ -1,0 +1,1670 @@
+{
+    "Andorra": [
+        {
+            "value": "\u20ac2",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/ad_2euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/ad_2euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_1euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_1euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_1cent.jpg"
+            ]
+        }
+    ],
+    "Austria": [
+        {
+            "value": "\u20ac2",
+            "description": "This coin bears a portrait of the pacifist Bertha von Suttner, a symbol of Austria's efforts over many decades to support peace. Edge lettering of the \u20ac2 coin: 2 EURO ***, repeated four times, alternately upright and inverted.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_2Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_2Euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "Depicted on this coin is Wolfgang Amadeus Mozart, the famous Austrian composer, in reference to Austria as a land of music.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_1Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_1Euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "This coin shows the secession building in Vienna, illustrating the birth of art nouveau in Austria. The building symbolises the birth of a new age and represents a bridge to a new monetary era.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "This design features the Belvedere Palace, one of the most beautiful baroque palaces in Austria. It was here that the treaty re-establishing the sovereignty of Austria was signed in 1955, making its name synonymous with freedom.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "St. Stephen's Cathedral, one of the jewels of Viennese Gothic architecture and a popular tourist venue, is depicted on this coin.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "This coin features alpine primroses, as part of a floral series, symbolising a duty to the environment and the part Austria is playing in the development of a Community environmental policy.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "This coin features an edelweiss, as part of a floral series, symbolising a duty to the environment and the part Austria is playing in the development of a Community environmental policy.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "This coin features a gentian, as part of a floral series, symbolising a duty to the environment and the part Austria is playing in the development of a Community environmental policy.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_1cent.jpg"
+            ]
+        }
+    ],
+    "Belgium": [
+        {
+            "value": "\u20ac2",
+            "description": "Edge lettering of the \u20ac2 coin: 2 **, repeated six times, alternately upright and inverted.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2euroAl.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2euroAl.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2euro_2008.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2euro_2014ph.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1999_1euro.gif",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1999_1euro.gif",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1euro_2011.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1euro_2014.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_50cent_2002.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_50cent_2002.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_50cent_2008.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_50cent_2014.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_20cent_2002.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_20cent_2002.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_20cent_2009.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_20cent_2014.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_10cent_1999.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_10cent_1999.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_10cent_2008.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2014_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_5cent_1999.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_5cent_1999.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_5cent_2011.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_5cent_2014.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2cent_2000.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2cent_2000.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2cent_2013.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2cent_2014.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1cent_2000.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1cent_2000.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1cent_2013.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1cent_2014.jpg"
+            ]
+        }
+    ],
+    "Croatia": [
+        {
+            "value": "\u20ac2",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_2euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_2euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "The \u20ac1 coin shows a marten on a chequerboard background and was designed by Jagor \u0160unde, David \u010cemelji\u0107 and Fran Zekan. The marten is a small mammal that lent its name to the country\u2019s former currency, the kuna. The design includes the year of issuance and the inscription \u201cHRVATSKA\u201d, the country\u2019s name in Croatian.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_1euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_1euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "The 50-cent coin features a portrait of inventor and engineer Nikola Tesla, who developed alternating current technology. The coin was designed by Ivan Domagoj Ra\u010di\u0107 and includes the year of issuance and the inscription \u201cHRVATSKA\u201d, the country\u2019s name in Croatian.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "The 20-cent coin features a portrait of inventor and engineer Nikola Tesla, who developed alternating current technology. The coin was designed by Ivan Domagoj Ra\u010di\u0107 and includes the year of issuance and the inscription \u201cHRVATSKA\u201d, the country\u2019s name in Croatian.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "The 10-cent coin features a portrait of inventor and engineer Nikola Tesla, who developed alternating current technology. The coin was designed by Ivan Domagoj Ra\u010di\u0107 and includes the year of issuance and the inscription \u201cHRVATSKA\u201d, the country\u2019s name in Croatian.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "The 5-cent coin shows a motif of the letters \u201cHR\u201d in the angular Glagolitic script. The Glagolitic alphabet is the oldest known Slavic script and was used in Croatia until the 19th century. The coin was designed by Maja \u0160kripelj and includes the year of issuance and the inscription \u201cHRVATSKA\u201d, the country\u2019s name in Croatian.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "The 2-cent coin shows a motif of the letters \u201cHR\u201d in the angular Glagolitic script. The Glagolitic alphabet is the oldest known Slavic script and was used in Croatia until the 19th century. The coin was designed by Maja \u0160kripelj and includes the year of issuance and the inscription \u201cHRVATSKA\u201d, the country\u2019s name in Croatian.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "The 1-cent coin shows a motif of the letters \u201cHR\u201d in the angular Glagolitic script. The Glagolitic alphabet is the oldest known Slavic script and was used in Croatia until the 19th century. The coin was designed by Maja \u0160kripelj and includes the year of issuance and the inscription \u201cHRVATSKA\u201d, the country\u2019s name in Croatian.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_1cent.jpg"
+            ]
+        }
+    ],
+    "Cyprus": [
+        {
+            "value": "\u20ac2",
+            "description": "The \u20ac1 and \u20ac2 coins depict a cruciform idol from the Chalcolithic period (3000 BC). This characteristic example of the island's prehistoric art reflects Cyprus's place at the heart of civilisation and antiquity.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_2Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_2Euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "The \u20ac1 and \u20ac2 coins depict a cruciform idol from the Chalcolithic period (3000 BC). This characteristic example of the island's prehistoric art reflects Cyprus's place at the heart of civilisation and antiquity.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_1euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_1euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "Featured on the 10, 20 and 50-cent coins is the Kyrenia ship, a trading vessel which dates back to the fourth century BC and a symbol of Cyprus's seafaring history and its importance as a centre of trade.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "Featured on the 10, 20 and 50-cent coins is the Kyrenia ship, a trading vessel which dates back to the fourth century BC and a symbol of Cyprus's seafaring history and its importance as a centre of trade.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "Featured on the 10, 20 and 50-cent coins is the Kyrenia ship, a trading vessel which dates back to the fourth century BC and a symbol of Cyprus's seafaring history and its importance as a centre of trade.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "The 1, 2 and 5-cent coins show the moufflon, a species of wild sheep found on Cyprus and representative of the island's wildlife.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "The 1, 2 and 5-cent coins show the moufflon, a species of wild sheep found on Cyprus and representative of the island's wildlife.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "The 1, 2 and 5-cent coins show the moufflon, a species of wild sheep found on Cyprus and representative of the island's wildlife.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_1cent.jpg"
+            ]
+        }
+    ],
+    "Estonia": [
+        {
+            "value": "\u20ac2",
+            "description": " ",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_2Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_2Euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_1Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_1Euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_1cent.jpg"
+            ]
+        }
+    ],
+    "Finland": [
+        {
+            "value": "\u20ac2",
+            "description": "The motif on this coin comprises cloudberries and cloudberry flowers in a design by Raimo Heino. Edge lettering of the \u20ac2 coin: SUOMI FINLAND ***, where the * represents a lion's head.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_2euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_2euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "The artist Pertti M\u00e4kinen created a motif depicting two flying swans for this coin. The design was taken from his competition entry for a coin to commemorate the 80th anniversary of the independence of Finland.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_1euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_1euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "1, 2, 5, 10, 20 and 50-cent coins: these show the Finnish heraldic lion in a reproduction of a design by the sculptor Heikki H\u00e4iv\u00e4oja. The heraldic lion in a variety of designs has been used on several Finnish coins over the years, for example on the 1 markka coins between 1964 and 2001.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "1, 2, 5, 10, 20 and 50-cent coins: these show the Finnish heraldic lion in a reproduction of a design by the sculptor Heikki H\u00e4iv\u00e4oja. The heraldic lion in a variety of designs has been used on several Finnish coins over the years, for example on the 1 markka coins between 1964 and 2001.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "1, 2, 5, 10, 20 and 50-cent coins: these show the Finnish heraldic lion in a reproduction of a design by the sculptor Heikki H\u00e4iv\u00e4oja. The heraldic lion in a variety of designs has been used on several Finnish coins over the years, for example on the 1 markka coins between 1964 and 2001.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "1, 2, 5, 10, 20 and 50-cent coins: these show the Finnish heraldic lion in a reproduction of a design by the sculptor Heikki H\u00e4iv\u00e4oja. The heraldic lion in a variety of designs has been used on several Finnish coins over the years, for example on the 1 markka coins between 1964 and 2001.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "1, 2, 5, 10, 20 and 50-cent coins: these show the Finnish heraldic lion in a reproduction of a design by the sculptor Heikki H\u00e4iv\u00e4oja. The heraldic lion in a variety of designs has been used on several Finnish coins over the years, for example on the 1 markka coins between 1964 and 2001.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "1, 2, 5, 10, 20 and 50-cent coins: these show the Finnish heraldic lion in a reproduction of a design by the sculptor Heikki H\u00e4iv\u00e4oja. The heraldic lion in a variety of designs has been used on several Finnish coins over the years, for example on the 1 markka coins between 1964 and 2001.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_1cent.jpg"
+            ]
+        }
+    ],
+    "France": [
+        {
+            "value": "\u20ac2",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_2euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_2euro.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_2euro_2022.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_1Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_1Euro.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_1euro_2022.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "10, 20 and 50-cent coins: the theme of the sower is a constant in the history of the French franc. Designed by Laurent Jorlo, \"this modern, timeless graphic represents France, which stays true to itself, whilst integrating into Europe\".",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "10, 20 and 50-cent coins: the theme of the sower is a constant in the history of the French franc. Designed by Laurent Jorlo, \"this modern, timeless graphic represents France, which stays true to itself, whilst integrating into Europe\".",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "10, 20 and 50-cent coins: the theme of the sower is a constant in the history of the French franc. Designed by Laurent Jorlo, \"this modern, timeless graphic represents France, which stays true to itself, whilst integrating into Europe\".",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "1, 2 and 5-cent coins: these depict a young, feminine Marianne with determined features that embody the desire for a sound and lasting Europe. The design was the work of Fabienne Courtiade, an engraver from the Paris Mint.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "1, 2 and 5-cent coins: these depict a young, feminine Marianne with determined features that embody the desire for a sound and lasting Europe. The design was the work of Fabienne Courtiade, an engraver from the Paris Mint.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "1, 2 and 5-cent coins: these depict a young, feminine Marianne with determined features that embody the desire for a sound and lasting Europe. The design was the work of Fabienne Courtiade, an engraver from the Paris Mint.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_1cent.jpg"
+            ]
+        }
+    ],
+    "Germany": [
+        {
+            "value": "\u20ac2",
+            "description": "\u20ac1 and \u20ac2 coins: the traditional symbol of German sovereignty, the eagle, surrounded by the stars of Europe, appears on these coins. This motif was designed by Heinz and Sneschana Russewa-Hoyer. Edge lettering of the \u20ac2 coin: EINIGKEIT UND RECHT UND FREIHEIT (unity, justice and freedom) and the emblem of the Federal Eagle.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_2euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_2euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "\u20ac1 and \u20ac2 coins: the traditional symbol of German sovereignty, the eagle, surrounded by the stars of Europe, appears on these coins. This motif was designed by Heinz and Sneschana Russewa-Hoyer.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_1euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_1euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "10, 20 and 50-cent coins: the Brandenburg Gate, a symbol of the division of Germany and its subsequent reunification, is the motif used on these coins. The perspective of the design, by Reinhard Heinsdorff, emphasises the opening of the gate, stressing the unification of Germany and Europe.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "10, 20 and 50-cent coins: the Brandenburg Gate, a symbol of the division of Germany and its subsequent reunification, is the motif used on these coins. The perspective of the design, by Reinhard Heinsdorff, emphasises the opening of the gate, stressing the unification of Germany and Europe.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "10, 20 and 50-cent coins: the Brandenburg Gate, a symbol of the division of Germany and its subsequent reunification, is the motif used on these coins. The perspective of the design, by Reinhard Heinsdorff, emphasises the opening of the gate, stressing the unification of Germany and Europe.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "1, 2 and 5-cent coins: the oak twig, reminiscent of that found on the former German pfennig coins, provides the motif for these coins. It was designed by Professor Rolf Lederbogen.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "1, 2 and 5-cent coins: the oak twig, reminiscent of that found on the former German pfennig coins, provides the motif for these coins. It was designed by Professor Rolf Lederbogen.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "1, 2 and 5-cent coins: the oak twig, reminiscent of that found on the former German pfennig coins, provides the motif for these coins. It was designed by Professor Rolf Lederbogen.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_1cent.jpg"
+            ]
+        }
+    ],
+    "Greece": [
+        {
+            "value": "\u20ac2",
+            "description": "This coin depicts a scene from a mosaic in Sparta (third century AD), showing Europa being abducted by Zeus, who has taken the form of a bull. Europa is a figure from Greek mythology after whom Europe was named. Edge lettering of the \u20ac2 coin: E\u039b\u039bHNIKH \u0394HMOKPATIA * (Hellenic Republic).",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_2euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_2euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "The image of the owl featured in this design was copied from an ancient Athenian 4-drachma coin (fifth century BC).",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_1euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_1euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "Eleftherios Venizelos (1864-1936), one of Greece's most prominent political figures, is shown on this coin. He was a pioneer in social reform, a renowned diplomat and played a key role in modernising the Greek state and liberating Northern Greece and the Aegean islands.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "This coin commemorates Ioannis Capodistrias (1776-1831), a leading national and European politician and diplomat who became the first Governor of Greece (1830-31) following the Greek War of Independence (1821-27).",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "Rigas Fereos (Velestinlis) (1757-98) is featured on this coin. He was a forerunner and leading figure of the Greek enlightenment, as well as a visionary and herald of Balkan liberation from Ottoman rule.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "This coin shows a modern sea-going tanker, reflecting the innovative spirit of Greek shipping.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "Depicted on this coin is a corvette, a type of ship used during the Greek War of Independence (1821-27).",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "This design features an advanced model of an Athenian trireme, the largest warship afloat for more than 200 years, dating from the time of the Athenian democracy (fifth century BC).",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_1cent.jpg"
+            ]
+        }
+    ],
+    "Ireland": [
+        {
+            "value": "\u20ac2",
+            "description": "Edge lettering of the \u20ac2 coin: 2**, repeated six times, alternately upright and inverted.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_2euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_2euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_1euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_1euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_1cent.jpg"
+            ]
+        }
+    ],
+    "Italy": [
+        {
+            "value": "\u20ac2",
+            "description": "Depicted on this coin is a portrait drawn by Rapha\u00ebl of Dante Alighieri, housed in the Pope Julius II Wing of the Vatican City Palace. Edge lettering of the \u20ac2 coin: 2*, repeated six times, alternately upright and inverted.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_2euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_2euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "This coin shows the famous drawing by Leonardo da Vinci, displayed in the gallery of the Academy in Venice, illustrating the ideal proportions of the human body.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_1euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_1euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "The statue of Emperor Marcus Aurelius on horseback is the main feature on this coin.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "Portrayed on this coin is a sculpture by Umberto Boccioni, leader of the Italian futurist school.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "This coin commemorates one of the greatest triumphs in Italian art. It shows one of the most famous works in the world, the \"Birth of Venus\" by Sandro Botticelli.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "This design features the Flavius amphitheatre, which Emperor Vespasian began building around 75 AD and Emperor Titus inaugurated in 80 AD.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "This coin shows the Mole Antonelliana, a tower designed in 1863 by Alessandro Antonelli.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "The Castel del Monte appears on this coin.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_1cent.jpg"
+            ]
+        }
+    ],
+    "Latvia": [
+        {
+            "value": "\u20ac2",
+            "description": "The \u20ac2 coin features a Latvian folk maiden. This image was originally used on the silver 5 lats coin in 1929. The edge of the coin bears the inscription DIEVS * SV\u0112T\u012a * LATVIJU (GOD BLESS LATVIA). The designer is Guntars Sieti\u0146\u0161.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_2euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_2euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "The \u20ac1 coin features a Latvian folk maiden. This image was originally used on the silver 5 lats coin in 1929. The designer is Guntars Sieti\u0146\u0161.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_1euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_1euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "The 50 cent coin shows the large coat of arms of the Republic of Latvia. The designer is Laimonis \u0160\u0113nbergs.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "The 20 cent coin shows the large coat of arms of the Republic of Latvia. The designer is Laimonis \u0160\u0113nbergs.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "The 10 cent coin shows the large coat of arms of the Republic of Latvia. The designer is Laimonis \u0160\u0113nbergs.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "The 5 cent coin shows the small coat of arms of the Republic of Latvia. The designer is Laimonis \u0160\u0113nbergs.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "The 2 cent coin shows the small coat of arms of the Republic of Latvia. The designer is Laimonis \u0160\u0113nbergs.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "The 1 cent coin shows the small coat of arms of the Republic of Latvia. The designer is Laimonis \u0160\u0113nbergs.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_1cent.jpg"
+            ]
+        }
+    ],
+    "Lithuania": [
+        {
+            "value": "\u20ac2",
+            "description": "Edge-lettering of the \u20ac2 coin: LAISV\u0116 * VIENYB\u0116 * GEROV\u0116 * (Freedom * Unity * Well-Being *)",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_2euro_2015.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_2euro_2015.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_1euro_2015.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_1euro_2015.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_50cent_2014.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_50cent_2014.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_20cent_2015.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_20cent_2015.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_10cent_2015.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_10cent_2015.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_5cent_2015.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_5cent_2015.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_2cent_2015.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_2cent_2015.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_1cent_2015.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_1cent_2015.jpg"
+            ]
+        }
+    ],
+    "Luxembourg": [
+        {
+            "value": "\u20ac2",
+            "description": " ",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_2euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_2euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_1Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_1Euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_1cent.jpg"
+            ]
+        }
+    ],
+    "Malta": [
+        {
+            "value": "\u20ac2",
+            "description": "The \u20ac1 and \u20ac2 coins show the emblem used by the Sovereign Order of Malta. During the Order's rule over Malta, between 1530 and 1798, the eight-pointed cross became associated with the island and is now often referred to as the Maltese Cross.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_2euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_2euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "The \u20ac1 and \u20ac2 coins show the emblem used by the Sovereign Order of Malta. During the Order's rule over Malta, between 1530 and 1798, the eight-pointed cross became associated with the island and is now often referred to as the Maltese Cross.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_1Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_1Euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "The 10, 20 and 50-cent coins bear the Emblem of Malta, a shield displaying a heraldic representation of the Maltese national flag and supporting a mural crown that represents the fortifications of Malta and denotes a city state. The shield is bounded on the left by an olive branch and on the right by a palm branch, symbols of peace traditionally associated with Malta, forming a wreath tied at its base by a ribbon which carries the inscription \"Repubblika ta' Malta\" (Republic of Malta).",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "The 10, 20 and 50-cent coins bear the Emblem of Malta, a shield displaying a heraldic representation of the Maltese national flag and supporting a mural crown that represents the fortifications of Malta and denotes a city state. The shield is bounded on the left by an olive branch and on the right by a palm branch, symbols of peace traditionally associated with Malta, forming a wreath tied at its base by a ribbon which carries the inscription \"Repubblika ta' Malta\" (Republic of Malta).",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "The 10, 20 and 50-cent coins bear the Emblem of Malta, a shield displaying a heraldic representation of the Maltese national flag and supporting a mural crown that represents the fortifications of Malta and denotes a city state. The shield is bounded on the left by an olive branch and on the right by a palm branch, symbols of peace traditionally associated with Malta, forming a wreath tied at its base by a ribbon which carries the inscription \"Repubblika ta' Malta\" (Republic of Malta).",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "The 1, 2 and 5-cent coins depict the altar at the prehistoric temple complex of Mnajdra, built around 3600 BC on a low elevation overlooking the sea.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "The 1, 2 and 5-cent coins depict the altar at the prehistoric temple complex of Mnajdra, built around 3600 BC on a low elevation overlooking the sea.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "The 1, 2 and 5-cent coins depict the altar at the prehistoric temple complex of Mnajdra, built around 3600 BC on a low elevation overlooking the sea.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_1cent.jpg"
+            ]
+        }
+    ],
+    "Monaco": [
+        {
+            "value": "\u20ac2",
+            "description": "Edge lettering of the \u20ac2 coin: 2**, repeated six times, alternately upright and inverted.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/2e.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/2e.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_2euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/1e.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/1e.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_1euro_2006.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_50cent_2001.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_50cent_2001.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_50cent_2006.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_20cent_2001.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_20cent_2001.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_20cent_2006.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_10cent_2001.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_10cent_2001.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_10cent_2006.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_5cent_2001.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_5cent_2001.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_5cent_2006.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_2cent_2001.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_2cent_2001.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_2cent_2006.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_1cent_2001.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_1cent_2001.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_1cent_2006.jpg"
+            ]
+        }
+    ],
+    "Netherlands": [
+        {
+            "value": "\u20ac2",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_2euro_2001.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_2euro_2001.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_2Euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_1euro_2000.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_1euro_2000.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_1euro_2014.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_50cents_2000.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_50cents_2000.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_20cent_2000.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_20cent_2000.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_10cent_2000.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_10cent_2000.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_5cent_2000.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_5cent_2000.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_5cent_2014.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_2cent_2000.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_2cent_2000.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_2cent_2014.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_1cent_2000.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_1cent_2000.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_1cent_2014.jpg"
+            ]
+        }
+    ],
+    "Portugal": [
+        {
+            "value": "\u20ac2",
+            "description": "\u20ac1 and \u20ac2 coins: the country's castles and coats of arms are set amid the European stars. This symbolises dialogue, the exchange of values and the dynamics of the building of Europe. The centrepiece is the royal seal of 1144. Edge lettering of the \u20ac2 coin: five coats of arms and seven castles, all equally spaced.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_2euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_2euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "\u20ac1 and \u20ac2 coins: the country's castles and coats of arms are set amid the European stars. This symbolises dialogue, the exchange of values and the dynamics of the building of Europe. The centrepiece is the royal seal of 1144.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_1Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_1Euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "10, 20 and 50-cent coins: these depict the royal seal of 1142 as the centrepiece of the design.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "10, 20 and 50-cent coins: these depict the royal seal of 1142 as the centrepiece of the design.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "10, 20 and 50-cent coins: these depict the royal seal of 1142 as the centrepiece of the design.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "1, 2 and 5-cent coins: these bear the image of the first royal seal, from 1134, along with the inscription \"Portugal\".",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "1, 2 and 5-cent coins: these bear the image of the first royal seal, from 1134, along with the inscription \"Portugal\".",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "1, 2 and 5-cent coins: these bear the image of the first royal seal, from 1134, along with the inscription \"Portugal\".",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_1cent.jpg"
+            ]
+        }
+    ],
+    "San Marino": [
+        {
+            "value": "\u20ac2",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2euro_2010.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2euro_2010.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2euro_2017.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_1euro_2010.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_1euro_2010.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_1euro_2017.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_50cent.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_50cent_2017.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_20cent.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_20cent_2017.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_10cent.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_10cent_2017.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_5cent.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_5cent_2017.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2cent.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2cent_2017.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_1cent.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_1cent_2017.jpg"
+            ]
+        }
+    ],
+    "Slovakia": [
+        {
+            "value": "\u20ac2",
+            "description": "The \u20ac1 and \u20ac2 coins depict a double cross on three hills, as featured in the national emblem of Slovakia.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_2Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_2Euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "The \u20ac1 and \u20ac2 coins depict a double cross on three hills, as featured in the national emblem of Slovakia.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_1Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_1Euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "The 10, 20 and 50 cent coins show Bratislava castle and the national emblem of Slovakia.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "The 10, 20 and 50 cent coins show Bratislava castle and the national emblem of Slovakia.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "The 10, 20 and 50 cent coins show Bratislava castle and the national emblem of Slovakia.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "The 1, 2 and 5 cent coins feature the Tatra Mountains\u2019 peak, Kriv\u00e1\u0148, a symbol of the sovereignty of the Slovak nation, and the national emblem of Slovakia.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "The 1, 2 and 5 cent coins feature the Tatra Mountains\u2019 peak, Kriv\u00e1\u0148, a symbol of the sovereignty of the Slovak nation, and the national emblem of Slovakia.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "The 1, 2 and 5 cent coins feature the Tatra Mountains\u2019 peak, Kriv\u00e1\u0148, a symbol of the sovereignty of the Slovak nation, and the national emblem of Slovakia.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_1cent.jpg"
+            ]
+        }
+    ],
+    "Slovenia": [
+        {
+            "value": "\u20ac2",
+            "description": "This coin shows the poet France Pre\u0161eren and the inscription \"Shiv\u00e9 naj vsi nar\u00f3di\" (God\u2019s blessing on all nations) \u2212 a line taken from his poem \"Zdravljica\" which is also used in the country\u2019s national anthem. Edge lettering of the \u20ac2 coin: SLOVENIJA followed by an engraved dot.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_2Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_2Euro.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "This coin bears a portrait of Primo\u017e Trubar, author of the first book printed in Slovene.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_1Euro.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_1Euro.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "The Triglav mountain is depicted on this coin.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_50cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_50cent.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "Lipizzaner horses form the central feature of this design.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_20cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "This coin features architect Jo\u017ee Ple\u010dnik\u2019s unrealised plan for the Slovenian Parliament.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_10cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "This coin depicts a sower.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_5cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "The Sovereign Enthronement Stone features on this coin.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_2cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "This coin bears the image of a stork.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_1cent.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_1cent.jpg"
+            ]
+        }
+    ],
+    "Spain": [
+        {
+            "value": "\u20ac2",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2Euro_2003.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2Euro_2003.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2euro_2014.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2euro_2015.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1Euro_1999.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1Euro_1999.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1euro_2014.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1Euro_2015.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "10, 20 and 50-cent coins: Miguel de Cervantes, the father of Spanish literature, is shown on these coins, reflecting \"the universality of the man and his work\".",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_50cent_1999.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_50cent_1999.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_50cent_2014.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "10, 20 and 50-cent coins: Miguel de Cervantes, the father of Spanish literature, is shown on these coins, reflecting \"the universality of the man and his work\".",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_20cent_2001.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_20cent_2001.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_20cent.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "10, 20 and 50-cent coins: Miguel de Cervantes, the father of Spanish literature, is shown on these coins, reflecting \"the universality of the man and his work\".",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_10cent_2003.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_10cent_2003.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_10cent.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "1, 2 and 5-cent coins: the cathedral of Santiago de Compostela, a jewel of Spanish Romanesque architecture and one of the most famous pilgrimage destinations in the world, is pictured on these coins. They show the monumental facade of the Obradoiro, a splendid example of Spanish baroque construction, started in 1667 by Jose del Toro and Domingo de Andrade. It was finished in the 18th century by Fernando Casas y Novoa.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_5cent_1999.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_5cent_1999.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_5cent.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "1, 2 and 5-cent coins: the cathedral of Santiago de Compostela, a jewel of Spanish Romanesque architecture and one of the most famous pilgrimage destinations in the world, is pictured on these coins. They show the monumental facade of the Obradoiro, a splendid example of Spanish baroque construction, started in 1667 by Jose del Toro and Domingo de Andrade. It was finished in the 18th century by Fernando Casas y Novoa.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2cent_2002.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2cent_2002.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2cent.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "1, 2 and 5-cent coins: the cathedral of Santiago de Compostela, a jewel of Spanish Romanesque architecture and one of the most famous pilgrimage destinations in the world, is pictured on these coins. They show the monumental facade of the Obradoiro, a splendid example of Spanish baroque construction, started in 1667 by Jose del Toro and Domingo de Andrade. It was finished in the 18th century by Fernando Casas y Novoa.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1cent_1999.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1cent_1999.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1cent.jpg"
+            ]
+        }
+    ],
+    "Vatican City": [
+        {
+            "value": "\u20ac2",
+            "description": "Edge lettering of the \u20ac2 coin: 2*, repeated six times, alternately upright and inverted.",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_2002.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_2002.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_SedeVacante.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_2013.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_2016.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2euro_2017.jpg"
+            ]
+        },
+        {
+            "value": "\u20ac1",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2002.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2002.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_SedeVacante.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2013.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2016.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2017.jpg"
+            ]
+        },
+        {
+            "value": "50 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_2002.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_2002.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_SedeVacante.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_2013.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_2016.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_2017.jpg"
+            ]
+        },
+        {
+            "value": "20 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_2002.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_2002.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_SedeVacante.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_2013.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_2016.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_2017.jpg"
+            ]
+        },
+        {
+            "value": "10 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_2002.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_2002.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_SedeVacante.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_2013.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_2016.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_2017.jpg"
+            ]
+        },
+        {
+            "value": "5 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_2002.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_2002.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_SedeVacante.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_2013.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_2016.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_2017.jpg"
+            ]
+        },
+        {
+            "value": "2 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_2002.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_2002.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_SedeVacante.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_2013.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_2016.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_2017.jpg"
+            ]
+        },
+        {
+            "value": "1 cent",
+            "description": "",
+            "image": "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1cent_2002.jpg",
+            "images": [
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1cent_2002.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1cent_SedeVacante.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1cent_2013.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1cent_2016.jpg",
+                "https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1cent_2017.jpg"
+            ]
+        }
+    ]
+}
