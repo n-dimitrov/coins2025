@@ -4,6 +4,24 @@ import numpy as np
 from PIL import Image
 import requests
 from io import BytesIO
+from google.cloud import bigquery
+from google.oauth2 import service_account
+import os
+
+def get_bigquery_client():
+    """Get authenticated BigQuery client"""
+    if not os.path.exists('service_account.json'):
+        return None
+    
+    credentials = service_account.Credentials.from_service_account_file(
+        'service_account.json',
+        scopes=['https://www.googleapis.com/auth/bigquery']
+    )
+    
+    return bigquery.Client(
+        project="coins2025",
+        credentials=credentials
+    )
 
 flags = {
     "Andorra": ":flag-ad:",
@@ -42,12 +60,66 @@ st.set_page_config(
 
 @st.cache_data
 def load_data():
-    """Load the coins catalog data"""
+    """Load the coins catalog data from BigQuery"""
     try:
-        df = pd.read_csv('data/catalog.csv')
+        client = get_bigquery_client()
+        if not client:
+            st.error("Service account file not found. Please ensure 'service_account.json' exists.")
+            return pd.DataFrame()
+        
+        query = """
+        SELECT 
+            coin_type as type,
+            year,
+            country,
+            series,
+            value,
+            coin_id as id,
+            image_url as image,
+            feature,
+            volume
+        FROM `coins2025.db.catalog`
+        ORDER BY country, year, value DESC
+        """
+        
+        df = client.query(query).to_dataframe()
+        
+        if df.empty:
+            st.warning("No catalog data found in database. Please run import_db.py to import catalog data.")
+            return pd.DataFrame()
+        
         return df
-    except FileNotFoundError:
-        st.error("Catalog file not found. Please ensure 'data/catalog.csv' exists.")
+        
+    except Exception as e:
+        st.error(f"Could not load catalog data from database: {str(e)}")
+        st.info("Falling back to CSV file...")
+        
+        # Fallback to CSV if database fails
+        try:
+            df = pd.read_csv('data/catalog.csv')
+            return df
+        except FileNotFoundError:
+            st.error("Neither database nor CSV file available. Please ensure data is imported or 'data/catalog.csv' exists.")
+            return pd.DataFrame()
+
+@st.cache_data
+def load_ownership_data():
+    """Load ownership history from BigQuery"""
+    try:
+        client = get_bigquery_client()
+        if not client:
+            return pd.DataFrame()
+        
+        query = """
+        SELECT name, coin_id, date, date_only
+        FROM `coins2025.db.ownership_history`
+        ORDER BY date DESC
+        """
+        
+        df = client.query(query).to_dataframe()
+        return df
+    except Exception as e:
+        st.error(f"Could not load ownership data: {str(e)}")
         return pd.DataFrame()
 
 def format_value(value):
@@ -101,9 +173,22 @@ def main():
     
     # Load data
     df = load_data()
+    ownership_df = load_ownership_data()
     
     if df.empty:
         st.stop()
+    
+    # Add ownership info to catalog data
+    if not ownership_df.empty:
+        # Get all collectors who have this coin type
+        collectors_by_coin = ownership_df.groupby('coin_id').agg({
+            'name': lambda x: ', '.join(sorted(x.unique())),  # List of collectors who have this coin
+            'date': 'count'  # Count of how many people have this coin
+        }).reset_index()
+        collectors_by_coin.columns = ['id', 'collectors', 'collector_count']
+        
+        # Merge with catalog data
+        df = df.merge(collectors_by_coin, on='id', how='left')
     
     # Sidebar filters
     st.sidebar.header("Filters")
@@ -124,6 +209,13 @@ def main():
     values = ['All'] + sorted(df['value'].unique().tolist(), reverse=True)
     selected_value = st.sidebar.selectbox("Value", values)
     
+    # Collector filter (only show if ownership data is available)
+    if not ownership_df.empty:
+        all_collectors = sorted(ownership_df['name'].unique())
+        selected_collector = st.sidebar.selectbox("Show coins owned by:", ['All'] + all_collectors)
+    else:
+        selected_collector = 'All'
+    
     # Apply filters
     filtered_df = df.copy()
     
@@ -138,6 +230,11 @@ def main():
     
     if selected_value != 'All':
         filtered_df = filtered_df[filtered_df['value'] == selected_value]
+    
+    if selected_collector != 'All':
+        # Filter to show only coins that the selected collector has
+        collector_coins = ownership_df[ownership_df['name'] == selected_collector]['coin_id'].unique()
+        filtered_df = filtered_df[filtered_df['id'].isin(collector_coins)]
     
     # Display statistics
     st.markdown("### 📊 Statistics")
@@ -157,6 +254,21 @@ def main():
     with col4:
         countries_count = len(filtered_df['country'].unique())
         st.metric("Countries", countries_count)
+    
+    # Show collector statistics if available
+    if not ownership_df.empty:
+        st.markdown("### 👥 Collector Statistics")
+        if selected_collector == 'All':
+            # Show stats for all collectors
+            collector_stats = ownership_df['name'].value_counts().head(5)
+            cols = st.columns(len(collector_stats) if len(collector_stats) <= 5 else 5)
+            for i, (collector, count) in enumerate(collector_stats.items()):
+                with cols[i % 5]:
+                    st.metric(collector, count)
+        else:
+            # Show stats for selected collector
+            collector_count = len(ownership_df[ownership_df['name'] == selected_collector])
+            st.metric(f"{selected_collector}'s collection", collector_count)
     
     # Display mode selection
     st.markdown("### 📋 Display Options")
@@ -183,23 +295,37 @@ def main():
         # # Format country names with flags
         # display_df['country'] = display_df['country'].apply(format_country_with_flag)
         
+        # Configure columns based on available data
+        column_config = {
+            "type": st.column_config.TextColumn(label="Type"),
+            "year": st.column_config.NumberColumn(label="Year", format="%d"),
+            "country": st.column_config.TextColumn(label="Country"),
+            "series": st.column_config.TextColumn(label="Series"),
+            "value": st.column_config.NumberColumn(label="Value", format="%.2f"),
+            "id": st.column_config.TextColumn(label="ID"),
+            "image": st.column_config.ImageColumn(label="Image"),
+            "feature": st.column_config.TextColumn(label="Feature"),
+            "volume": st.column_config.TextColumn(label="Volume")
+        }
+        
+        column_order = ['image', 'type', 'year', 'country', 'value', 'series', 'feature', 'volume', 'id']
+        
+        # Add collector columns if available
+        if 'collectors' in display_df.columns:
+            column_config["collectors"] = st.column_config.TextColumn(label="Collectors Who Have This")
+            column_order.insert(-1, 'collectors')  # Insert before 'id'
+        
+        if 'collector_count' in display_df.columns:
+            column_config["collector_count"] = st.column_config.NumberColumn(label="# Collectors", format="%d")
+            column_order.insert(-1, 'collector_count')  # Insert before 'id'
+        
         # Show the table with images
         st.data_editor(
             display_df,
             hide_index=True,
-            column_config={
-                "type": st.column_config.TextColumn(label="Type"),
-                "year": st.column_config.NumberColumn(label="Year", format="%d"),
-                "country": st.column_config.TextColumn(label="Country"),
-                "series": st.column_config.TextColumn(label="Series"),
-                "value": st.column_config.NumberColumn(label="Value", format="%.2f"),
-                "id": st.column_config.TextColumn(label="ID"),
-                "image": st.column_config.ImageColumn(label="Image"),
-                "feature": st.column_config.TextColumn(label="Feature"),
-                "volume": st.column_config.TextColumn(label="Volume")
-            },
+            column_config=column_config,
             disabled=True,
-            column_order=('image', 'type', 'year', 'country', 'value', 'series', 'feature', 'volume', 'id'),
+            column_order=column_order,
             use_container_width=True
         )
     
@@ -243,6 +369,13 @@ def main():
                     st.markdown(f"**Series:** {c_series}")
                     st.markdown(f"**Volume:** {c_volume}")
                     st.markdown(f"**Feature:** {c_feature}")
+                    
+                    # Add collector information if available
+                    if 'collectors' in coin.index and pd.notna(coin['collectors']):
+                        st.markdown(f"**Collectors:** {coin['collectors']}")
+                    if 'collector_count' in coin.index and pd.notna(coin['collector_count']):
+                        st.markdown(f"**Found by {int(coin['collector_count'])} people**")
+                    
                     st.markdown("---")
     
     else:  # Gallery View
