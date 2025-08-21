@@ -147,25 +147,29 @@ def display_coin_image(image_url, coin_id, width=150):
                 # Center the image
                 col1, col2, col3 = st.columns([1, 2, 1])
                 with col2:
-                    st.image(img, width=width, caption=f"ID: {coin_id}")
+                    caption = f"ID: {coin_id}" if coin_id else None
+                    st.image(img, width=width, caption=caption)
             else:
                 # Simple placeholder for unavailable image
                 col1, col2, col3 = st.columns([1, 2, 1])
                 with col2:
                     st.markdown(f'<div style="height: {width}px; display: flex; align-items: center; justify-content: center; border: 2px dashed #ccc; border-radius: 8px; background-color: #f8f8f8;"><span style="color: #888;">🖼️ Image unavailable</span></div>', unsafe_allow_html=True)
-                    st.caption(f"ID: {coin_id}")
+                    if coin_id:
+                        st.caption(f"ID: {coin_id}")
         else:
             # Simple placeholder for no image
             col1, col2, col3 = st.columns([1, 2, 1])
             with col2:
                 st.markdown(f'<div style="height: {width}px; display: flex; align-items: center; justify-content: center; border: 2px dashed #ccc; border-radius: 8px; background-color: #f8f8f8;"><span style="color: #888;">🖼️ No image</span></div>', unsafe_allow_html=True)
-                st.caption(f"ID: {coin_id}")
+                if coin_id:
+                    st.caption(f"ID: {coin_id}")
     except Exception as e:
         # Simple placeholder for image load error
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
             st.markdown(f'<div style="height: {width}px; display: flex; align-items: center; justify-content: center; border: 2px dashed #ccc; border-radius: 8px; background-color: #f8f8f8;"><span style="color: #888;">🖼️ Image load error</span></div>', unsafe_allow_html=True)
-            st.caption(f"ID: {coin_id}")
+            if coin_id:
+                st.caption(f"ID: {coin_id}")
 
 def main():
     st.title("🪙 Euro Coins Catalog")
@@ -360,7 +364,8 @@ def main():
             c_image = coin['image']
             c_feature = coin['feature'] if pd.notna(coin['feature']) else '---'
             c_volume = coin['volume'] if pd.notna(coin['volume']) else '---'
-
+            c_collectors = coin['collectors'] if 'collectors' in coin.index and pd.notna(coin['collectors']) else '---'
+            c_collector_count = int(coin['collector_count']) if 'collector_count' in coin.index and pd.notna(coin['collector_count']) else 0
             with col:
                 with st.container():
                     st.markdown(f"{c_country_flag} ({c_year})")
@@ -369,24 +374,22 @@ def main():
                     st.markdown(f"**Series:** {c_series}")
                     st.markdown(f"**Volume:** {c_volume}")
                     st.markdown(f"**Feature:** {c_feature}")
-                    
-                    # Add collector information if available
-                    if 'collectors' in coin.index and pd.notna(coin['collectors']):
-                        st.markdown(f"**Collectors:** {coin['collectors']}")
-                    if 'collector_count' in coin.index and pd.notna(coin['collector_count']):
-                        st.markdown(f"**Found by {int(coin['collector_count'])} people**")
-                    
+                    st.markdown(f"**Collectors:** {c_collectors}")
+                    st.markdown(f"**Found by {c_collector_count} people**")
                     st.markdown("---")
     
     else:  # Gallery View
         st.markdown("### 🖼️ Coins Gallery")
         
+        # Constant coin size for gallery
+        COIN_SIZE = 120
+        
         # Pagination for gallery
-        coins_per_page = 20
+        coins_per_page = 24  # 4 rows × 6 columns
         total_pages = (len(filtered_df) + coins_per_page - 1) // coins_per_page
         
         if total_pages > 1:
-            page = st.selectbox("Page", range(1, total_pages + 1)) - 1
+            page = st.selectbox("Page", range(1, total_pages + 1), key="gallery_page") - 1
         else:
             page = 0
         
@@ -394,18 +397,18 @@ def main():
         end_idx = min(start_idx + coins_per_page, len(filtered_df))
         page_df = filtered_df.iloc[start_idx:end_idx]
         
-        # Display images in grid
-        cols = st.columns(5)
+        # Display images in grid with pagination
+        cols = st.columns(6)
         
         for idx, (_, coin) in enumerate(page_df.iterrows()):
-            col = cols[idx % 5]
+            col = cols[idx % 6]
             
             with col:
-                st.markdown(f"**{format_country_with_flag(coin['country'])}**")
+                c_country = coin['country']
+                c_country_flag = format_country_with_flag(c_country)
+                st.markdown(c_country_flag)
                 st.markdown(f"{format_value(coin['value'])} ({coin['year']})")
-                display_coin_image(coin['image'], coin['id'])
-                if coin['feature'] and pd.notna(coin['feature']) and coin['type'] == 'CC':
-                    st.caption(coin['feature'][:50] + "..." if len(str(coin['feature'])) > 50 else coin['feature'])
+                display_coin_image(coin['image'], "", width=COIN_SIZE)  # No coin ID display
     
     # Search functionality
     st.markdown("### 🔍 Search")
