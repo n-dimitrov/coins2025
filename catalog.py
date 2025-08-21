@@ -11,6 +11,7 @@ import os
 def get_bigquery_client():
     """Get authenticated BigQuery client"""
     if not os.path.exists('service_account.json'):
+        print("service_account.json not found")
         return None
     
     credentials = service_account.Credentials.from_service_account_file(
