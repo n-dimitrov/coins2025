@@ -1,0 +1,1 @@
+# My EuroCoins FastAPI Application
