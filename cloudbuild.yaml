@@ -1,11 +1,11 @@
 steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-eurocoins:$COMMIT_SHA', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-eurocoins:latest', '.']
   
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/my-eurocoins:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/my-eurocoins:latest']
   
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -15,7 +15,7 @@ steps:
     - 'deploy'
     - 'my-eurocoins'
     - '--image'
-    - 'gcr.io/$PROJECT_ID/my-eurocoins:$COMMIT_SHA'
+    - 'gcr.io/$PROJECT_ID/my-eurocoins:latest'
     - '--region'
     - 'us-central1'
     - '--platform'
@@ -35,6 +35,6 @@ steps:
     - 'APP_ENV=production,GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
 
 images:
-  - gcr.io/$PROJECT_ID/my-eurocoins:$COMMIT_SHA
+  - gcr.io/$PROJECT_ID/my-eurocoins:latest
 
 timeout: '1200s'

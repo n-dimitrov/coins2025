@@ -14,7 +14,7 @@ async def get_coins(
     country: Optional[str] = Query(None, description="Filter by country"),
     year: Optional[int] = Query(None, description="Filter by year"),
     search: Optional[str] = Query(None, description="Search term"),
-    limit: int = Query(20, ge=1, le=100, description="Results per page"),
+    limit: int = Query(20, ge=1, le=2000, description="Results per page"),
     offset: int = Query(0, ge=0, description="Pagination offset")
 ):
     """Get coins with optional filters."""

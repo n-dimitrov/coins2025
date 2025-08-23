@@ -38,7 +38,7 @@ class CoinCatalog {
             
             params.append('limit', '1000'); // Load all for client-side filtering
             
-            const response = await fetch(`/api/coins?${params}`);
+            const response = await fetch(`/api/coins/?${params}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }

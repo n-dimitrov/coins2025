@@ -3,6 +3,7 @@ from typing import List, Dict, Optional, Any
 import os
 from datetime import datetime, timedelta
 import logging
+import asyncio
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -30,27 +31,34 @@ class BigQueryService:
                 logger.info(f"Cache hit for query: {query[:50]}...")
                 return cached_data
 
-        # Execute query
-        job_config = bigquery.QueryJobConfig()
-        if params:
-            job_config.query_parameters = [
-                bigquery.ScalarQueryParameter(k, "STRING", str(v)) 
-                for k, v in params.items()
-            ]
+        # Execute query in thread pool since BigQuery client is synchronous
+        def execute_query():
+            job_config = bigquery.QueryJobConfig()
+            if params:
+                job_config.query_parameters = [
+                    bigquery.ScalarQueryParameter(k, "STRING", str(v)) 
+                    for k, v in params.items()
+                ]
 
-        try:
-            logger.info(f"Executing BigQuery: {query[:100]}...")
-            query_job = self.client.query(query, job_config=job_config)
-            results = [dict(row) for row in query_job.result()]
-            
-            # Cache results
-            self._cache[cache_key] = (results, datetime.now())
-            logger.info(f"Query executed successfully, cached {len(results)} results")
-            return results
-            
-        except Exception as e:
-            logger.error(f"BigQuery error: {str(e)}")
-            raise
+            try:
+                logger.info(f"Executing BigQuery: {query[:100]}...")
+                query_job = self.client.query(query, job_config=job_config)
+                results = [dict(row) for row in query_job.result()]
+                logger.info(f"Query executed successfully, got {len(results)} results")
+                return results
+                
+            except Exception as e:
+                logger.error(f"BigQuery error: {str(e)}")
+                raise
+
+        # Run in thread pool to avoid blocking
+        loop = asyncio.get_event_loop()
+        results = await loop.run_in_executor(None, execute_query)
+        
+        # Cache results
+        self._cache[cache_key] = (results, datetime.now())
+        logger.info(f"Query executed successfully, cached {len(results)} results")
+        return results
 
     async def get_coins(self, filters: dict = None, limit: int = 100, offset: int = 0) -> List[Dict[str, Any]]:
         """Get coins with optional filters."""
