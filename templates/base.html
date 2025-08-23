@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My EuroCoins{% endblock %}</title>
     
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block description %}Explore the complete collection of Euro coins from 1999 to 2025. Discover regular circulation and commemorative coins from all eurozone countries.{% endblock %}">
+    <meta name="keywords" content="euro coins, european coins, coin catalog, commemorative coins, eurozone, numismatics">
+    <meta name="author" content="My EuroCoins">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://myeurocoins.org{% block canonical_path %}/{% endblock %}">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}My EuroCoins - Euro Coin Collection{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Explore the complete collection of Euro coins from 1999 to 2025.{% endblock %}">
+    <meta property="og:url" content="https://myeurocoins.org{% block og_url %}/{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://myeurocoins.org/static/images/og-image.png">
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
