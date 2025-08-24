@@ -11,8 +11,9 @@ bigquery_service = BigQueryService()
 @router.get("/", response_model=CoinListResponse)
 async def get_coins(
     coin_type: Optional[str] = Query(None, description="Filter by coin type (RE/CC)"),
+    value: Optional[float] = Query(None, description="Filter by coin value"),
     country: Optional[str] = Query(None, description="Filter by country"),
-    year: Optional[int] = Query(None, description="Filter by year"),
+    commemorative: Optional[str] = Query(None, description="Filter by commemorative series"),
     search: Optional[str] = Query(None, description="Search term"),
     limit: int = Query(20, ge=1, le=2000, description="Results per page"),
     offset: int = Query(0, ge=0, description="Pagination offset")
@@ -22,10 +23,12 @@ async def get_coins(
         filters = {}
         if coin_type:
             filters['coin_type'] = coin_type
+        if value:
+            filters['value'] = value
         if country:
             filters['country'] = country
-        if year:
-            filters['year'] = year
+        if commemorative:
+            filters['series'] = commemorative
 
         coins_data = await bigquery_service.get_coins(filters, limit, offset)
         
