@@ -70,13 +70,17 @@ class BigQueryService:
                 where_clauses.append("coin_type = @coin_type")
                 params['coin_type'] = filters['coin_type']
             
+            if filters.get('value'):
+                where_clauses.append("value = @value")
+                params['value'] = str(filters['value'])
+            
             if filters.get('country'):
                 where_clauses.append("country = @country")
                 params['country'] = filters['country']
             
-            if filters.get('year'):
-                where_clauses.append("year = @year")
-                params['year'] = str(filters['year'])
+            if filters.get('series'):
+                where_clauses.append("series = @series")
+                params['series'] = filters['series']
 
         where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
         
@@ -119,16 +123,32 @@ class BigQueryService:
 
     async def get_filter_options(self) -> Dict[str, List]:
         """Get available filter options."""
-        query = f"""
+        # Get countries and denominations from all coins
+        general_query = f"""
         SELECT 
             ARRAY_AGG(DISTINCT country ORDER BY country) as countries,
-            ARRAY_AGG(DISTINCT year ORDER BY year DESC) as years,
-            ARRAY_AGG(DISTINCT value ORDER BY value) as denominations
+            ARRAY_AGG(DISTINCT value ORDER BY value DESC) as denominations
         FROM `{self.client.project}.{self.dataset_id}.{self.table_id}`
         """
         
-        results = await self._get_cached_or_query(query)
-        return dict(results[0]) if results else {}
+        # Get commemorative series only from CC coins
+        commemorative_query = f"""
+        SELECT 
+            ARRAY_AGG(DISTINCT series ORDER BY series) as commemoratives
+        FROM `{self.client.project}.{self.dataset_id}.{self.table_id}`
+        WHERE series LIKE 'CC-%'
+        """
+        
+        general_results = await self._get_cached_or_query(general_query)
+        commemorative_results = await self._get_cached_or_query(commemorative_query)
+        
+        result = {}
+        if general_results:
+            result.update(general_results[0])
+        if commemorative_results:
+            result.update(commemorative_results[0])
+            
+        return result
 
     def clear_cache(self):
         """Clear the cache."""

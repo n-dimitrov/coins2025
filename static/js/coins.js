@@ -4,13 +4,44 @@ class CoinCatalog {
         this.filteredCoins = [];
         this.currentFilters = {
             coin_type: '',
+            value: '',
             country: '',
-            year: '',
+            commemorative: '',
             search: ''
         };
         this.currentPage = 1;
         this.coinsPerPage = 20;
         this.loading = false;
+        
+        // Static mapping for special commemorative series
+        this.commemorativeLabels = {
+            'CC-2004': '2004 - €2 Commemoratives',
+            'CC-2005': '2005 - €2 Commemoratives',
+            'CC-2006': '2006 - €2 Commemoratives',
+            'CC-2007': '2007 - €2 Commemoratives',
+            'CC-2007-TOR': '2007 - €2 Treaty of Rome',
+            'CC-2008': '2008 - €2 Commemoratives',
+            'CC-2009': '2009 - €2 Commemoratives',
+            'CC-2009-EMU': '2009 - €2 Economic and Monetary Union',
+            'CC-2010': '2010 - €2 Commemoratives',
+            'CC-2011': '2011 - €2 Commemoratives',
+            'CC-2012': '2012 - €2 Commemoratives',
+            'CC-2012-TYE': '2012 - €2 Ten Years of Euro',
+            'CC-2013': '2013 - €2 Commemoratives',
+            'CC-2014': '2014 - €2 Commemoratives',
+            'CC-2015': '2015 - €2 Commemoratives',
+            'CC-2015-EUF': '2015 - €2 European Flag',
+            'CC-2016': '2016 - €2 Commemoratives',
+            'CC-2017': '2017 - €2 Commemoratives',
+            'CC-2018': '2018 - €2 Commemoratives',
+            'CC-2019': '2019 - €2 Commemoratives',
+            'CC-2020': '2020 - €2 Commemoratives',
+            'CC-2021': '2021 - €2 Commemoratives',
+            'CC-2022': '2022 - €2 Commemoratives',
+            'CC-2022-ERA': '2022 - €2 Erasmus Programme',
+            'CC-2023': '2023 - €2 Commemoratives',
+            'CC-2024': '2024 - €2 Commemoratives'
+        };
         
         this.init();
     }
@@ -67,7 +98,8 @@ class CoinCatalog {
             const options = await response.json();
             
             this.populateCountryFilter(options.countries || []);
-            this.populateYearFilter(options.years || []);
+            this.populateValueFilter(options.denominations || []);
+            this.populateCommemorativeFilter(options.commemoratives || []);
         } catch (error) {
             console.error('Error loading filter options:', error);
             // Continue with empty options
@@ -89,17 +121,44 @@ class CoinCatalog {
         });
     }
 
-    populateYearFilter(years) {
-        const select = document.getElementById('year-filter');
+    populateValueFilter(denominations) {
+        const select = document.getElementById('value-filter');
         if (!select) return;
         
         // Clear existing options except the first one
-        select.innerHTML = '<option value="">All Years</option>';
+        select.innerHTML = '<option value="">All Values</option>';
         
-        years.forEach(year => {
+        denominations.forEach(value => {
             const option = document.createElement('option');
-            option.value = year;
-            option.textContent = year;
+            option.value = value;
+            // Format value to always show 2 decimal places
+            const formattedValue = parseFloat(value).toFixed(2);
+            option.textContent = `€${formattedValue}`;
+            select.appendChild(option);
+        });
+    }
+
+    populateCommemorativeFilter(commemoratives) {
+        const select = document.getElementById('commemorative-filter');
+        if (!select) return;
+        
+        // Clear existing options except the first one
+        select.innerHTML = '<option value="">All Commemoratives</option>';
+        
+        // Sort commemoratives in descending order (most recent first)
+        const sortedCommemorative = commemoratives.sort((a, b) => {
+            // Extract year from series code (e.g., CC-2024 -> 2024)
+            const yearA = parseInt(a.split('-')[1]) || 0;
+            const yearB = parseInt(b.split('-')[1]) || 0;
+            return yearB - yearA; // Descending order
+        });
+        
+        sortedCommemorative.forEach(commemorative => {
+            const option = document.createElement('option');
+            option.value = commemorative;
+            // Use the label from mapping, or fallback to the original value
+            const label = this.commemorativeLabels[commemorative] || commemorative;
+            option.textContent = label;
             select.appendChild(option);
         });
     }
@@ -109,10 +168,13 @@ class CoinCatalog {
             if (this.currentFilters.coin_type && coin.coin_type !== this.currentFilters.coin_type) {
                 return false;
             }
+            if (this.currentFilters.value && coin.value.toString() !== this.currentFilters.value) {
+                return false;
+            }
             if (this.currentFilters.country && coin.country !== this.currentFilters.country) {
                 return false;
             }
-            if (this.currentFilters.year && coin.year.toString() !== this.currentFilters.year) {
+            if (this.currentFilters.commemorative && coin.series !== this.currentFilters.commemorative) {
                 return false;
             }
             if (this.currentFilters.search) {
@@ -299,23 +361,29 @@ class CoinCatalog {
             this.applyFilters();
         });
 
+        document.getElementById('value-filter')?.addEventListener('change', (e) => {
+            this.currentFilters.value = e.target.value;
+            this.applyFilters();
+        });
+
         document.getElementById('country-filter')?.addEventListener('change', (e) => {
             this.currentFilters.country = e.target.value;
             this.applyFilters();
         });
 
-        document.getElementById('year-filter')?.addEventListener('change', (e) => {
-            this.currentFilters.year = e.target.value;
+        document.getElementById('commemorative-filter')?.addEventListener('change', (e) => {
+            this.currentFilters.commemorative = e.target.value;
             this.applyFilters();
         });
 
         // Clear filters
         document.getElementById('clear-filters')?.addEventListener('click', () => {
-            this.currentFilters = { coin_type: '', country: '', year: '', search: '' };
+            this.currentFilters = { coin_type: '', value: '', country: '', commemorative: '', search: '' };
             document.getElementById('search-input').value = '';
             document.getElementById('type-filter').value = '';
+            document.getElementById('value-filter').value = '';
             document.getElementById('country-filter').value = '';
-            document.getElementById('year-filter').value = '';
+            document.getElementById('commemorative-filter').value = '';
             this.applyFilters();
         });
     }
