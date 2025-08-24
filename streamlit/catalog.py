@@ -124,11 +124,8 @@ def load_ownership_data():
         return pd.DataFrame()
 
 def format_value(value):
-    """Format coin value for display"""
-    if value >= 1:
-        return f"€{value:.0f}"
-    else:
-        return f"{int(value * 100)}¢"
+    """Format coin value for display with two decimal places"""
+    return f"€{value:.2f}"
 
 def format_country_with_flag(country):
     """Format country name with flag emoji"""
