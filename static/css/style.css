@@ -14,6 +14,11 @@
     animation: coin-spin 3s infinite ease-in-out;
 }
 
+/* Hero section coin logo */
+.coin-logo {
+    animation: coin-spin 3s infinite ease-in-out;
+}
+
 @keyframes coin-spin {
     0%, 100% { transform: rotateY(0deg); }
     50% { transform: rotateY(180deg); }
@@ -297,4 +302,305 @@
 
 .scroll-to-top.show {
     display: flex;
+}
+
+/* Coin Modal Styles */
+.coin-modal {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.coin-modal .modal-body {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.coin-detail-container {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.coin-image-section {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.coin-main-image {
+    width: 240px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid var(--primary-color);
+    box-shadow: 0 15px 35px rgba(0,102,204,0.3);
+    transition: transform 0.3s ease;
+}
+
+.coin-main-image:hover {
+    transform: scale(1.05);
+}
+
+.coin-thumbnail-gallery {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.coin-thumbnail {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+}
+
+.coin-thumbnail:hover,
+.coin-thumbnail.active {
+    border-color: var(--primary-color);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.coin-info-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.coin-header {
+    text-align: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.coin-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.coin-value-badge {
+    background: linear-gradient(135deg, var(--primary-color), #0056b3);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 0.3rem;
+}
+
+.coin-type-badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-left: 0.5rem;
+}
+
+/* Navigation controls */
+.coin-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    background: #f8f9fa;
+    border-radius: 20px;
+}
+
+.nav-btn {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #495057;
+}
+
+.nav-btn:hover:not(:disabled) {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+.nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.coin-position {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Modal transition styles */
+#coinDetailModal .modal-body {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.coin-details-wrapper {
+    margin-top: 1.5rem;
+}
+
+.coin-simple-info {
+    text-align: center;
+}
+
+.info-line {
+    font-size: 1rem;
+    color: #495057;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+}
+
+.info-description {
+    font-size: 0.9rem;
+    color: #6c757d;
+    line-height: 1.4;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+/* Modal Animation */
+.modal.fade .modal-dialog {
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Toast Notification */
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    z-index: 9999;
+    animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Responsive Design for Modal */
+@media (max-width: 768px) {
+    .coin-detail-container {
+        padding: 1rem;
+    }
+    
+    .coin-main-image {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .coin-simple-details {
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .simple-detail {
+        min-width: 70px;
+    }
+    
+    .coin-title {
+        font-size: 1.2rem;
+    }
+    
+    .coin-value-badge {
+        font-size: 1rem;
+        padding: 0.25rem 0.6rem;
+    }
+    
+    .coin-feature-section {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .feature-description {
+/* Responsive adjustments for simplified modal */
+@media (max-width: 576px) {
+    .coin-navigation {
+        padding: 0.4rem 0.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .nav-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.8rem;
+    }
+    
+    .coin-position {
+        font-size: 0.8rem;
+    }
+    
+    .coin-main-image {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .info-line {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .info-description {
+        font-size: 0.85rem;
+        padding: 0.5rem;
+        margin-top: 0.75rem;
+        max-height: 100px;
+    }
 }

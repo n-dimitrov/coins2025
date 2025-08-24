@@ -29,5 +29,5 @@ class StatsResponse(BaseModel):
 
 class FilterOptions(BaseModel):
     countries: List[str]
-    years: List[int]
+    commemoratives: List[str]
     denominations: List[float]
