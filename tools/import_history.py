@@ -10,6 +10,10 @@ import pandas as pd
 from google.cloud import bigquery
 from google.oauth2 import service_account
 import sys
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(
@@ -21,9 +25,10 @@ logger = logging.getLogger(__name__)
 class HistoryImporter:
     """Import ownership history with simple schema matching CSV structure."""
     
-    def __init__(self, project_id: str, dataset_id: str, service_account_path: str):
+    def __init__(self, project_id: str, dataset_id: str, table_name: str, service_account_path: str):
         self.project_id = project_id
         self.dataset_id = dataset_id
+        self.table_name = table_name
         self.service_account_path = service_account_path
         self.client = None
         
@@ -53,26 +58,24 @@ class HistoryImporter:
             return False
     
     def _get_history_schema(self):
-        """Simple schema matching history.csv structure."""
+        """Simplified schema without redundant date_only field."""
         return [
             bigquery.SchemaField("name", "STRING", mode="REQUIRED", 
                                 description="Owner name"),
             bigquery.SchemaField("coin_id", "STRING", mode="REQUIRED", 
                                 description="Coin identifier"),
             bigquery.SchemaField("date", "TIMESTAMP", mode="REQUIRED", 
-                                description="Acquisition date and time"),
-            bigquery.SchemaField("date_only", "DATE", mode="REQUIRED", 
-                                description="Acquisition date only")
+                                description="Acquisition date and time")
         ]
     
     def _create_history_table(self) -> bool:
         """Create the ownership history table."""
         try:
-            table_ref = self.client.dataset(self.dataset_id).table("ownership_history")
+            table_ref = self.client.dataset(self.dataset_id).table(self.table_name)
             
             try:
                 self.client.get_table(table_ref)
-                logger.info("Table ownership_history already exists")
+                logger.info(f"Table {self.table_name} already exists")
                 return True
             except Exception:
                 schema = self._get_history_schema()
@@ -82,7 +85,7 @@ class HistoryImporter:
                 table.clustering_fields = ["name", "coin_id"]
                 
                 self.client.create_table(table)
-                logger.info("Created table ownership_history")
+                logger.info(f"Created table {self.table_name}")
                 return True
                 
         except Exception as e:
@@ -109,17 +112,12 @@ class HistoryImporter:
             # Rename id column to coin_id to match schema
             df = df.rename(columns={'id': 'coin_id'})
             
-            # Convert date columns
+            # Convert date column and drop the redundant date_only column
             df['date'] = pd.to_datetime(df['date'])
-            
-            # Handle empty date_only values by extracting from date column
-            df['date_only'] = df['date_only'].fillna('')
-            mask = df['date_only'] == ''
-            df.loc[mask, 'date_only'] = df.loc[mask, 'date'].dt.strftime('%Y-%m-%d')
-            df['date_only'] = pd.to_datetime(df['date_only']).dt.date
+            df = df.drop(columns=['date_only'])
             
             # Import to BigQuery
-            table_ref = self.client.dataset(self.dataset_id).table("ownership_history")
+            table_ref = self.client.dataset(self.dataset_id).table(self.table_name)
             job_config = bigquery.LoadJobConfig(
                 write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
                 schema=self._get_history_schema()
@@ -139,9 +137,9 @@ class HistoryImporter:
             SELECT 
                 name,
                 COUNT(*) as coin_count,
-                MIN(date_only) as first_acquisition,
-                MAX(date_only) as last_acquisition
-            FROM `{self.project_id}.{self.dataset_id}.ownership_history`
+                MIN(DATE(date)) as first_acquisition,
+                MAX(DATE(date)) as last_acquisition
+            FROM `{self.project_id}.{self.dataset_id}.{self.table_name}`
             GROUP BY name
             ORDER BY coin_count DESC
             """
@@ -159,12 +157,13 @@ class HistoryImporter:
 
 def main():
     """Main function to import ownership history."""
-    PROJECT_ID = "coins2025"
-    DATASET_ID = "db"
-    SERVICE_ACCOUNT_PATH = "service_account.json"
+    PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "coins2025")
+    DATASET_ID = os.getenv("BQ_DATASET", "db")
+    HISTORY_TABLE = os.getenv("BQ_HISTORY_TABLE", "ownership_history")
+    SERVICE_ACCOUNT_PATH = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "service_account.json")
     HISTORY_CSV_PATH = "data/history.csv"
     
-    importer = HistoryImporter(PROJECT_ID, DATASET_ID, SERVICE_ACCOUNT_PATH)
+    importer = HistoryImporter(PROJECT_ID, DATASET_ID, HISTORY_TABLE, SERVICE_ACCOUNT_PATH)
     
     if importer.import_history(HISTORY_CSV_PATH):
         logger.info("History import completed successfully!")
