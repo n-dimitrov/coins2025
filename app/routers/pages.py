@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from app.services.bigquery_service import BigQueryService
 import logging
 
@@ -71,3 +71,9 @@ async def coin_detail(request: Request, coin_id: str):
             "request": request,
             "error": "Unable to load coin details"
         }, status_code=500)
+
+
+@router.get("/favicon.ico")
+async def favicon():
+    """Serve favicon.ico for browsers that request it directly."""
+    return FileResponse("static/images/favicon-32x32.png", media_type="image/png")
