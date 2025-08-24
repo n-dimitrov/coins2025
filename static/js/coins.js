@@ -452,6 +452,15 @@ class CoinCatalog {
         
         const modalContent = `
             <div class="coin-detail-container">
+                <div class="coin-header">
+                    <div class="coin-title">
+                        <span class="country-flag">${flag}</span>
+                        ${coin.country}
+                        <span class="coin-type-badge ${typeClass}">${typeName}</span>
+                    </div>
+                    <div class="coin-value-badge">€${formattedValue}</div>
+                </div>
+                
                 <div class="coin-image-section">
                     <img src="${mainImage}" 
                          class="coin-main-image" 
@@ -461,51 +470,12 @@ class CoinCatalog {
                 </div>
                 
                 <div class="coin-info-section">
-                    <div class="coin-header">
-                        <div class="coin-title">
-                            <span class="country-flag">${flag}</span>
-                            ${coin.country}
-                            <div class="coin-value-badge">€${formattedValue}</div>
+                    <div class="coin-details-wrapper">
+                        <div class="coin-simple-info">
+                            <div class="info-line">${coin.year} • ${commemorativeLabel}</div>
+                            ${coin.volume ? `<div class="info-line">${coin.volume}</div>` : ''}
+                            ${coin.feature ? `<div class="info-description">${coin.feature}</div>` : ''}
                         </div>
-                        <span class="coin-type-badge ${typeClass}">${typeName}</span>
-                    </div>
-                    
-                    <div class="coin-detail-grid">
-                        <div class="detail-item">
-                            <div class="detail-label">Year</div>
-                            <div class="detail-value">${coin.year}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Series</div>
-                            <div class="detail-value">${commemorativeLabel}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Coin ID</div>
-                            <div class="detail-value">${coin.coin_id}</div>
-                        </div>
-                        ${coin.volume ? `
-                            <div class="detail-item">
-                                <div class="detail-label">Volume</div>
-                                <div class="detail-value">${coin.volume}</div>
-                            </div>
-                        ` : ''}
-                    </div>
-                    
-                    ${coin.feature ? `
-                        <div class="coin-feature-section">
-                            <div class="feature-title">
-                                <i class="fas fa-info-circle text-primary"></i>
-                                Feature Description
-                            </div>
-                            <div class="feature-description">${coin.feature}</div>
-                        </div>
-                    ` : ''}
-                    
-                    <div class="modal-actions">
-                        <button class="action-btn btn-share" onclick="window.coinCatalog.shareCoin('${coin.coin_id}')">
-                            <i class="fas fa-share-alt"></i>
-                            Share
-                        </button>
                     </div>
                 </div>
             </div>
