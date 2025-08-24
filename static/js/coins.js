@@ -506,9 +506,9 @@ class CoinCatalog {
                     <div class="coin-title">
                         <span class="country-flag">${flag}</span>
                         ${coin.country}
-                        <span class="coin-type-badge ${typeClass}">${typeName}</span>
+                        <span class="coin-value-badge">€${formattedValue}</span>
                     </div>
-                    <div class="coin-value-badge">€${formattedValue}</div>
+                    <div class="coin-year">${coin.year}</div>
                 </div>
                 
                 <div class="coin-navigation">
@@ -527,6 +527,12 @@ class CoinCatalog {
                     </button>
                 </div>
                 
+                <div class="coin-type-section">
+                    <span class="badge ${typeClass}">
+                        ${typeName}
+                    </span>
+                </div>
+                
                 <div class="coin-image-section">
                     <img src="${mainImage}" 
                          class="coin-main-image" 
@@ -538,7 +544,7 @@ class CoinCatalog {
                 <div class="coin-info-section">
                     <div class="coin-details-wrapper">
                         <div class="coin-simple-info">
-                            <div class="info-line">${coin.year} • ${commemorativeLabel}</div>
+                            <div class="info-line">${commemorativeLabel}</div>
                             ${coin.volume ? `<div class="info-line">${coin.volume}</div>` : ''}
                             ${coin.feature ? `<div class="info-description">${coin.feature}</div>` : ''}
                         </div>
