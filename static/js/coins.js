@@ -1,5 +1,6 @@
 class CoinCatalog {
-    constructor() {
+    constructor(groupContext = null) {
+        this.groupContext = groupContext;
         this.coins = [];
         this.filteredCoins = [];
         this.currentFilters = {
@@ -7,7 +8,10 @@ class CoinCatalog {
             value: '',
             country: '',
             commemorative: '',
-            search: ''
+            search: '',
+            // Group-specific filters
+            ownership_status: '',
+            owned_by: ''
         };
         this.currentPage = 1;
         this.coinsPerPage = 20;
@@ -111,7 +115,12 @@ class CoinCatalog {
             
             params.append('limit', '1000'); // Load all for client-side filtering
             
-            const response = await fetch(`/api/coins/?${params}`);
+            // Use group API if in group mode
+            const apiUrl = this.groupContext 
+                ? `/api/coins/group/${this.groupContext.group}/?${params}`
+                : `/api/coins/?${params}`;
+            
+            const response = await fetch(apiUrl);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -272,9 +281,30 @@ class CoinCatalog {
         // Format value to always show 2 decimal places
         const formattedValue = parseFloat(coin.value).toFixed(2);
 
+        // Generate ownership badges if in group mode
+        let ownershipHtml = '';
+        if (this.groupContext && coin.owners) {
+            if (coin.owners.length > 0) {
+                const ownerBadges = coin.owners.map(owner => 
+                    `<span class="badge bg-success me-1" title="Owned by ${owner.alias}">${owner.alias}</span>`
+                ).join('');
+                ownershipHtml = `
+                    <div class="ownership-info mt-2">
+                        ${ownerBadges}
+                    </div>
+                `;
+            } else {
+                ownershipHtml = `
+                    <div class="ownership-info mt-2">
+                        <span class="badge bg-outline-secondary">Not owned</span>
+                    </div>
+                `;
+            }
+        }
+
         return `
             <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
-                <div class="card coin-card h-100">
+                <div class="card coin-card h-100 ${this.groupContext ? 'group-mode' : ''}">
                     <div class="position-relative">
                         <img 
                             src="${imageUrl}" 
@@ -296,6 +326,7 @@ class CoinCatalog {
                         </div>
                         <p class="card-text text-muted small">${typeName} • ${coin.year}</p>
                         ${coin.feature ? `<p class="card-text small text-truncate" title="${coin.feature}">${coin.feature}</p>` : ''}
+                        ${ownershipHtml}
                     </div>
                 </div>
             </div>
@@ -421,14 +452,36 @@ class CoinCatalog {
             this.applyFilters();
         });
 
+        // Group-specific filters (only if in group mode)
+        if (this.groupContext) {
+            document.getElementById('ownership-filter')?.addEventListener('change', (e) => {
+                this.currentFilters.ownership_status = e.target.value;
+                this.applyFilters();
+            });
+
+            document.getElementById('member-filter')?.addEventListener('change', (e) => {
+                this.currentFilters.owned_by = e.target.value;
+                this.applyFilters();
+            });
+        }
+
         // Clear filters
         document.getElementById('clear-filters')?.addEventListener('click', () => {
-            this.currentFilters = { coin_type: '', value: '', country: '', commemorative: '', search: '' };
+            const baseFilters = { coin_type: '', value: '', country: '', commemorative: '', search: '' };
+            const groupFilters = this.groupContext ? { ownership_status: '', owned_by: '' } : {};
+            this.currentFilters = { ...baseFilters, ...groupFilters };
+            
             document.getElementById('search-input').value = '';
             document.getElementById('type-filter').value = '';
             document.getElementById('value-filter').value = '';
             document.getElementById('country-filter').value = '';
             document.getElementById('commemorative-filter').value = '';
+            
+            if (this.groupContext) {
+                document.getElementById('ownership-filter').value = '';
+                document.getElementById('member-filter').value = '';
+            }
+            
             this.applyFilters();
         });
 

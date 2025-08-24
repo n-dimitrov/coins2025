@@ -69,6 +69,35 @@
                     </select>
                 </div>
                 
+                <!-- Group-specific filters -->
+                {% if group_context %}
+                <hr>
+                <h6 class="text-muted mb-3">
+                    <i class="fas fa-users me-2"></i>Group Filters
+                </h6>
+                
+                <!-- Collection Status Filter -->
+                <div class="filter-section">
+                    <label for="ownership-filter" class="form-label">Collection Status</label>
+                    <select class="form-select" id="ownership-filter">
+                        <option value="">All Coins</option>
+                        <option value="owned">Owned by Group</option>
+                        <option value="missing">Missing from Group</option>
+                    </select>
+                </div>
+
+                <!-- Group Members Filter -->
+                <div class="filter-section">
+                    <label for="member-filter" class="form-label">Group Members</label>
+                    <select class="form-select" id="member-filter">
+                        <option value="">All Members</option>
+                        {% for member in group_context.members %}
+                        <option value="{{ member.user }}">{{ member.alias }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+                
                 <!-- Clear Filters -->
                 <div class="filter-section">
                     <button type="button" class="btn btn-outline-secondary w-100" id="clear-filters">
@@ -132,7 +161,9 @@
 // Initialize catalog when page loads
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof CoinCatalog !== 'undefined') {
-        window.coinCatalog = new CoinCatalog();
+        // Pass group context to JavaScript
+        const groupContext = {% if group_context %}{{ group_context | tojson }}{% else %}null{% endif %};
+        window.coinCatalog = new CoinCatalog(groupContext);
     }
 });
 
