@@ -12,6 +12,7 @@ class CoinCatalog {
         this.currentPage = 1;
         this.coinsPerPage = 20;
         this.loading = false;
+        this.currentCoinIndex = 0;
         
         // Static mapping for special commemorative series
         this.commemorativeLabels = {
@@ -409,6 +410,9 @@ class CoinCatalog {
 
     async showCoinDetailModal(coin) {
         try {
+            // Set current coin index for navigation
+            this.currentCoinIndex = this.filteredCoins.findIndex(c => c.coin_id === coin.coin_id);
+            
             // Fetch additional coin details if needed
             const detailedCoin = await this.fetchCoinDetails(coin.coin_id);
             
@@ -418,12 +422,17 @@ class CoinCatalog {
             // Show modal
             const modal = new bootstrap.Modal(document.getElementById('coinDetailModal'));
             modal.show();
+            
+            // Set up navigation handlers
+            this.setupModalNavigation();
         } catch (error) {
             console.error('Error showing coin details:', error);
             // Fallback to basic coin data
+            this.currentCoinIndex = this.filteredCoins.findIndex(c => c.coin_id === coin.coin_id);
             this.populateCoinModal(coin);
             const modal = new bootstrap.Modal(document.getElementById('coinDetailModal'));
             modal.show();
+            this.setupModalNavigation();
         }
     }
 
@@ -461,6 +470,22 @@ class CoinCatalog {
                     <div class="coin-value-badge">€${formattedValue}</div>
                 </div>
                 
+                <div class="coin-navigation">
+                    <button class="nav-btn nav-prev" onclick="window.coinCatalog.navigateToPreviousCoin()" 
+                            ${this.currentCoinIndex === 0 ? 'disabled' : ''}>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="coin-position">
+                        ${this.currentCoinIndex + 1} of ${this.filteredCoins.length}
+                    </div>
+                    
+                    <button class="nav-btn nav-next" onclick="window.coinCatalog.navigateToNextCoin()"
+                            ${this.currentCoinIndex === this.filteredCoins.length - 1 ? 'disabled' : ''}>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                
                 <div class="coin-image-section">
                     <img src="${mainImage}" 
                          class="coin-main-image" 
@@ -482,6 +507,123 @@ class CoinCatalog {
         `;
         
         document.querySelector('#coinDetailModal .modal-body').innerHTML = modalContent;
+    }
+
+    setupModalNavigation() {
+        const modal = document.getElementById('coinDetailModal');
+        const modalBody = modal.querySelector('.modal-body');
+        
+        // Remove existing event listeners
+        this.removeModalNavigation();
+        
+        // Keyboard navigation
+        this.modalKeyHandler = (e) => {
+            if (modal.classList.contains('show')) {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    this.navigateToPreviousCoin();
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    this.navigateToNextCoin();
+                }
+            }
+        };
+        
+        document.addEventListener('keydown', this.modalKeyHandler);
+        
+        // Touch/swipe navigation
+        let startX = 0;
+        let endX = 0;
+        
+        this.modalTouchStart = (e) => {
+            startX = e.touches[0].clientX;
+        };
+        
+        this.modalTouchEnd = (e) => {
+            endX = e.changedTouches[0].clientX;
+            this.handleSwipe(startX, endX);
+        };
+        
+        modalBody.addEventListener('touchstart', this.modalTouchStart, { passive: true });
+        modalBody.addEventListener('touchend', this.modalTouchEnd, { passive: true });
+        
+        // Clean up on modal hide
+        modal.addEventListener('hidden.bs.modal', () => {
+            this.removeModalNavigation();
+        }, { once: true });
+    }
+
+    removeModalNavigation() {
+        if (this.modalKeyHandler) {
+            document.removeEventListener('keydown', this.modalKeyHandler);
+        }
+        
+        const modal = document.getElementById('coinDetailModal');
+        const modalBody = modal.querySelector('.modal-body');
+        
+        if (this.modalTouchStart) {
+            modalBody.removeEventListener('touchstart', this.modalTouchStart);
+        }
+        if (this.modalTouchEnd) {
+            modalBody.removeEventListener('touchend', this.modalTouchEnd);
+        }
+    }
+
+    handleSwipe(startX, endX) {
+        const swipeThreshold = 50; // Minimum distance for a swipe
+        const difference = startX - endX;
+        
+        if (Math.abs(difference) > swipeThreshold) {
+            if (difference > 0) {
+                // Swipe left - next coin
+                this.navigateToNextCoin();
+            } else {
+                // Swipe right - previous coin
+                this.navigateToPreviousCoin();
+            }
+        }
+    }
+
+    async navigateToNextCoin() {
+        if (this.currentCoinIndex < this.filteredCoins.length - 1) {
+            this.currentCoinIndex++;
+            await this.updateModalCoin();
+        }
+    }
+
+    async navigateToPreviousCoin() {
+        if (this.currentCoinIndex > 0) {
+            this.currentCoinIndex--;
+            await this.updateModalCoin();
+        }
+    }
+
+    async updateModalCoin() {
+        const coin = this.filteredCoins[this.currentCoinIndex];
+        if (coin) {
+            try {
+                // Add slide animation
+                const modalBody = document.querySelector('#coinDetailModal .modal-body');
+                modalBody.style.opacity = '0.5';
+                modalBody.style.transform = 'translateX(10px)';
+                
+                // Fetch detailed coin info
+                const detailedCoin = await this.fetchCoinDetails(coin.coin_id);
+                
+                // Update modal content
+                this.populateCoinModal(detailedCoin || coin);
+                
+                // Animate back
+                setTimeout(() => {
+                    modalBody.style.opacity = '1';
+                    modalBody.style.transform = 'translateX(0)';
+                }, 50);
+                
+            } catch (error) {
+                console.error('Error updating modal coin:', error);
+                this.populateCoinModal(coin);
+            }
+        }
     }
 
     shareCoin(coinId) {
