@@ -383,7 +383,7 @@ class CoinCatalog {
             'Austria': '🇦🇹', 'Netherlands': '🇳🇱', 'Portugal': '🇵🇹', 'Greece': '🇬🇷',
             'Ireland': '🇮🇪', 'Slovenia': '🇸🇮', 'Slovakia': '🇸🇰', 'Estonia': '🇪🇪',
             'Latvia': '🇱🇻', 'Lithuania': '🇱🇹', 'Malta': '🇲🇹', 'Cyprus': '🇨🇾',
-            'Monaco': '🇲🇨', 'Vatican City': '🇻🇦', 'Andorra': '🇦🇩'
+            'Monaco': '🇲🇨', 'Vatican City': '🇻🇦', 'San Marino': '🇸🇲', 'Andorra': '🇦🇩'
         };
         return flags[country] || '🇪🇺';
     }
