@@ -226,6 +226,9 @@ class CoinCatalog {
         const typeClass = coin.coin_type === 'RE' ? 'bg-success' : 'bg-primary';
         const typeName = coin.coin_type === 'RE' ? 'Regular' : 'Commemorative';
         const imageUrl = coin.image_url || '/static/images/coin-placeholder.png';
+        
+        // Format value to always show 2 decimal places
+        const formattedValue = parseFloat(coin.value).toFixed(2);
 
         return `
             <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
@@ -242,12 +245,12 @@ class CoinCatalog {
                             ${coin.coin_type}
                         </span>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body coin-card-clickable" data-coin-id="${coin.coin_id}" style="cursor: pointer;">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h6 class="card-title mb-0">
                                 <span class="country-flag me-2">${flag}</span>${coin.country}
                             </h6>
-                            <span class="h5 mb-0 text-primary fw-bold">€${coin.value}</span>
+                            <span class="h5 mb-0 text-primary fw-bold">€${formattedValue}</span>
                         </div>
                         <p class="card-text text-muted small">${typeName} • ${coin.year}</p>
                         ${coin.feature ? `<p class="card-text small text-truncate" title="${coin.feature}">${coin.feature}</p>` : ''}
@@ -386,6 +389,168 @@ class CoinCatalog {
             document.getElementById('commemorative-filter').value = '';
             this.applyFilters();
         });
+
+        // Coin card click handlers
+        this.setupCoinCardClickHandlers();
+    }
+
+    setupCoinCardClickHandlers() {
+        document.addEventListener('click', (e) => {
+            const clickableArea = e.target.closest('.coin-card-clickable');
+            if (clickableArea) {
+                const coinId = clickableArea.dataset.coinId;
+                const coin = this.coins.find(c => c.coin_id === coinId);
+                if (coin) {
+                    this.showCoinDetailModal(coin);
+                }
+            }
+        });
+    }
+
+    async showCoinDetailModal(coin) {
+        try {
+            // Fetch additional coin details if needed
+            const detailedCoin = await this.fetchCoinDetails(coin.coin_id);
+            
+            // Populate modal content
+            this.populateCoinModal(detailedCoin || coin);
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('coinDetailModal'));
+            modal.show();
+        } catch (error) {
+            console.error('Error showing coin details:', error);
+            // Fallback to basic coin data
+            this.populateCoinModal(coin);
+            const modal = new bootstrap.Modal(document.getElementById('coinDetailModal'));
+            modal.show();
+        }
+    }
+
+    async fetchCoinDetails(coinId) {
+        try {
+            const response = await fetch(`/api/coins/${coinId}`);
+            if (response.ok) {
+                const data = await response.json();
+                return data.coin;
+            }
+        } catch (error) {
+            console.error('Error fetching coin details:', error);
+        }
+        return null;
+    }
+
+    populateCoinModal(coin) {
+        const flag = this.getCountryFlag(coin.country);
+        const formattedValue = parseFloat(coin.value).toFixed(2);
+        const typeClass = coin.coin_type === 'RE' ? 'bg-success' : 'bg-primary';
+        const typeName = coin.coin_type === 'RE' ? 'Regular' : 'Commemorative';
+        const commemorativeLabel = this.commemorativeLabels[coin.series] || coin.series;
+        
+        // Create image gallery - for now use single image, can be enhanced later
+        const mainImage = coin.image_url || '/static/images/coin-placeholder.png';
+        
+        const modalContent = `
+            <div class="coin-detail-container">
+                <div class="coin-image-section">
+                    <img src="${mainImage}" 
+                         class="coin-main-image" 
+                         id="coinMainImage"
+                         alt="${coin.country} ${coin.value} Euro"
+                         onerror="this.src='/static/images/coin-placeholder.png'">
+                </div>
+                
+                <div class="coin-info-section">
+                    <div class="coin-header">
+                        <div class="coin-title">
+                            <span class="country-flag">${flag}</span>
+                            ${coin.country}
+                            <div class="coin-value-badge">€${formattedValue}</div>
+                        </div>
+                        <span class="coin-type-badge ${typeClass}">${typeName}</span>
+                    </div>
+                    
+                    <div class="coin-detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Year</div>
+                            <div class="detail-value">${coin.year}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Series</div>
+                            <div class="detail-value">${commemorativeLabel}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Coin ID</div>
+                            <div class="detail-value">${coin.coin_id}</div>
+                        </div>
+                        ${coin.volume ? `
+                            <div class="detail-item">
+                                <div class="detail-label">Volume</div>
+                                <div class="detail-value">${coin.volume}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    ${coin.feature ? `
+                        <div class="coin-feature-section">
+                            <div class="feature-title">
+                                <i class="fas fa-info-circle text-primary"></i>
+                                Feature Description
+                            </div>
+                            <div class="feature-description">${coin.feature}</div>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="modal-actions">
+                        <button class="action-btn btn-share" onclick="window.coinCatalog.shareCoin('${coin.coin_id}')">
+                            <i class="fas fa-share-alt"></i>
+                            Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.querySelector('#coinDetailModal .modal-body').innerHTML = modalContent;
+    }
+
+    shareCoin(coinId) {
+        const coin = this.coins.find(c => c.coin_id === coinId);
+        if (coin) {
+            const shareText = `Check out this ${coin.country} €${parseFloat(coin.value).toFixed(2)} coin from ${coin.year}!`;
+            const shareUrl = `${window.location.origin}/catalog?search=${encodeURIComponent(coin.coin_id)}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: `${coin.country} €${parseFloat(coin.value).toFixed(2)} Coin`,
+                    text: shareText,
+                    url: shareUrl
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(`${shareText} ${shareUrl}`).then(() => {
+                    // Show toast notification
+                    this.showToast('Link copied to clipboard!');
+                }).catch(() => {
+                    // Fallback if clipboard API is not available
+                    this.showToast('Unable to copy link');
+                });
+            }
+        }
+    }
+
+    showToast(message) {
+        // Simple toast implementation
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        toast.textContent = message;
+        
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
     }
 
     setLoading(loading) {
