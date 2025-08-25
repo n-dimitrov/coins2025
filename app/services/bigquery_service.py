@@ -188,15 +188,22 @@ class BigQueryService:
     async def get_coin_ownership_by_group(self, coin_id: str, group_id: int) -> List[Dict[str, Any]]:
         """Get ownership information for a specific coin within a group."""
         query = f"""
+        WITH latest_ownership AS (
+            SELECT 
+                h.name, h.coin_id, h.date, h.is_active,
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+            FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+            WHERE h.coin_id = @coin_id
+        )
         SELECT 
-            h.name as owner,
+            lo.name as owner,
             gu.alias as alias,
-            h.date as acquired_date
-        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+            lo.date as acquired_date
+        FROM latest_ownership lo
         JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu 
-            ON h.name = gu.user AND gu.group_id = @group_id
-        WHERE h.coin_id = @coin_id
-        ORDER BY h.date DESC
+            ON lo.name = gu.user AND gu.group_id = @group_id
+        WHERE lo.rn = 1 AND lo.is_active = true
+        ORDER BY lo.date DESC
         """
         
         return await self._get_cached_or_query(query, {
@@ -239,17 +246,23 @@ class BigQueryService:
         where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
         
         query = f"""
-        WITH coin_ownership AS (
+        WITH latest_ownership AS (
+            SELECT 
+                h.name, h.coin_id, h.date, h.is_active,
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+            FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+        ),
+        coin_ownership AS (
             SELECT 
                 c.*,
-                h.name as owner,
+                lo.name as owner,
                 gu.alias as owner_alias,
-                h.date as acquired_date
+                lo.date as acquired_date
             FROM `{self.client.project}.{self.dataset_id}.{self.table_id}` c
-            LEFT JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h 
-                ON c.coin_id = h.coin_id
+            LEFT JOIN latest_ownership lo 
+                ON c.coin_id = lo.coin_id AND lo.rn = 1 AND lo.is_active = true
             LEFT JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu 
-                ON h.name = gu.user AND gu.group_id = @group_id
+                ON lo.name = gu.user AND gu.group_id = @group_id
             WHERE {where_sql}
         )
         SELECT 
@@ -273,15 +286,195 @@ class BigQueryService:
     async def get_group_stats(self, group_id: int) -> Dict[str, int]:
         """Get statistics for a group."""
         query = f"""
+        WITH latest_ownership AS (
+            SELECT 
+                h.name, h.coin_id, h.is_active,
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+            FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+        )
         SELECT 
             COUNT(DISTINCT gu.user) as total_members,
-            COUNT(DISTINCT h.coin_id) as total_coins_owned,
-            COUNT(h.coin_id) as total_ownership_records
+            COUNT(DISTINCT CASE WHEN lo.is_active = true THEN lo.coin_id END) as total_coins_owned,
+            COUNT(CASE WHEN lo.is_active = true THEN 1 END) as total_ownership_records
         FROM `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu
-        LEFT JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h 
-            ON gu.user = h.name
+        LEFT JOIN latest_ownership lo 
+            ON gu.user = lo.name AND lo.rn = 1
         WHERE gu.group_id = @group_id
         """
         
         results = await self._get_cached_or_query(query, {'group_id': group_id})
         return dict(results[0]) if results else {}
+
+    # Ownership management methods
+    async def add_coin_ownership(self, name: str, coin_id: str, date: datetime, created_by: str = None) -> str:
+        """Add a new coin ownership record."""
+        import uuid
+        from datetime import datetime as dt
+        
+        record_id = str(uuid.uuid4())
+        current_time = dt.now()
+        
+        # First check if user already owns this coin
+        existing = await self.get_current_coin_ownership(coin_id, name)
+        if existing:
+            raise ValueError(f"User {name} already owns coin {coin_id}")
+        
+        query = f"""
+        INSERT INTO `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}`
+        (id, name, coin_id, date, created_at, created_by, is_active)
+        VALUES (@id, @name, @coin_id, @date, @created_at, @created_by, true)
+        """
+        
+        params = {
+            'id': record_id,
+            'name': name,
+            'coin_id': coin_id,
+            'date': date,
+            'created_at': current_time,
+            'created_by': created_by or 'api',
+        }
+        
+        # Execute query in thread pool
+        def execute_insert():
+            job_config = bigquery.QueryJobConfig()
+            query_parameters = []
+            for k, v in params.items():
+                if k in ['date', 'created_at']:
+                    query_parameters.append(bigquery.ScalarQueryParameter(k, "TIMESTAMP", v))
+                elif k == 'is_active':
+                    query_parameters.append(bigquery.ScalarQueryParameter(k, "BOOL", v))
+                else:
+                    query_parameters.append(bigquery.ScalarQueryParameter(k, "STRING", str(v)))
+            job_config.query_parameters = query_parameters
+            
+            query_job = self.client.query(query, job_config=job_config)
+            query_job.result()
+            
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, execute_insert)
+        
+        # Invalidate related cache
+        await self._invalidate_ownership_cache(coin_id=coin_id, user_name=name)
+        
+        return record_id
+
+    async def remove_coin_ownership(self, name: str, coin_id: str, removal_date: datetime, created_by: str = None) -> str:
+        """Remove coin ownership by adding a removal record."""
+        import uuid
+        from datetime import datetime as dt
+        
+        # Check if user currently owns this coin
+        current_ownership = await self.get_current_coin_ownership(coin_id, name)
+        if not current_ownership:
+            raise ValueError(f"User {name} does not currently own coin {coin_id}")
+        
+        record_id = str(uuid.uuid4())
+        current_time = dt.now()
+        
+        query = f"""
+        INSERT INTO `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}`
+        (id, name, coin_id, date, created_at, created_by, is_active)
+        VALUES (@id, @name, @coin_id, @removal_date, @created_at, @created_by, false)
+        """
+        
+        params = {
+            'id': record_id,
+            'name': name,
+            'coin_id': coin_id,
+            'removal_date': removal_date,
+            'created_at': current_time,
+            'created_by': created_by or 'api',
+        }
+        
+        # Execute query in thread pool
+        def execute_insert():
+            job_config = bigquery.QueryJobConfig()
+            query_parameters = []
+            for k, v in params.items():
+                if k in ['removal_date', 'created_at']:
+                    query_parameters.append(bigquery.ScalarQueryParameter(k, "TIMESTAMP", v))
+                else:
+                    query_parameters.append(bigquery.ScalarQueryParameter(k, "STRING", str(v)))
+            job_config.query_parameters = query_parameters
+            
+            query_job = self.client.query(query, job_config=job_config)
+            query_job.result()
+            
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, execute_insert)
+        
+        # Invalidate related cache
+        await self._invalidate_ownership_cache(coin_id=coin_id, user_name=name)
+        
+        return record_id
+
+    async def get_current_coin_ownership(self, coin_id: str, name: str = None) -> List[Dict[str, Any]]:
+        """Get current owners of a coin (latest active record per user)."""
+        where_clause = "WHERE h.coin_id = @coin_id"
+        params = {'coin_id': coin_id}
+        
+        if name:
+            where_clause += " AND h.name = @name"
+            params['name'] = name
+            
+        query = f"""
+        WITH latest_records AS (
+            SELECT 
+                h.name, h.coin_id, h.date, h.is_active, h.created_at,
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+            FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+            {where_clause}
+        )
+        SELECT name, date as acquired_date
+        FROM latest_records
+        WHERE rn = 1 AND is_active = true
+        """
+        
+        return await self._get_cached_or_query(query, params)
+
+    async def get_user_owned_coins(self, name: str, group_id: int = None) -> List[Dict[str, Any]]:
+        """Get all coins currently owned by a user."""
+        group_join = ""
+        group_where = ""
+        params = {'name': name}
+        
+        if group_id:
+            group_join = f"JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu ON lr.name = gu.user"
+            group_where = "AND gu.group_id = @group_id"
+            params['group_id'] = group_id
+            
+        query = f"""
+        WITH latest_records AS (
+            SELECT 
+                h.name, h.coin_id, h.date, h.is_active, h.created_at,
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+            FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+            WHERE h.name = @name
+        )
+        SELECT lr.coin_id, lr.date as acquired_date, c.coin_type, c.year, c.country, c.series, c.value
+        FROM latest_records lr
+        {group_join}
+        JOIN `{self.client.project}.{self.dataset_id}.{self.table_id}` c ON lr.coin_id = c.coin_id
+        WHERE lr.rn = 1 AND lr.is_active = true {group_where}
+        ORDER BY lr.date DESC
+        """
+        
+        return await self._get_cached_or_query(query, params)
+
+    async def _invalidate_ownership_cache(self, coin_id: str = None, user_name: str = None, group_id: int = None):
+        """Invalidate cache entries related to ownership changes."""
+        keys_to_remove = []
+        
+        for cache_key in list(self._cache.keys()):
+            # Invalidate if cache key contains the affected coin_id or user_name
+            if (coin_id and coin_id in cache_key) or \
+               (user_name and user_name in cache_key) or \
+               (group_id and str(group_id) in cache_key) or \
+               'ownership' in cache_key.lower() or \
+               'coins_with_ownership' in cache_key.lower():
+                keys_to_remove.append(cache_key)
+        
+        for key in keys_to_remove:
+            del self._cache[key]
+            
+        logger.info(f"Invalidated {len(keys_to_remove)} cache entries due to ownership change")
