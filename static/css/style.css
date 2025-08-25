@@ -413,6 +413,20 @@
     margin-left: 0.5rem;
 }
 
+/* Ensure coin type badges and ownership badges align at the same level */
+.position-relative .badge.position-absolute.top-0.start-0,
+.position-relative .badge.position-absolute.top-0.end-0 {
+    top: 8px !important;
+}
+
+.position-relative .badge.position-absolute.top-0.start-0 {
+    left: 8px !important;
+}
+
+.position-relative .badge.position-absolute.top-0.end-0 {
+    right: 8px !important;
+}
+
 /* Navigation controls */
 .coin-navigation {
     display: flex;
@@ -665,7 +679,6 @@
         inset 0 1px 0 rgba(255,255,255,0.2) !important;
     z-index: 10 !important;
     cursor: pointer !important;
-    position: relative !important;
     transition: all 0.2s ease !important;
     color: white !important;
     padding: 0 !important;

@@ -292,14 +292,14 @@ class CoinCatalog {
                 if (ownersCount === totalMembers) {
                     // Everyone owns it - show star badge with custom circular 3D styling
                     ownershipBadgeHtml = `
-                        <span class="position-absolute top-0 end-0 m-2 ownership-badge ownership-full" title="Owned by everyone (${ownersCount}/${totalMembers})">
+                        <span class="position-absolute top-0 end-0 ownership-badge ownership-full" title="Owned by everyone (${ownersCount}/${totalMembers})">
                             ⭐
                         </span>
                     `;
                 } else {
                     // Show number of owners with custom circular 3D styling
                     ownershipBadgeHtml = `
-                        <span class="position-absolute top-0 end-0 m-2 ownership-badge ownership-partial" title="Owned by ${ownersCount}/${totalMembers} members">
+                        <span class="position-absolute top-0 end-0 ownership-badge ownership-partial" title="Owned by ${ownersCount}/${totalMembers} members">
                             ${ownersCount}
                         </span>
                     `;
@@ -347,7 +347,7 @@ class CoinCatalog {
                             loading="lazy"
                             onerror="this.src='/static/images/coin-placeholder.png'"
                         >
-                        <span class="badge ${typeClass} position-absolute top-0 start-0 m-2">
+                        <span class="badge ${typeClass} position-absolute top-0 start-0">
                             ${coin.coin_type}
                         </span>
                         ${ownershipBadgeHtml}
