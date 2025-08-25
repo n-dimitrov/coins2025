@@ -135,12 +135,16 @@ async def get_group_coins(
         for coin_data in coins_data:
             coin_dict = dict(coin_data)
             # Handle owners array
+            owners = []
             if 'owners' in coin_dict and coin_dict['owners']:
-                coin_dict['owners'] = [dict(owner) for owner in coin_dict['owners'] if owner]
-            else:
-                coin_dict['owners'] = []
+                for owner in coin_dict['owners']:
+                    if owner:  # Skip None values
+                        owners.append(dict(owner))
             
-            coins.append(Coin(**{k: v for k, v in coin_dict.items() if k != 'owners'}))
+            coin_dict['owners'] = owners
+            coin_dict['is_owned'] = len(owners) > 0
+            
+            coins.append(Coin(**coin_dict))
         
         # Client-side search if needed
         if search and coins:
