@@ -7,15 +7,15 @@ A comprehensive, interactive web application for exploring and cataloging Euro c
 ![My EuroCoins Banner](https://img.shields.io/badge/My%20EuroCoins-2025-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBzdHJva2U9IiNGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=)
 
 [![Deploy Status](https://img.shields.io/badge/deploy-passing-green?style=flat-square)](https://myeurocoins.org)
-[![Python](https://img.shields.io/badge/python-3.11+-blue?style=flat-square)](https://python.org)
+[![Python](https://img.shields.io/badge/python-3.12+-blue?style=flat-square)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-latest-green?style=flat-square)](https://fastapi.tiangolo.com)
 [![Google Cloud](https://img.shields.io/badge/Google%20Cloud-Run-blue?style=flat-square)](https://cloud.google.com/run)
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.11+
-- Google Cloud CLI
+- Python 3.12+
+- Google Cloud CLI (optional for local BigQuery access)
 - Docker (for deployment)
 
 ## 🛠️ Development
@@ -27,8 +27,8 @@ git clone https://github.com/n-dimitrov/coins2025.git
 cd coins2025
 
 # Create and activate Python virtual environment
-python3.11 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+python3.12 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -38,7 +38,9 @@ cp .env.template .env
 # Edit .env with your Google Cloud credentials
 
 # Run development server
-uvicorn app.main:app --reload --port 8000 --host 0.0.0.0
+python main.py
+# or using scripts
+./scripts/run_local.sh
 
 # Visit: http://localhost:8000
 ```
@@ -69,11 +71,18 @@ chmod +x scripts/deploy_to_gcp.sh
 ## 🌟 Features
 
 ### 📚 **Comprehensive Catalog**
-- **800+ Total Coins** from 1999-2025 (continuously updated)
-- **Regular Circulation Coins** from all eurozone countries
-- **Commemorative Coins** including special series and UNESCO World Heritage sites
+- **1000+ Total Coins** from 1999-2025 (continuously updated)
+- **Regular Circulation Coins** from all eurozone countries with series variations
+- **Commemorative €2 Coins** including special series and joint European issues
 - **27 Countries** covering all eurozone nations and micro-states
 - **Real Coin Images** sourced from European Central Bank official database
+
+### 👥 **Group Collection Management**
+- **Group Creation & Management** - Create groups for family, friends, or collecting clubs
+- **Ownership Tracking** - Track which group members own which coins
+- **Collection Status Filters** - Filter by owned/missing coins in group context
+- **Member-Specific Views** - See collections by individual group members
+- **Ownership Badges** - Visual indicators showing ownership status and counts
 
 ### 🎨 **Modern UI Design**
 - **Fully Responsive** - Optimized for mobile, tablet, and desktop
@@ -81,14 +90,15 @@ chmod +x scripts/deploy_to_gcp.sh
 - **Interactive Filtering** with real-time search and multi-criteria selection
 - **Country Flags** for instant visual identification
 - **Accessibility Compliant** following WCAG 2.1 guidelines
+- **Modal Coin Details** with image gallery and navigation
 
 ### 🔍 **Advanced Search & Filtering**
 - **Real-time Text Search** across country names, features, and descriptions
 - **Type Filtering** - Regular (RE) vs Commemorative (CC) coins
-- **Year Range Selection** with slider or dropdown (1999-2025)
 - **Denomination Filtering** from 1¢ to €2 coins
 - **Country Multi-Selection** with visual flag indicators
-- **Series Filtering** for commemorative coin series (UNESCO, Bundesländer, etc.)
+- **Commemorative Series Filtering** with human-readable labels
+- **Group Filters** - Ownership status and member-specific filtering
 
 ### ⚡ **Performance & Architecture**
 - **FastAPI Backend** with async BigQuery integration for blazing speed
@@ -101,15 +111,15 @@ chmod +x scripts/deploy_to_gcp.sh
 ## 🏗️ Tech Stack
 
 ### Backend
-- **Python 3.11** - Core runtime
+- **Python 3.12** - Core runtime
 - **FastAPI** - Modern, fast web framework
 - **Uvicorn** - ASGI server
 - **Google Cloud BigQuery** - Data warehouse
-- **Pydantic** - Data validation
+- **Pydantic** - Data validation and serialization
 
 ### Frontend
 - **HTML5 & CSS3** - Core web technologies
-- **Vanilla JavaScript** - No framework dependencies
+- **Vanilla JavaScript ES6+** - No framework dependencies
 - **Bootstrap 5** - Responsive CSS framework
 - **Font Awesome 6** - Icon library
 
@@ -118,44 +128,70 @@ chmod +x scripts/deploy_to_gcp.sh
 - **Google Cloud Build** - Automated CI/CD pipeline
 - **Google BigQuery** - Scalable data warehouse for coin catalog
 - **Docker** - Containerization for consistent deployments
-- **Cloud Storage** - Static asset delivery via CDN
 
 ## 📁 Project Structure
 
 ```
 coins2025/
 ├── app/                        # FastAPI application
-│   ├── main.py                 # Application entry point
-│   ├── config.py               # Configuration settings
-│   ├── models/                 # Pydantic data models
-│   │   └── coin.py             # Coin data structures
-│   ├── routers/                # API route handlers
-│   │   ├── coins.py            # Coin API endpoints
-│   │   ├── health.py           # Health check endpoint
-│   │   └── pages.py            # HTML page routes
-│   └── services/               # Business logic
-│       └── bigquery_service.py # BigQuery integration
-├── templates/                  # Jinja2 HTML templates
-│   ├── base.html              # Base template with navigation
-│   ├── index.html             # Homepage
-│   ├── catalog.html           # Coin catalog page
-│   └── error.html             # Error pages
-├── static/                     # Static assets
-│   ├── css/                   # Stylesheets
-│   ├── js/                    # JavaScript modules
-│   └── images/                # Icons and images
-├── data/                      # Data files and imports
-│   ├── catalog.csv            # Coin catalog data
-│   ├── cc_catalog.json        # Commemorative coins
-│   └── re_catalog.json        # Regular coins
-├── scripts/                   # Deployment and utility scripts
-├── streamlit/                 # Data import utilities
-├── tools/                     # Web scraping tools
-├── credentials/               # Service account credentials
-├── Dockerfile                 # Container configuration
-├── cloudbuild.yaml           # Google Cloud Build config
-├── requirements.txt          # Python dependencies
-└── README.md                 # This file
+│   ├── __init__.py            # Package initialization
+│   ├── config.py              # Configuration settings
+│   ├── models/                # Pydantic data models
+│   │   ├── __init__.py
+│   │   └── coin.py            # Coin data structures
+│   ├── routers/               # API route handlers
+│   │   ├── __init__.py
+│   │   ├── coins.py           # Coin API endpoints
+│   │   ├── health.py          # Health check endpoint
+│   │   └── pages.py           # HTML page routes
+│   └── services/              # Business logic
+│       ├── __init__.py
+│       ├── bigquery_service.py # BigQuery integration
+│       └── group_service.py    # Group management
+├── templates/                 # Jinja2 HTML templates
+│   ├── base.html             # Base template with navigation
+│   ├── index.html            # Homepage
+│   ├── catalog.html          # Coin catalog page
+│   ├── error.html            # Error pages
+│   └── 404.html              # 404 error page
+├── static/                    # Static assets
+│   ├── css/
+│   │   └── style.css         # Custom styles
+│   ├── js/
+│   │   ├── app.js            # Main application logic
+│   │   └── coins.js          # Coin catalog functionality
+│   └── images/               # Icons, favicons, and images
+├── docs/                     # Documentation
+│   ├── ADDING_SERIES.md      # Guide for adding new coin series
+│   ├── DEPLOYMENT.md         # Production deployment guide
+│   ├── IMPLEMENTATION_PLAN.md # Technical architecture
+│   ├── GROUPS_IMPLEMENTATION_PLAN.md # Group features design
+│   ├── MODAL_IMPLEMENTATION.md # Modal system documentation
+│   ├── OWNERSHIP_API_SUMMARY.md # Ownership API reference
+│   └── OWNERSHIP_BADGE_IMPLEMENTATION.md # Ownership badges
+├── data/                     # Data files and imports
+│   ├── catalog.csv           # Complete coin catalog
+│   ├── groups.csv            # Group definitions
+│   ├── group_users.csv       # Group membership
+│   ├── history.csv           # Ownership history
+│   ├── cc_catalog.json       # Commemorative coins
+│   └── re_catalog.json       # Regular coins
+├── tools/                    # Data management tools
+│   ├── import_catalog.py     # Import coin catalog to BigQuery
+│   ├── import_groups.py      # Import group data
+│   ├── import_history.py     # Import ownership history
+│   ├── scrape_cc_catalog.py  # Scrape commemorative coin data
+│   └── scrape_re_catalog.py  # Scrape regular coin data
+├── scripts/                  # Deployment and utility scripts
+│   ├── deploy_to_gcp.sh     # Google Cloud deployment
+│   ├── run_local.sh         # Local development server
+│   └── test_docker.sh       # Docker testing
+├── credentials/              # Service account credentials
+├── main.py                   # Application entry point
+├── Dockerfile               # Container configuration
+├── cloudbuild.yaml          # Google Cloud Build config
+├── requirements.txt         # Python dependencies
+└── README.md                # This file
 ```
 ## 💰 Cost & Performance
 
@@ -225,26 +261,77 @@ coins2025/
 
 ### Public Endpoints
 ```
-GET  /                     # Homepage
-GET  /catalog              # Catalog page
-GET  /coin/{coin_id}       # Individual coin details
+GET  /                          # Homepage
+GET  /catalog                   # Catalog page
+GET  /catalog/group/{group_name} # Group catalog page
+GET  /coin/{coin_id}            # Individual coin details
 
-GET  /api/health           # Health check
-GET  /api/coins            # List coins with filters
-GET  /api/coins/{coin_id}  # Get specific coin
-GET  /api/coins/stats      # Get collection statistics
-GET  /api/coins/filters    # Get filter options
+GET  /api/health                # Health check
+GET  /api/coins                 # List coins with filters
+GET  /api/coins/{coin_id}       # Get specific coin
+GET  /api/coins/group/{group_name} # List coins with group ownership
+GET  /api/coins/stats           # Get collection statistics
+GET  /api/coins/filters         # Get filter options
 ```
 
 ### Query Parameters
 ```
-?coin_type=RE|CC          # Filter by type
-?country=Germany          # Filter by country
-?year=2023               # Filter by year
-?search=europa           # Text search
-?limit=20                # Results per page
-?offset=0                # Pagination offset
+?coin_type=RE|CC               # Filter by type
+?country=Germany               # Filter by country
+?commemorative=CC-2024         # Filter by commemorative series
+?search=europa                 # Text search
+?ownership_status=owned|missing # Group ownership filter
+?owned_by=username             # Filter by specific group member
+?limit=20                      # Results per page
+?offset=0                      # Pagination offset
 ```
+
+## 🤝 Contributing
+
+### Development Workflow
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test locally with `python main.py`
+5. Submit a pull request
+
+### Development Guidelines
+- **Python**: Follow PEP 8, use type hints, document functions
+- **JavaScript**: Use ES6+ features, avoid jQuery, modular design
+- **HTML**: Semantic markup, accessibility attributes
+- **CSS**: Follow Bootstrap conventions, use custom properties
+- **Testing**: Write unit tests for new features
+- **Documentation**: Update relevant docs with changes
+
+### Adding New Coin Series
+For detailed instructions on adding new commemorative series or regular coin series, see [docs/ADDING_SERIES.md](docs/ADDING_SERIES.md).
+
+### Code Quality
+```bash
+# Format Python code
+black app/ --line-length 88
+
+# Lint Python code
+flake8 app/ --max-line-length 88
+
+# Type checking
+mypy app/
+
+# Run tests
+pytest tests/
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **European Central Bank** - Official coin images and technical specifications
+- **Google Cloud Platform** - Robust infrastructure and BigQuery data warehouse
+- **FastAPI** - Modern, high-performance web framework
+- **Bootstrap** - Responsive design framework
+- **Font Awesome** - Comprehensive icon library
 
 ## 🤝 Contributing
 
@@ -264,7 +351,7 @@ GET  /api/coins/filters    # Get filter options
 - **Documentation**: Update relevant docs with changes
 
 ### Adding New Coin Series
-For detailed instructions on adding new commemorative series or regular coin series, see [ADDING_SERIES.md](ADDING_SERIES.md).
+For detailed instructions on adding new commemorative series or regular coin series, see [docs/ADDING_SERIES.md](docs/ADDING_SERIES.md).
 
 ### Code Quality
 ```bash
@@ -295,9 +382,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📚 Documentation
 
-- [Adding New Series Guide](ADDING_SERIES.md) - Comprehensive guide for adding new coin series
-- [Implementation Plan](IMPLEMENTATION_PLAN.md) - Technical architecture and decisions
-- [Deployment Guide](DEPLOYMENT.md) - Production deployment instructions
+- [Adding New Series Guide](docs/ADDING_SERIES.md) - Comprehensive guide for adding new coin series
+- [Implementation Plan](docs/IMPLEMENTATION_PLAN.md) - Technical architecture and decisions
+- [Groups Implementation](docs/GROUPS_IMPLEMENTATION_PLAN.md) - Group features design and implementation
+- [Deployment Guide](docs/DEPLOYMENT.md) - Production deployment instructions
+- [Modal Implementation](docs/MODAL_IMPLEMENTATION.md) - Coin detail modal system
+- [Ownership API](docs/OWNERSHIP_API_SUMMARY.md) - Group ownership API reference
+- [Ownership Badges](docs/OWNERSHIP_BADGE_IMPLEMENTATION.md) - Visual ownership indicators
 - [API Documentation](https://myeurocoins.org/docs) - Interactive API documentation
 
 ## 📧 Contact & Support
