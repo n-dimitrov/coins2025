@@ -281,7 +281,34 @@ class CoinCatalog {
         // Format value to always show 2 decimal places
         const formattedValue = parseFloat(coin.value).toFixed(2);
 
-        // Generate ownership badges if in group mode
+        // Generate ownership badge for upper right corner if in group mode
+        let ownershipBadgeHtml = '';
+        
+        if (this.groupContext && coin.owners !== undefined) {
+            const ownersCount = coin.owners ? coin.owners.length : 0;
+            const totalMembers = this.groupContext.members ? this.groupContext.members.length : 0;
+            
+            if (ownersCount > 0) {
+                if (ownersCount === totalMembers) {
+                    // Everyone owns it - show stars badge with success color
+                    ownershipBadgeHtml = `
+                        <span class="badge bg-success text-white position-absolute top-0 end-0 m-2 ownership-badge ownership-full" title="Owned by everyone (${ownersCount}/${totalMembers})">
+                            ⭐⭐⭐
+                        </span>
+                    `;
+                } else {
+                    // Show number of owners with success color
+                    ownershipBadgeHtml = `
+                        <span class="badge bg-success text-white position-absolute top-0 end-0 m-2 ownership-badge ownership-partial" title="Owned by ${ownersCount}/${totalMembers} members">
+                            ${ownersCount}
+                        </span>
+                    `;
+                }
+            }
+            // No badge for 0 owners (case 1)
+        }
+
+        // Generate ownership info in card body (keep existing functionality)
         let ownershipHtml = '';
         if (this.groupContext && coin.owners) {
             if (coin.owners.length > 0) {
@@ -316,6 +343,7 @@ class CoinCatalog {
                         <span class="badge ${typeClass} position-absolute top-0 start-0 m-2">
                             ${coin.coin_type}
                         </span>
+                        ${ownershipBadgeHtml}
                     </div>
                     <div class="card-body coin-card-clickable" data-coin-id="${coin.coin_id}" style="cursor: pointer;">
                         <div class="d-flex justify-content-between align-items-center mb-2">
