@@ -22,21 +22,27 @@ class GroupService:
         try:
             group = await self.validate_group(group_name)
             if not group:
+                logger.error(f"Group '{group_name}' not found in validate_group")
                 return None
             
+            logger.info(f"Group found: {group}")
+
             # Get group members
             members = await self.bigquery_service.get_group_users(group['id'])
             
             # Get group stats
             stats = await self.bigquery_service.get_group_stats(group['id'])
             
-            return {
+            context = {
                 'id': group['id'],
                 'name': group['name'],
-                'group': group['group'],
+                'group_key': group.get('group_key', group.get('group', group_name)),  # Handle both old and new schema
                 'members': members,
                 'stats': stats
             }
+            
+            logger.info(f"Group context created: {context}")
+            return context
         except Exception as e:
             logger.error(f"Error getting group context for {group_name}: {str(e)}")
             return None

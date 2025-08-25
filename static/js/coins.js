@@ -139,7 +139,7 @@ class CoinCatalog {
             
             // Use group API if in group mode
             const apiPath = this.groupContext 
-                ? `/api/coins/group/${this.groupContext.group}/?${params}`
+                ? `/api/coins/group/${this.groupContext.group_key}/?${params}`
                 : `/api/coins/?${params}`;
             
             const apiUrl = this.getApiUrl(apiPath);
