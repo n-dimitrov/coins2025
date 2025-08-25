@@ -88,8 +88,8 @@
 
                 <!-- Group Members Filter -->
                 <div class="filter-section">
-                    <label for="member-filter" class="form-label">Group Members</label>
-                    <select class="form-select" id="member-filter">
+                    <label for="owned-by-filter" class="form-label">Group Members</label>
+                    <select class="form-select" id="owned-by-filter">
                         <option value="">All Members</option>
                         {% for member in group_context.members %}
                         <option value="{{ member.user }}">{{ member.alias }}</option>

@@ -95,6 +95,7 @@ class CoinCatalog {
     async init() {
         try {
             await this.loadFilterOptions();
+            this.populateGroupMemberFilter(); // Populate group member filter if in group context
             await this.loadCoins();
             this.setupEventListeners();
             this.renderCoins();
@@ -214,6 +215,21 @@ class CoinCatalog {
         });
     }
 
+    populateGroupMemberFilter() {
+        const select = document.getElementById('owned-by-filter');
+        if (!select || !this.groupContext || !this.groupContext.members) return;
+        
+        // Clear existing options except the first one
+        select.innerHTML = '<option value="">All Members</option>';
+        
+        this.groupContext.members.forEach(member => {
+            const option = document.createElement('option');
+            option.value = member.user;
+            option.textContent = member.alias;
+            select.appendChild(option);
+        });
+    }
+
     applyFilters() {
         this.filteredCoins = this.coins.filter(coin => {
             if (this.currentFilters.coin_type && coin.coin_type !== this.currentFilters.coin_type) {
@@ -239,6 +255,31 @@ class CoinCatalog {
                     return false;
                 }
             }
+            
+            // Group-specific filters (only apply if in group context)
+            if (this.groupContext) {
+                // Ownership status filter
+                if (this.currentFilters.ownership_status) {
+                    const hasOwners = coin.owners && coin.owners.length > 0;
+                    if (this.currentFilters.ownership_status === 'owned' && !hasOwners) {
+                        return false;
+                    }
+                    if (this.currentFilters.ownership_status === 'missing' && hasOwners) {
+                        return false;
+                    }
+                }
+                
+                // Owned by specific member filter
+                if (this.currentFilters.owned_by) {
+                    const isOwnedByMember = coin.owners && coin.owners.some(owner => 
+                        owner.owner === this.currentFilters.owned_by
+                    );
+                    if (!isOwnedByMember) {
+                        return false;
+                    }
+                }
+            }
+            
             return true;
         });
         
@@ -486,6 +527,14 @@ class CoinCatalog {
             ownedByFilter.addEventListener('change', (e) => {
                 this.currentFilters.owned_by = e.target.value;
                 this.applyFilters();
+            });
+        }
+
+        // Clear filters button
+        const clearFiltersBtn = document.getElementById('clear-filters');
+        if (clearFiltersBtn) {
+            clearFiltersBtn.addEventListener('click', () => {
+                this.clearAllFilters();
             });
         }
 
@@ -919,6 +968,44 @@ class CoinCatalog {
         if (modal) {
             modal.style.display = 'none';
         }
+    }
+
+    clearAllFilters() {
+        // Reset all filter values
+        this.currentFilters = {
+            coin_type: '',
+            value: '',
+            country: '',
+            commemorative: '',
+            search: '',
+            ownership_status: '',
+            owned_by: ''
+        };
+        
+        // Reset all form elements
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) searchInput.value = '';
+        
+        const typeFilter = document.getElementById('type-filter');
+        if (typeFilter) typeFilter.value = '';
+        
+        const valueFilter = document.getElementById('value-filter');
+        if (valueFilter) valueFilter.value = '';
+        
+        const countryFilter = document.getElementById('country-filter');
+        if (countryFilter) countryFilter.value = '';
+        
+        const commemorativeFilter = document.getElementById('commemorative-filter');
+        if (commemorativeFilter) commemorativeFilter.value = '';
+        
+        const ownershipFilter = document.getElementById('ownership-filter');
+        if (ownershipFilter) ownershipFilter.value = '';
+        
+        const ownedByFilter = document.getElementById('owned-by-filter');
+        if (ownedByFilter) ownedByFilter.value = '';
+        
+        // Reapply filters (which will now show all coins)
+        this.applyFilters();
     }
 
     formatAcquisitionDate(dateString) {
