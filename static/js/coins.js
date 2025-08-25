@@ -308,33 +308,8 @@ class CoinCatalog {
             // No badge for 0 owners (case 1)
         }
 
-        // Generate ownership info in card body (keep existing functionality)
+        // Ownership info moved to coin details modal - no longer displayed in card body
         let ownershipHtml = '';
-        if (this.groupContext && coin.owners) {
-            if (coin.owners.length > 0) {
-                // Sort owners by date (oldest first)
-                const sortedOwners = [...coin.owners].sort((a, b) => {
-                    const dateA = new Date(a.acquired_date || '1970-01-01');
-                    const dateB = new Date(b.acquired_date || '1970-01-01');
-                    return dateA - dateB;
-                });
-
-                const ownerBadges = sortedOwners.map(owner => 
-                    `<span class="badge bg-success me-1" title="Owned by ${owner.alias}">${owner.alias}</span>`
-                ).join('');
-                ownershipHtml = `
-                    <div class="ownership-info mt-2">
-                        ${ownerBadges}
-                    </div>
-                `;
-            } else {
-                ownershipHtml = `
-                    <div class="ownership-info mt-2">
-                        <span class="badge bg-outline-secondary">Not owned</span>
-                    </div>
-                `;
-            }
-        }
 
         return `
             <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
@@ -583,11 +558,16 @@ class CoinCatalog {
             // Set current coin index for navigation
             this.currentCoinIndex = this.filteredCoins.findIndex(c => c.coin_id === coin.coin_id);
             
-            // Fetch additional coin details if needed
-            const detailedCoin = await this.fetchCoinDetails(coin.coin_id);
+            // Only fetch additional coin details if we're NOT in group context
+            // Group coins already have complete data including ownership
+            let coinToDisplay = coin;
+            if (!this.groupContext) {
+                const detailedCoin = await this.fetchCoinDetails(coin.coin_id);
+                coinToDisplay = detailedCoin || coin;
+            }
             
             // Populate modal content
-            this.populateCoinModal(detailedCoin || coin);
+            this.populateCoinModal(coinToDisplay);
             
             // Show modal
             const modal = new bootstrap.Modal(document.getElementById('coinDetailModal'));
@@ -628,6 +608,45 @@ class CoinCatalog {
         
         // Create image gallery - for now use single image, can be enhanced later
         const mainImage = coin.image_url || '/static/images/coin-placeholder.png';
+        
+        // Generate ownership info for modal
+        let ownershipModalHtml = '';
+        if (this.groupContext && coin.owners !== undefined) {
+            if (coin.owners.length > 0) {
+                // Sort owners by date (oldest first)
+                const sortedOwners = [...coin.owners].sort((a, b) => {
+                    const dateA = new Date(a.acquired_date || '1970-01-01');
+                    const dateB = new Date(b.acquired_date || '1970-01-01');
+                    return dateA - dateB;
+                });
+
+                const ownerBadges = sortedOwners.map(owner => 
+                    `<span class="badge bg-success me-1 mb-1" title="Owned by ${owner.alias}${owner.acquired_date ? ' (acquired: ' + new Date(owner.acquired_date).toLocaleDateString() + ')' : ''}">${owner.alias}</span>`
+                ).join('');
+                
+                ownershipModalHtml = `
+                    <div class="ownership-modal-section">
+                        <div class="ownership-modal-header">
+                            <i class="fas fa-users me-2"></i>Owned by:
+                        </div>
+                        <div class="ownership-modal-badges">
+                            ${ownerBadges}
+                        </div>
+                    </div>
+                `;
+            } else {
+                ownershipModalHtml = `
+                    <div class="ownership-modal-section">
+                        <div class="ownership-modal-header">
+                            <i class="fas fa-users me-2"></i>Collection Status:
+                        </div>
+                        <div class="ownership-modal-badges">
+                            <span class="badge bg-outline-secondary">Not owned by group</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
         
         const modalContent = `
             <div class="coin-detail-container">
@@ -677,6 +696,7 @@ class CoinCatalog {
                             ${coin.volume ? `<div class="info-line">${coin.volume}</div>` : ''}
                             ${coin.feature ? `<div class="info-description">${coin.feature}</div>` : ''}
                         </div>
+                        ${ownershipModalHtml}
                     </div>
                 </div>
             </div>
@@ -783,11 +803,16 @@ class CoinCatalog {
                 modalBody.style.opacity = '0.5';
                 modalBody.style.transform = 'translateX(10px)';
                 
-                // Fetch detailed coin info
-                const detailedCoin = await this.fetchCoinDetails(coin.coin_id);
+                // Only fetch additional coin details if we're NOT in group context
+                // Group coins already have complete data including ownership
+                let coinToDisplay = coin;
+                if (!this.groupContext) {
+                    const detailedCoin = await this.fetchCoinDetails(coin.coin_id);
+                    coinToDisplay = detailedCoin || coin;
+                }
                 
                 // Update modal content
-                this.populateCoinModal(detailedCoin || coin);
+                this.populateCoinModal(coinToDisplay);
                 
                 // Animate back
                 setTimeout(() => {
