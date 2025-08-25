@@ -312,11 +312,11 @@ class CoinCatalog {
         let ownershipHtml = '';
         if (this.groupContext && coin.owners) {
             if (coin.owners.length > 0) {
-                // Sort owners by date (most recent first)
+                // Sort owners by date (oldest first)
                 const sortedOwners = [...coin.owners].sort((a, b) => {
                     const dateA = new Date(a.acquired_date || '1970-01-01');
                     const dateB = new Date(b.acquired_date || '1970-01-01');
-                    return dateB - dateA;
+                    return dateA - dateB;
                 });
 
                 const ownerBadges = sortedOwners.map(owner => 
@@ -862,11 +862,11 @@ class CoinCatalog {
             return;
         }
 
-        // Sort owners by date (most recent first)
+        // Sort owners by date (oldest first)
         const sortedOwners = [...coin.owners].sort((a, b) => {
             const dateA = new Date(a.acquired_date || '1970-01-01');
             const dateB = new Date(b.acquired_date || '1970-01-01');
-            return dateB - dateA;
+            return dateA - dateB;
         });
 
         // Generate owner list HTML
