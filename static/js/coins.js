@@ -290,16 +290,16 @@ class CoinCatalog {
             
             if (ownersCount > 0) {
                 if (ownersCount === totalMembers) {
-                    // Everyone owns it - show stars badge with success color
+                    // Everyone owns it - show star badge with custom circular 3D styling
                     ownershipBadgeHtml = `
-                        <span class="badge bg-success text-white position-absolute top-0 end-0 m-2 ownership-badge ownership-full" title="Owned by everyone (${ownersCount}/${totalMembers})">
-                            ⭐⭐⭐
+                        <span class="position-absolute top-0 end-0 ownership-badge ownership-full" title="Owned by everyone (${ownersCount}/${totalMembers})">
+                            ⭐
                         </span>
                     `;
                 } else {
-                    // Show number of owners with success color
+                    // Show number of owners with custom circular 3D styling
                     ownershipBadgeHtml = `
-                        <span class="badge bg-success text-white position-absolute top-0 end-0 m-2 ownership-badge ownership-partial" title="Owned by ${ownersCount}/${totalMembers} members">
+                        <span class="position-absolute top-0 end-0 ownership-badge ownership-partial" title="Owned by ${ownersCount}/${totalMembers} members">
                             ${ownersCount}
                         </span>
                     `;
@@ -308,26 +308,8 @@ class CoinCatalog {
             // No badge for 0 owners (case 1)
         }
 
-        // Generate ownership info in card body (keep existing functionality)
+        // Ownership info moved to coin details modal - no longer displayed in card body
         let ownershipHtml = '';
-        if (this.groupContext && coin.owners) {
-            if (coin.owners.length > 0) {
-                const ownerBadges = coin.owners.map(owner => 
-                    `<span class="badge bg-success me-1" title="Owned by ${owner.alias}">${owner.alias}</span>`
-                ).join('');
-                ownershipHtml = `
-                    <div class="ownership-info mt-2">
-                        ${ownerBadges}
-                    </div>
-                `;
-            } else {
-                ownershipHtml = `
-                    <div class="ownership-info mt-2">
-                        <span class="badge bg-outline-secondary">Not owned</span>
-                    </div>
-                `;
-            }
-        }
 
         return `
             <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
@@ -340,7 +322,7 @@ class CoinCatalog {
                             loading="lazy"
                             onerror="this.src='/static/images/coin-placeholder.png'"
                         >
-                        <span class="badge ${typeClass} position-absolute top-0 start-0 m-2">
+                        <span class="badge ${typeClass} position-absolute top-0 start-0">
                             ${coin.coin_type}
                         </span>
                         ${ownershipBadgeHtml}
@@ -448,73 +430,114 @@ class CoinCatalog {
     }
 
     setupEventListeners() {
-        // Search input
-        const searchInput = document.getElementById('search-input');
-        let searchTimeout;
-        searchInput?.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
                 this.currentFilters.search = e.target.value;
                 this.applyFilters();
-            }, 300);
-        });
+            });
+        }
 
-        // Filter selects
-        document.getElementById('type-filter')?.addEventListener('change', (e) => {
-            this.currentFilters.coin_type = e.target.value;
-            this.applyFilters();
-        });
+        // Filter dropdowns
+        const typeFilter = document.getElementById('type-filter');
+        if (typeFilter) {
+            typeFilter.addEventListener('change', (e) => {
+                this.currentFilters.coin_type = e.target.value;
+                this.applyFilters();
+            });
+        }
 
-        document.getElementById('value-filter')?.addEventListener('change', (e) => {
-            this.currentFilters.value = e.target.value;
-            this.applyFilters();
-        });
+        const valueFilter = document.getElementById('value-filter');
+        if (valueFilter) {
+            valueFilter.addEventListener('change', (e) => {
+                this.currentFilters.value = e.target.value;
+                this.applyFilters();
+            });
+        }
 
-        document.getElementById('country-filter')?.addEventListener('change', (e) => {
-            this.currentFilters.country = e.target.value;
-            this.applyFilters();
-        });
+        const countryFilter = document.getElementById('country-filter');
+        if (countryFilter) {
+            countryFilter.addEventListener('change', (e) => {
+                this.currentFilters.country = e.target.value;
+                this.applyFilters();
+            });
+        }
 
-        document.getElementById('commemorative-filter')?.addEventListener('change', (e) => {
-            this.currentFilters.commemorative = e.target.value;
-            this.applyFilters();
-        });
+        const commemorativeFilter = document.getElementById('commemorative-filter');
+        if (commemorativeFilter) {
+            commemorativeFilter.addEventListener('change', (e) => {
+                this.currentFilters.commemorative = e.target.value;
+                this.applyFilters();
+            });
+        }
 
-        // Group-specific filters (only if in group mode)
-        if (this.groupContext) {
-            document.getElementById('ownership-filter')?.addEventListener('change', (e) => {
+        // Group-specific filters (if available)
+        const ownershipFilter = document.getElementById('ownership-filter');
+        if (ownershipFilter) {
+            ownershipFilter.addEventListener('change', (e) => {
                 this.currentFilters.ownership_status = e.target.value;
                 this.applyFilters();
             });
+        }
 
-            document.getElementById('member-filter')?.addEventListener('change', (e) => {
+        const ownedByFilter = document.getElementById('owned-by-filter');
+        if (ownedByFilter) {
+            ownedByFilter.addEventListener('change', (e) => {
                 this.currentFilters.owned_by = e.target.value;
                 this.applyFilters();
             });
         }
 
-        // Clear filters
-        document.getElementById('clear-filters')?.addEventListener('click', () => {
-            const baseFilters = { coin_type: '', value: '', country: '', commemorative: '', search: '' };
-            const groupFilters = this.groupContext ? { ownership_status: '', owned_by: '' } : {};
-            this.currentFilters = { ...baseFilters, ...groupFilters };
-            
-            document.getElementById('search-input').value = '';
-            document.getElementById('type-filter').value = '';
-            document.getElementById('value-filter').value = '';
-            document.getElementById('country-filter').value = '';
-            document.getElementById('commemorative-filter').value = '';
-            
-            if (this.groupContext) {
-                document.getElementById('ownership-filter').value = '';
-                document.getElementById('member-filter').value = '';
+        // Coin card clicks (for coin detail modal)
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('coin-card-clickable') || 
+                e.target.closest('.coin-card-clickable')) {
+                
+                const coinElement = e.target.classList.contains('coin-card-clickable') 
+                    ? e.target 
+                    : e.target.closest('.coin-card-clickable');
+                
+                const coinId = coinElement.dataset.coinId;
+                const coin = this.coins.find(c => c.coin_id === coinId);
+                if (coin) {
+                    this.showCoinDetailModal(coin);
+                }
             }
-            
-            this.applyFilters();
         });
 
-        // Coin card click handlers
-        this.setupCoinCardClickHandlers();
+        // Ownership badge clicks (for owner info modal)
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('ownership-badge')) {
+                e.stopPropagation(); // Prevent coin modal from opening
+                const coinCard = e.target.closest('.coin-card');
+                const coinId = coinCard.querySelector('[data-coin-id]').dataset.coinId;
+                const coin = this.coins.find(c => c.coin_id === coinId);
+                if (coin && coin.owners && coin.owners.length > 0) {
+                    this.showOwnerInfo(coin, e.target);
+                }
+            }
+        });
+
+        // Close owner info modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('ownerInfoModal');
+            if (modal && modal.style.display === 'block' && 
+                !e.target.closest('.owner-info-content') && 
+                !e.target.classList.contains('ownership-badge')) {
+                this.hideOwnerInfo();
+            }
+        });
+
+        // Close owner info modal with ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('ownerInfoModal');
+                if (modal && modal.style.display === 'block') {
+                    this.hideOwnerInfo();
+                }
+            }
+        });
     }
 
     setupCoinCardClickHandlers() {
@@ -535,11 +558,16 @@ class CoinCatalog {
             // Set current coin index for navigation
             this.currentCoinIndex = this.filteredCoins.findIndex(c => c.coin_id === coin.coin_id);
             
-            // Fetch additional coin details if needed
-            const detailedCoin = await this.fetchCoinDetails(coin.coin_id);
+            // Only fetch additional coin details if we're NOT in group context
+            // Group coins already have complete data including ownership
+            let coinToDisplay = coin;
+            if (!this.groupContext) {
+                const detailedCoin = await this.fetchCoinDetails(coin.coin_id);
+                coinToDisplay = detailedCoin || coin;
+            }
             
             // Populate modal content
-            this.populateCoinModal(detailedCoin || coin);
+            this.populateCoinModal(coinToDisplay);
             
             // Show modal
             const modal = new bootstrap.Modal(document.getElementById('coinDetailModal'));
@@ -580,6 +608,45 @@ class CoinCatalog {
         
         // Create image gallery - for now use single image, can be enhanced later
         const mainImage = coin.image_url || '/static/images/coin-placeholder.png';
+        
+        // Generate ownership info for modal
+        let ownershipModalHtml = '';
+        if (this.groupContext && coin.owners !== undefined) {
+            if (coin.owners.length > 0) {
+                // Sort owners by date (oldest first)
+                const sortedOwners = [...coin.owners].sort((a, b) => {
+                    const dateA = new Date(a.acquired_date || '1970-01-01');
+                    const dateB = new Date(b.acquired_date || '1970-01-01');
+                    return dateA - dateB;
+                });
+
+                const ownerBadges = sortedOwners.map(owner => 
+                    `<span class="badge bg-success me-1 mb-1" title="Owned by ${owner.alias}${owner.acquired_date ? ' (acquired: ' + new Date(owner.acquired_date).toLocaleDateString() + ')' : ''}">${owner.alias}</span>`
+                ).join('');
+                
+                ownershipModalHtml = `
+                    <div class="ownership-modal-section">
+                        <div class="ownership-modal-header">
+                            <i class="fas fa-users me-2"></i>Owned by:
+                        </div>
+                        <div class="ownership-modal-badges">
+                            ${ownerBadges}
+                        </div>
+                    </div>
+                `;
+            } else {
+                ownershipModalHtml = `
+                    <div class="ownership-modal-section">
+                        <div class="ownership-modal-header">
+                            <i class="fas fa-users me-2"></i>Collection Status:
+                        </div>
+                        <div class="ownership-modal-badges">
+                            <span class="badge bg-outline-secondary">Not owned by group</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
         
         const modalContent = `
             <div class="coin-detail-container">
@@ -629,6 +696,7 @@ class CoinCatalog {
                             ${coin.volume ? `<div class="info-line">${coin.volume}</div>` : ''}
                             ${coin.feature ? `<div class="info-description">${coin.feature}</div>` : ''}
                         </div>
+                        ${ownershipModalHtml}
                     </div>
                 </div>
             </div>
@@ -735,11 +803,16 @@ class CoinCatalog {
                 modalBody.style.opacity = '0.5';
                 modalBody.style.transform = 'translateX(10px)';
                 
-                // Fetch detailed coin info
-                const detailedCoin = await this.fetchCoinDetails(coin.coin_id);
+                // Only fetch additional coin details if we're NOT in group context
+                // Group coins already have complete data including ownership
+                let coinToDisplay = coin;
+                if (!this.groupContext) {
+                    const detailedCoin = await this.fetchCoinDetails(coin.coin_id);
+                    coinToDisplay = detailedCoin || coin;
+                }
                 
                 // Update modal content
-                this.populateCoinModal(detailedCoin || coin);
+                this.populateCoinModal(coinToDisplay);
                 
                 // Animate back
                 setTimeout(() => {
@@ -804,5 +877,87 @@ class CoinCatalog {
     showError(message) {
         console.error(message);
         // You could implement a toast notification here
+    }
+
+    showOwnerInfo(coin, badgeElement) {
+        const modal = document.getElementById('ownerInfoModal');
+        const body = document.getElementById('ownerInfoBody');
+        
+        if (!modal || !body || !coin.owners || coin.owners.length === 0) {
+            return;
+        }
+
+        // Sort owners by date (oldest first)
+        const sortedOwners = [...coin.owners].sort((a, b) => {
+            const dateA = new Date(a.acquired_date || '1970-01-01');
+            const dateB = new Date(b.acquired_date || '1970-01-01');
+            return dateA - dateB;
+        });
+
+        // Generate owner list HTML
+        const ownersHtml = sortedOwners.map(owner => {
+            const formattedDate = this.formatAcquisitionDate(owner.acquired_date);
+            return `
+                <div class="owner-item">
+                    <div class="owner-name">${owner.alias}</div>
+                    <div class="owner-date">${formattedDate}</div>
+                </div>
+            `;
+        }).join('');
+
+        body.innerHTML = ownersHtml;
+
+        // Position modal (now centers on screen for better UX)
+        this.positionOwnerModal(modal, badgeElement);
+
+        // Show modal with proper display
+        modal.style.display = 'flex';
+    }
+
+    hideOwnerInfo() {
+        const modal = document.getElementById('ownerInfoModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    formatAcquisitionDate(dateString) {
+        if (!dateString) {
+            return 'Unknown date';
+        }
+
+        try {
+            const date = new Date(dateString);
+            const options = { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            };
+            return date.toLocaleDateString('en-GB', options);
+        } catch (error) {
+            return 'Invalid date';
+        }
+    }
+
+    positionOwnerModal(modal, badgeElement) {
+        // For better UX, center the modal on screen instead of positioning relative to badge
+        // This provides more space and better readability
+        
+        // Reset any previous positioning
+        const modalContent = modal.querySelector('.owner-info-content');
+        modalContent.style.position = 'relative';
+        modalContent.style.top = 'auto';
+        modalContent.style.left = 'auto';
+        modalContent.style.margin = 'auto';
+        
+        // Set modal to full screen centered
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100%';
+        modal.style.height = '100%';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.display = 'flex';
     }
 }

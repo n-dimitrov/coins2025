@@ -149,6 +149,19 @@
     </div>
 </div>
 
+<!-- Owner Info Modal -->
+<div id="ownerInfoModal" class="owner-info-modal" style="display: none;">
+    <div class="owner-info-content">
+        <div class="owner-info-header">
+            <h6>Coin Owners</h6>
+            <button class="owner-info-close" onclick="hideOwnerInfo()">&times;</button>
+        </div>
+        <div class="owner-info-body" id="ownerInfoBody">
+            <!-- Dynamic content -->
+        </div>
+    </div>
+</div>
+
 <!-- Scroll to Top Button -->
 <button class="scroll-to-top" id="scroll-to-top" onclick="scrollToTop()">
     <i class="fas fa-arrow-up"></i>
@@ -166,6 +179,13 @@ document.addEventListener('DOMContentLoaded', function() {
         window.coinCatalog = new CoinCatalog(groupContext);
     }
 });
+
+// Global function for closing owner info modal
+function hideOwnerInfo() {
+    if (window.coinCatalog) {
+        window.coinCatalog.hideOwnerInfo();
+    }
+}
 
 // Scroll to top functionality
 function scrollToTop() {
