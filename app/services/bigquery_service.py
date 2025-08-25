@@ -162,24 +162,17 @@ class BigQueryService:
 
     # Group-related methods
     async def get_group_by_name(self, group_name: str) -> Optional[Dict[str, Any]]:
-        """Get group by name."""
-        query = f"""
-        SELECT * 
-        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_groups_table}`
-        WHERE `group` = @group_name
-        """
-        
-        results = await self._get_cached_or_query(query, {'group_name': group_name})
-        return results[0] if results else None
+        """Get group by group_key (legacy method for backward compatibility)."""
+        return await self.get_group_by_key(group_name)
 
-    async def get_group_users(self, group_id: int) -> List[Dict[str, Any]]:
-        """Get users for a specific group."""
+    async def get_group_users(self, group_id: str) -> List[Dict[str, Any]]:
+        """Get active users for a specific group."""
         query = f"""
         SELECT gu.*, g.name as group_name 
         FROM `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu
         JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_groups_table}` g 
             ON gu.group_id = g.id
-        WHERE gu.group_id = @group_id
+        WHERE gu.group_id = @group_id AND gu.is_active = true AND g.is_active = true
         ORDER BY gu.alias
         """
         
@@ -201,8 +194,8 @@ class BigQueryService:
             lo.date as acquired_date
         FROM latest_ownership lo
         JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu 
-            ON lo.name = gu.user AND gu.group_id = @group_id
-        WHERE lo.rn = 1 AND lo.is_active = true
+            ON lo.name = gu.name AND gu.group_id = @group_id
+        WHERE lo.rn = 1 AND lo.is_active = true AND gu.is_active = true
         ORDER BY lo.date DESC
         """
         
@@ -262,7 +255,7 @@ class BigQueryService:
             LEFT JOIN latest_ownership lo 
                 ON c.coin_id = lo.coin_id AND lo.rn = 1 AND lo.is_active = true
             LEFT JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu 
-                ON lo.name = gu.user AND gu.group_id = @group_id
+                ON lo.name = gu.name AND gu.group_id = @group_id AND gu.is_active = true
             WHERE {where_sql}
         )
         SELECT 
@@ -293,13 +286,13 @@ class BigQueryService:
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
         )
         SELECT 
-            COUNT(DISTINCT gu.user) as total_members,
+            COUNT(DISTINCT gu.name) as total_members,
             COUNT(DISTINCT CASE WHEN lo.is_active = true THEN lo.coin_id END) as total_coins_owned,
             COUNT(CASE WHEN lo.is_active = true THEN 1 END) as total_ownership_records
         FROM `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu
         LEFT JOIN latest_ownership lo 
-            ON gu.user = lo.name AND lo.rn = 1
-        WHERE gu.group_id = @group_id
+            ON gu.name = lo.name AND lo.rn = 1
+        WHERE gu.group_id = @group_id AND gu.is_active = true
         """
         
         results = await self._get_cached_or_query(query, {'group_id': group_id})
@@ -439,7 +432,7 @@ class BigQueryService:
         params = {'name': name}
         
         if group_id:
-            group_join = f"JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu ON lr.name = gu.user"
+            group_join = f"JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu ON lr.name = gu.name AND gu.is_active = true"
             group_where = "AND gu.group_id = @group_id"
             params['group_id'] = group_id
             
@@ -478,3 +471,299 @@ class BigQueryService:
             del self._cache[key]
             
         logger.info(f"Invalidated {len(keys_to_remove)} cache entries due to ownership change")
+
+    # Group management methods
+    async def create_group(self, group_key: str, name: str) -> str:
+        """Create a new group."""
+        import uuid
+        from datetime import datetime as dt
+        
+        # Check if group_key already exists
+        existing = await self.get_group_by_key(group_key)
+        if existing:
+            raise ValueError(f"Group with key '{group_key}' already exists")
+        
+        group_id = str(uuid.uuid4())
+        
+        query = f"""
+        INSERT INTO `{self.client.project}.{self.dataset_id}.{settings.bq_groups_table}`
+        (id, group_key, name, is_active)
+        VALUES (@id, @group_key, @name, true)
+        """
+        
+        params = {
+            'id': group_id,
+            'group_key': group_key,
+            'name': name
+        }
+        
+        def execute_insert():
+            job_config = bigquery.QueryJobConfig()
+            query_parameters = [
+                bigquery.ScalarQueryParameter("id", "STRING", group_id),
+                bigquery.ScalarQueryParameter("group_key", "STRING", group_key),
+                bigquery.ScalarQueryParameter("name", "STRING", name)
+            ]
+            job_config.query_parameters = query_parameters
+            
+            query_job = self.client.query(query, job_config=job_config)
+            query_job.result()
+            
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, execute_insert)
+        
+        # Invalidate group cache
+        self._invalidate_group_cache()
+        
+        return group_id
+
+    async def update_group(self, group_id: str, name: str) -> bool:
+        """Update group name."""
+        # Check if group exists and is active
+        existing = await self.get_group_by_id(group_id)
+        if not existing or not existing.get('is_active'):
+            raise ValueError(f"Group with id '{group_id}' not found or inactive")
+        
+        query = f"""
+        UPDATE `{self.client.project}.{self.dataset_id}.{settings.bq_groups_table}`
+        SET name = @name
+        WHERE id = @group_id AND is_active = true
+        """
+        
+        def execute_update():
+            job_config = bigquery.QueryJobConfig()
+            query_parameters = [
+                bigquery.ScalarQueryParameter("name", "STRING", name),
+                bigquery.ScalarQueryParameter("group_id", "STRING", group_id)
+            ]
+            job_config.query_parameters = query_parameters
+            
+            query_job = self.client.query(query, job_config=job_config)
+            query_job.result()
+            
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, execute_update)
+        
+        # Invalidate group cache
+        self._invalidate_group_cache()
+        
+        return True
+
+    async def delete_group(self, group_id: str) -> bool:
+        """Soft delete a group and all its members."""
+        # Check if group exists and is active
+        existing = await self.get_group_by_id(group_id)
+        if not existing or not existing.get('is_active'):
+            raise ValueError(f"Group with id '{group_id}' not found or inactive")
+        
+        # Soft delete group
+        group_query = f"""
+        UPDATE `{self.client.project}.{self.dataset_id}.{settings.bq_groups_table}`
+        SET is_active = false
+        WHERE id = @group_id
+        """
+        
+        # Soft delete all group members
+        users_query = f"""
+        UPDATE `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}`
+        SET is_active = false
+        WHERE group_id = @group_id
+        """
+        
+        def execute_deletes():
+            job_config = bigquery.QueryJobConfig()
+            query_parameters = [bigquery.ScalarQueryParameter("group_id", "STRING", group_id)]
+            job_config.query_parameters = query_parameters
+            
+            # Delete group
+            query_job = self.client.query(group_query, job_config=job_config)
+            query_job.result()
+            
+            # Delete group members
+            query_job = self.client.query(users_query, job_config=job_config)
+            query_job.result()
+            
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, execute_deletes)
+        
+        # Invalidate cache
+        self._invalidate_group_cache()
+        
+        return True
+
+    async def get_group_by_id(self, group_id: str) -> Optional[Dict[str, Any]]:
+        """Get group by ID."""
+        query = f"""
+        SELECT * 
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_groups_table}`
+        WHERE id = @group_id AND is_active = true
+        """
+        
+        results = await self._get_cached_or_query(query, {'group_id': group_id})
+        return results[0] if results else None
+
+    async def get_group_by_key(self, group_key: str) -> Optional[Dict[str, Any]]:
+        """Get active group by key."""
+        query = f"""
+        SELECT * 
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_groups_table}`
+        WHERE group_key = @group_key AND is_active = true
+        """
+        
+        results = await self._get_cached_or_query(query, {'group_key': group_key})
+        return results[0] if results else None
+
+    async def list_active_groups(self) -> List[Dict[str, Any]]:
+        """List all active groups."""
+        query = f"""
+        SELECT * 
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_groups_table}`
+        WHERE is_active = true
+        ORDER BY name
+        """
+        
+        return await self._get_cached_or_query(query, {})
+
+    # Group user management methods
+    async def add_user_to_group(self, group_id: str, name: str, alias: str) -> str:
+        """Add user to group."""
+        import uuid
+        
+        # Check if group exists and is active
+        group = await self.get_group_by_id(group_id)
+        if not group:
+            raise ValueError(f"Group with id '{group_id}' not found or inactive")
+        
+        # Check if user already exists in group
+        existing_user = await self.get_group_user(group_id, name)
+        if existing_user:
+            raise ValueError(f"User '{name}' already exists in group")
+        
+        user_id = str(uuid.uuid4())
+        
+        query = f"""
+        INSERT INTO `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}`
+        (id, group_id, name, alias, is_active)
+        VALUES (@id, @group_id, @name, @alias, true)
+        """
+        
+        def execute_insert():
+            job_config = bigquery.QueryJobConfig()
+            query_parameters = [
+                bigquery.ScalarQueryParameter("id", "STRING", user_id),
+                bigquery.ScalarQueryParameter("group_id", "STRING", group_id),
+                bigquery.ScalarQueryParameter("name", "STRING", name),
+                bigquery.ScalarQueryParameter("alias", "STRING", alias)
+            ]
+            job_config.query_parameters = query_parameters
+            
+            query_job = self.client.query(query, job_config=job_config)
+            query_job.result()
+            
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, execute_insert)
+        
+        # Invalidate cache
+        self._invalidate_group_cache()
+        
+        return user_id
+
+    async def update_group_user(self, group_id: str, name: str, alias: str) -> bool:
+        """Update user alias in group."""
+        # Check if user exists in group
+        existing_user = await self.get_group_user(group_id, name)
+        if not existing_user:
+            raise ValueError(f"User '{name}' not found in group")
+        
+        query = f"""
+        UPDATE `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}`
+        SET alias = @alias
+        WHERE group_id = @group_id AND name = @name AND is_active = true
+        """
+        
+        def execute_update():
+            job_config = bigquery.QueryJobConfig()
+            query_parameters = [
+                bigquery.ScalarQueryParameter("alias", "STRING", alias),
+                bigquery.ScalarQueryParameter("group_id", "STRING", group_id),
+                bigquery.ScalarQueryParameter("name", "STRING", name)
+            ]
+            job_config.query_parameters = query_parameters
+            
+            query_job = self.client.query(query, job_config=job_config)
+            query_job.result()
+            
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, execute_update)
+        
+        # Invalidate cache
+        self._invalidate_group_cache()
+        
+        return True
+
+    async def remove_user_from_group(self, group_id: str, name: str) -> bool:
+        """Remove user from group."""
+        # Check if user exists in group
+        existing_user = await self.get_group_user(group_id, name)
+        if not existing_user:
+            raise ValueError(f"User '{name}' not found in group")
+        
+        query = f"""
+        UPDATE `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}`
+        SET is_active = false
+        WHERE group_id = @group_id AND name = @name
+        """
+        
+        def execute_update():
+            job_config = bigquery.QueryJobConfig()
+            query_parameters = [
+                bigquery.ScalarQueryParameter("group_id", "STRING", group_id),
+                bigquery.ScalarQueryParameter("name", "STRING", name)
+            ]
+            job_config.query_parameters = query_parameters
+            
+            query_job = self.client.query(query, job_config=job_config)
+            query_job.result()
+            
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, execute_update)
+        
+        # Invalidate cache
+        self._invalidate_group_cache()
+        
+        return True
+
+    async def get_group_user(self, group_id: str, name: str) -> Optional[Dict[str, Any]]:
+        """Get specific user in group."""
+        query = f"""
+        SELECT * 
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}`
+        WHERE group_id = @group_id AND name = @name AND is_active = true
+        """
+        
+        results = await self._get_cached_or_query(query, {'group_id': group_id, 'name': name})
+        return results[0] if results else None
+
+    async def get_active_group_users(self, group_id: str) -> List[Dict[str, Any]]:
+        """Get all active users in group."""
+        query = f"""
+        SELECT * 
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}`
+        WHERE group_id = @group_id AND is_active = true
+        ORDER BY alias
+        """
+        
+        return await self._get_cached_or_query(query, {'group_id': group_id})
+
+    async def _invalidate_group_cache(self):
+        """Invalidate cache entries related to groups."""
+        keys_to_remove = []
+        
+        for cache_key in list(self._cache.keys()):
+            if 'group' in cache_key.lower():
+                keys_to_remove.append(cache_key)
+        
+        for key in keys_to_remove:
+            del self._cache[key]
+            
+        logger.info(f"Invalidated {len(keys_to_remove)} cache entries due to group change")
