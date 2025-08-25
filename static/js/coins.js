@@ -114,8 +114,11 @@ class CoinCatalog {
     }
 
     async init() {
+        console.log('=== CoinCatalog.init() called ===');
+        console.log('Group context in init:', this.groupContext);
         try {
             await this.loadFilterOptions();
+            console.log('About to call populateGroupMemberFilter...');
             this.populateGroupMemberFilter(); // Populate group member filter if in group context
             await this.loadCoins();
             this.setupEventListeners();
@@ -250,8 +253,8 @@ class CoinCatalog {
         
         this.groupContext.members.forEach(member => {
             const option = document.createElement('option');
-            option.value = member.user;
-            option.textContent = member.alias;
+            option.value = member.name;
+            option.textContent = member.name;
             select.appendChild(option);
         });
     }
@@ -696,7 +699,7 @@ class CoinCatalog {
                 });
 
                 const ownerBadges = sortedOwners.map(owner => 
-                    `<span class="badge bg-success me-1 mb-1" title="Owned by ${owner.alias}${owner.acquired_date ? ' (acquired: ' + new Date(owner.acquired_date).toLocaleDateString() + ')' : ''}">${owner.alias}</span>`
+                    `<span class="badge bg-success me-1 mb-1" title="Owned by ${owner.owner}${owner.acquired_date ? ' (acquired: ' + new Date(owner.acquired_date).toLocaleDateString() + ')' : ''}">${owner.owner}</span>`
                 ).join('');
                 
                 ownershipModalHtml = `
@@ -974,7 +977,7 @@ class CoinCatalog {
             const formattedDate = this.formatAcquisitionDate(owner.acquired_date);
             return `
                 <div class="owner-item">
-                    <div class="owner-name">${owner.alias}</div>
+                    <div class="owner-name">${owner.owner}</div>
                     <div class="owner-date">${formattedDate}</div>
                 </div>
             `;

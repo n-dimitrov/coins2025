@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test owned_by Filter Logic</title>
+</head>
+<body>
+    <h1>Testing owned_by Filter Logic</h1>
+    <div id="results"></div>
+
+    <script>
+        // Mock data similar to what the API returns
+        const mockCoins = [
+            {
+                coin_id: "CC2022GRC-A-ERA-200",
+                country: "Greece",
+                value: 2.00,
+                owners: [
+                    { owner: "Drago", alias: "Drago", acquired_date: "2024-07-14T14:09:44Z" }
+                ]
+            },
+            {
+                coin_id: "RE2002AUT-A-RE1-001",
+                country: "Austria", 
+                value: 0.01,
+                owners: [
+                    { owner: "Marina", alias: "Marina", acquired_date: "2024-06-15T10:30:00Z" },
+                    { owner: "Drago", alias: "Drago", acquired_date: "2024-07-20T15:45:30Z" }
+                ]
+            },
+            {
+                coin_id: "CC2021ESP-A-TOL-200",
+                country: "Spain",
+                value: 2.00,
+                owners: []
+            },
+            {
+                coin_id: "RE2015DEU-A-RE1-050",
+                country: "Germany",
+                value: 0.50,
+                owners: [
+                    { owner: "Lili", alias: "Lili", acquired_date: "2024-05-10T08:15:00Z" }
+                ]
+            }
+        ];
+
+        // Mock group context
+        const mockGroupContext = {
+            group_key: "hippo",
+            name: "Hippo Collectors",
+            members: [
+                { user: "Drago", alias: "Drago" },
+                { user: "Marina", alias: "Marina" },
+                { user: "Lili", alias: "Lili" },
+                { user: "Jonko", alias: "Jonko" }
+            ]
+        };
+
+        // Test the filter logic
+        function testOwnedByFilter() {
+            const results = document.getElementById('results');
+            
+            // Test 1: Filter by "Drago"
+            console.log("=== Test 1: Filter by 'Drago' ===");
+            const dragoCoins = mockCoins.filter(coin => {
+                if (!coin.owners || coin.owners.length === 0) return false;
+                return coin.owners.some(owner => owner.owner === "Drago");
+            });
+            
+            results.innerHTML += `<h2>Test 1: Coins owned by Drago</h2>`;
+            results.innerHTML += `<p>Found ${dragoCoins.length} coins:</p>`;
+            dragoCoins.forEach(coin => {
+                results.innerHTML += `<p>- ${coin.coin_id} (${coin.country}) - Owners: ${coin.owners.map(o => o.owner).join(', ')}</p>`;
+            });
+
+            // Test 2: Filter by "Marina"
+            console.log("=== Test 2: Filter by 'Marina' ===");
+            const marinaCoins = mockCoins.filter(coin => {
+                if (!coin.owners || coin.owners.length === 0) return false;
+                return coin.owners.some(owner => owner.owner === "Marina");
+            });
+            
+            results.innerHTML += `<h2>Test 2: Coins owned by Marina</h2>`;
+            results.innerHTML += `<p>Found ${marinaCoins.length} coins:</p>`;
+            marinaCoins.forEach(coin => {
+                results.innerHTML += `<p>- ${coin.coin_id} (${coin.country}) - Owners: ${coin.owners.map(o => o.owner).join(', ')}</p>`;
+            });
+
+            // Test 3: Filter by "Jonko" (should find nothing)
+            console.log("=== Test 3: Filter by 'Jonko' ===");
+            const jonkoCoins = mockCoins.filter(coin => {
+                if (!coin.owners || coin.owners.length === 0) return false;
+                return coin.owners.some(owner => owner.owner === "Jonko");
+            });
+            
+            results.innerHTML += `<h2>Test 3: Coins owned by Jonko</h2>`;
+            results.innerHTML += `<p>Found ${jonkoCoins.length} coins:</p>`;
+            jonkoCoins.forEach(coin => {
+                results.innerHTML += `<p>- ${coin.coin_id} (${coin.country}) - Owners: ${coin.owners.map(o => o.owner).join(', ')}</p>`;
+            });
+
+            // Test 4: No filter (empty string) - should show all
+            console.log("=== Test 4: No filter (show all) ===");
+            const allCoins = mockCoins.filter(coin => {
+                // When owned_by is empty, show all coins
+                return true;
+            });
+            
+            results.innerHTML += `<h2>Test 4: All coins (no filter)</h2>`;
+            results.innerHTML += `<p>Found ${allCoins.length} coins:</p>`;
+            allCoins.forEach(coin => {
+                const ownersList = coin.owners && coin.owners.length > 0 
+                    ? coin.owners.map(o => o.owner).join(', ')
+                    : 'None';
+                results.innerHTML += `<p>- ${coin.coin_id} (${coin.country}) - Owners: ${ownersList}</p>`;
+            });
+
+            // Test the actual implementation logic
+            results.innerHTML += `<h2>Test 5: Using actual implementation logic</h2>`;
+            
+            function testFilter(owned_by) {
+                return mockCoins.filter(coin => {
+                    if (owned_by) {
+                        const isOwnedByMember = coin.owners && coin.owners.some(owner => 
+                            owner.owner === owned_by
+                        );
+                        if (!isOwnedByMember) {
+                            return false;
+                        }
+                    }
+                    return true;
+                });
+            }
+
+            // Test with each user
+            ['', 'Drago', 'Marina', 'Lili', 'Jonko'].forEach(user => {
+                const filtered = testFilter(user);
+                const displayName = user || 'All Members';
+                results.innerHTML += `<p><strong>${displayName}:</strong> ${filtered.length} coins</p>`;
+            });
+        }
+
+        // Run tests when page loads
+        testOwnedByFilter();
+    </script>
+</body>
+</html>

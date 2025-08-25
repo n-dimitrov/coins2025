@@ -92,7 +92,7 @@
                     <select class="form-select" id="owned-by-filter">
                         <option value="">All Members</option>
                         {% for member in group_context.members %}
-                        <option value="{{ member.user }}">{{ member.alias }}</option>
+                        <option value="{{ member.user }}">{{ member.user }}</option>
                         {% endfor %}
                     </select>
                 </div>
