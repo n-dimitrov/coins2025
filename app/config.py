@@ -9,7 +9,7 @@ class Settings:
     # BigQuery
     bq_dataset: str = os.getenv("BQ_DATASET", "db")
     bq_table: str = os.getenv("BQ_TABLE", "catalog")
-    bq_history_table: str = os.getenv("BQ_HISTORY_TABLE", "ownership_history")
+    bq_history_table: str = os.getenv("BQ_HISTORY_TABLE", "history")
     bq_groups_table: str = os.getenv("BQ_GROUPS_TABLE", "groups")
     bq_group_users_table: str = os.getenv("BQ_GROUP_USERS_TABLE", "group_users")
     

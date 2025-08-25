@@ -10,6 +10,8 @@ import pandas as pd
 from google.cloud import bigquery
 from google.oauth2 import service_account
 import sys
+import uuid
+from datetime import datetime
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -58,14 +60,22 @@ class HistoryImporter:
             return False
     
     def _get_history_schema(self):
-        """Simplified schema without redundant date_only field."""
+        """Enhanced schema for add/remove operations."""
         return [
+            bigquery.SchemaField("id", "STRING", mode="REQUIRED", 
+                                description="Primary key (UUID)"),
             bigquery.SchemaField("name", "STRING", mode="REQUIRED", 
                                 description="Owner name"),
             bigquery.SchemaField("coin_id", "STRING", mode="REQUIRED", 
                                 description="Coin identifier"),
             bigquery.SchemaField("date", "TIMESTAMP", mode="REQUIRED", 
-                                description="Acquisition date and time")
+                                description="Acquisition date and time"),
+            bigquery.SchemaField("created_at", "TIMESTAMP", mode="REQUIRED", 
+                                description="When this record was added to system"),
+            bigquery.SchemaField("created_by", "STRING", mode="NULLABLE", 
+                                description="Who added this record"),
+            bigquery.SchemaField("is_active", "BOOLEAN", mode="REQUIRED", 
+                                description="true = owned, false = removed/sold")
         ]
     
     def _create_history_table(self) -> bool:
@@ -93,7 +103,7 @@ class HistoryImporter:
             return False
     
     def import_history(self, csv_file_path: str) -> bool:
-        """Import history.csv to BigQuery."""
+        """Import history.csv to BigQuery with enhanced schema."""
         try:
             if not self._authenticate():
                 return False
@@ -115,6 +125,15 @@ class HistoryImporter:
             # Convert date column and drop the redundant date_only column
             df['date'] = pd.to_datetime(df['date'])
             df = df.drop(columns=['date_only'])
+            
+            # Add new fields for enhanced schema
+            df['id'] = [str(uuid.uuid4()) for _ in range(len(df))]
+            df['created_at'] = datetime.now()
+            df['created_by'] = 'import_script'
+            df['is_active'] = True  # All imported records are active (owned)
+            
+            # Reorder columns to match schema
+            df = df[['id', 'name', 'coin_id', 'date', 'created_at', 'created_by', 'is_active']]
             
             # Import to BigQuery
             table_ref = self.client.dataset(self.dataset_id).table(self.table_name)
@@ -159,7 +178,7 @@ def main():
     """Main function to import ownership history."""
     PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "coins2025")
     DATASET_ID = os.getenv("BQ_DATASET", "db")
-    HISTORY_TABLE = os.getenv("BQ_HISTORY_TABLE", "ownership_history")
+    HISTORY_TABLE = os.getenv("BQ_HISTORY_TABLE", "history")
     SERVICE_ACCOUNT_PATH = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "service_account.json")
     HISTORY_CSV_PATH = "data/history.csv"
     
