@@ -641,6 +641,55 @@
     background-color: transparent;
 }
 
+/* Ownership badge in upper right corner */
+.ownership-badge {
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    min-width: 24px;
+    height: 24px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ownership-badge:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Special styling for the "everyone owns" badge - keep success color */
+.ownership-badge.ownership-full {
+    background-color: #198754 !important;
+    color: white !important;
+    font-size: 0.65rem !important;
+    padding: 0.2rem 0.4rem !important;
+    border-radius: 8px !important;
+    animation: pulse-success 2s infinite;
+}
+
+/* Numeric ownership badge - success color to match owner badges */
+.ownership-badge.ownership-partial {
+    background-color: #198754 !important;
+    color: white !important;
+}
+
+/* Pulse animation for full ownership - updated to use success color */
+@keyframes pulse-success {
+    0% {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    50% {
+        box-shadow: 0 4px 12px rgba(25, 135, 84, 0.4);
+    }
+    100% {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
 /* Group filter sections */
 .filter-section h6 {
     color: var(--primary-color);
