@@ -92,6 +92,27 @@ class CoinCatalog {
         this.init();
     }
 
+    // Helper method to construct API URLs with proper protocol
+    getApiUrl(path) {
+        // Ensure we use the same protocol as the current page
+        const protocol = window.location.protocol;
+        const host = window.location.host;
+        
+        // If running locally, use relative URLs
+        if (host.includes('localhost') || host.includes('127.0.0.1')) {
+            return path;
+        }
+        
+        // For production, ensure HTTPS is used
+        if (protocol === 'http:' && host.includes('myeurocoins.org')) {
+            // Force HTTPS for production
+            return `https://${host}${path}`;
+        }
+        
+        // Use relative URL for same-origin requests
+        return path;
+    }
+
     async init() {
         try {
             await this.loadFilterOptions();
@@ -117,9 +138,13 @@ class CoinCatalog {
             params.append('limit', '1000'); // Load all for client-side filtering
             
             // Use group API if in group mode
-            const apiUrl = this.groupContext 
+            const apiPath = this.groupContext 
                 ? `/api/coins/group/${this.groupContext.group}/?${params}`
                 : `/api/coins/?${params}`;
+            
+            const apiUrl = this.getApiUrl(apiPath);
+            
+            console.log('Fetching coins from:', apiUrl); // Debug logging
             
             const response = await fetch(apiUrl);
             if (!response.ok) {
@@ -132,7 +157,8 @@ class CoinCatalog {
             this.applyFilters();
         } catch (error) {
             console.error('Error loading coins:', error);
-            this.showError('Failed to load coins');
+            console.error('Current location:', window.location.href); // Additional debug info
+            this.showError('Failed to load coins: ' + error.message);
             this.coins = [];
             this.filteredCoins = [];
         } finally {
@@ -142,7 +168,7 @@ class CoinCatalog {
 
     async loadFilterOptions() {
         try {
-            const response = await fetch('/api/coins/filters');
+            const response = await fetch(this.getApiUrl('/api/coins/filters'));
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -637,7 +663,7 @@ class CoinCatalog {
 
     async fetchCoinDetails(coinId) {
         try {
-            const response = await fetch(`/api/coins/${coinId}`);
+            const response = await fetch(this.getApiUrl(`/api/coins/${coinId}`));
             if (response.ok) {
                 const data = await response.json();
                 return data.coin;
