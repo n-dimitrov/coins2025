@@ -290,16 +290,16 @@ class CoinCatalog {
             
             if (ownersCount > 0) {
                 if (ownersCount === totalMembers) {
-                    // Everyone owns it - show stars badge with success color
+                    // Everyone owns it - show star badge with custom circular 3D styling
                     ownershipBadgeHtml = `
-                        <span class="badge bg-success text-white position-absolute top-0 end-0 m-2 ownership-badge ownership-full" title="Owned by everyone (${ownersCount}/${totalMembers})">
-                            ⭐⭐⭐
+                        <span class="position-absolute top-0 end-0 m-2 ownership-badge ownership-full" title="Owned by everyone (${ownersCount}/${totalMembers})">
+                            ⭐
                         </span>
                     `;
                 } else {
-                    // Show number of owners with success color
+                    // Show number of owners with custom circular 3D styling
                     ownershipBadgeHtml = `
-                        <span class="badge bg-success text-white position-absolute top-0 end-0 m-2 ownership-badge ownership-partial" title="Owned by ${ownersCount}/${totalMembers} members">
+                        <span class="position-absolute top-0 end-0 m-2 ownership-badge ownership-partial" title="Owned by ${ownersCount}/${totalMembers} members">
                             ${ownersCount}
                         </span>
                     `;
@@ -312,7 +312,14 @@ class CoinCatalog {
         let ownershipHtml = '';
         if (this.groupContext && coin.owners) {
             if (coin.owners.length > 0) {
-                const ownerBadges = coin.owners.map(owner => 
+                // Sort owners by date (most recent first)
+                const sortedOwners = [...coin.owners].sort((a, b) => {
+                    const dateA = new Date(a.acquired_date || '1970-01-01');
+                    const dateB = new Date(b.acquired_date || '1970-01-01');
+                    return dateB - dateA;
+                });
+
+                const ownerBadges = sortedOwners.map(owner => 
                     `<span class="badge bg-success me-1" title="Owned by ${owner.alias}">${owner.alias}</span>`
                 ).join('');
                 ownershipHtml = `
@@ -448,73 +455,114 @@ class CoinCatalog {
     }
 
     setupEventListeners() {
-        // Search input
-        const searchInput = document.getElementById('search-input');
-        let searchTimeout;
-        searchInput?.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
                 this.currentFilters.search = e.target.value;
                 this.applyFilters();
-            }, 300);
-        });
+            });
+        }
 
-        // Filter selects
-        document.getElementById('type-filter')?.addEventListener('change', (e) => {
-            this.currentFilters.coin_type = e.target.value;
-            this.applyFilters();
-        });
+        // Filter dropdowns
+        const typeFilter = document.getElementById('type-filter');
+        if (typeFilter) {
+            typeFilter.addEventListener('change', (e) => {
+                this.currentFilters.coin_type = e.target.value;
+                this.applyFilters();
+            });
+        }
 
-        document.getElementById('value-filter')?.addEventListener('change', (e) => {
-            this.currentFilters.value = e.target.value;
-            this.applyFilters();
-        });
+        const valueFilter = document.getElementById('value-filter');
+        if (valueFilter) {
+            valueFilter.addEventListener('change', (e) => {
+                this.currentFilters.value = e.target.value;
+                this.applyFilters();
+            });
+        }
 
-        document.getElementById('country-filter')?.addEventListener('change', (e) => {
-            this.currentFilters.country = e.target.value;
-            this.applyFilters();
-        });
+        const countryFilter = document.getElementById('country-filter');
+        if (countryFilter) {
+            countryFilter.addEventListener('change', (e) => {
+                this.currentFilters.country = e.target.value;
+                this.applyFilters();
+            });
+        }
 
-        document.getElementById('commemorative-filter')?.addEventListener('change', (e) => {
-            this.currentFilters.commemorative = e.target.value;
-            this.applyFilters();
-        });
+        const commemorativeFilter = document.getElementById('commemorative-filter');
+        if (commemorativeFilter) {
+            commemorativeFilter.addEventListener('change', (e) => {
+                this.currentFilters.commemorative = e.target.value;
+                this.applyFilters();
+            });
+        }
 
-        // Group-specific filters (only if in group mode)
-        if (this.groupContext) {
-            document.getElementById('ownership-filter')?.addEventListener('change', (e) => {
+        // Group-specific filters (if available)
+        const ownershipFilter = document.getElementById('ownership-filter');
+        if (ownershipFilter) {
+            ownershipFilter.addEventListener('change', (e) => {
                 this.currentFilters.ownership_status = e.target.value;
                 this.applyFilters();
             });
+        }
 
-            document.getElementById('member-filter')?.addEventListener('change', (e) => {
+        const ownedByFilter = document.getElementById('owned-by-filter');
+        if (ownedByFilter) {
+            ownedByFilter.addEventListener('change', (e) => {
                 this.currentFilters.owned_by = e.target.value;
                 this.applyFilters();
             });
         }
 
-        // Clear filters
-        document.getElementById('clear-filters')?.addEventListener('click', () => {
-            const baseFilters = { coin_type: '', value: '', country: '', commemorative: '', search: '' };
-            const groupFilters = this.groupContext ? { ownership_status: '', owned_by: '' } : {};
-            this.currentFilters = { ...baseFilters, ...groupFilters };
-            
-            document.getElementById('search-input').value = '';
-            document.getElementById('type-filter').value = '';
-            document.getElementById('value-filter').value = '';
-            document.getElementById('country-filter').value = '';
-            document.getElementById('commemorative-filter').value = '';
-            
-            if (this.groupContext) {
-                document.getElementById('ownership-filter').value = '';
-                document.getElementById('member-filter').value = '';
+        // Coin card clicks (for coin detail modal)
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('coin-card-clickable') || 
+                e.target.closest('.coin-card-clickable')) {
+                
+                const coinElement = e.target.classList.contains('coin-card-clickable') 
+                    ? e.target 
+                    : e.target.closest('.coin-card-clickable');
+                
+                const coinId = coinElement.dataset.coinId;
+                const coin = this.coins.find(c => c.coin_id === coinId);
+                if (coin) {
+                    this.showCoinDetailModal(coin);
+                }
             }
-            
-            this.applyFilters();
         });
 
-        // Coin card click handlers
-        this.setupCoinCardClickHandlers();
+        // Ownership badge clicks (for owner info modal)
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('ownership-badge')) {
+                e.stopPropagation(); // Prevent coin modal from opening
+                const coinCard = e.target.closest('.coin-card');
+                const coinId = coinCard.querySelector('[data-coin-id]').dataset.coinId;
+                const coin = this.coins.find(c => c.coin_id === coinId);
+                if (coin && coin.owners && coin.owners.length > 0) {
+                    this.showOwnerInfo(coin, e.target);
+                }
+            }
+        });
+
+        // Close owner info modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('ownerInfoModal');
+            if (modal && modal.style.display === 'block' && 
+                !e.target.closest('.owner-info-content') && 
+                !e.target.classList.contains('ownership-badge')) {
+                this.hideOwnerInfo();
+            }
+        });
+
+        // Close owner info modal with ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('ownerInfoModal');
+                if (modal && modal.style.display === 'block') {
+                    this.hideOwnerInfo();
+                }
+            }
+        });
     }
 
     setupCoinCardClickHandlers() {
@@ -804,5 +852,87 @@ class CoinCatalog {
     showError(message) {
         console.error(message);
         // You could implement a toast notification here
+    }
+
+    showOwnerInfo(coin, badgeElement) {
+        const modal = document.getElementById('ownerInfoModal');
+        const body = document.getElementById('ownerInfoBody');
+        
+        if (!modal || !body || !coin.owners || coin.owners.length === 0) {
+            return;
+        }
+
+        // Sort owners by date (most recent first)
+        const sortedOwners = [...coin.owners].sort((a, b) => {
+            const dateA = new Date(a.acquired_date || '1970-01-01');
+            const dateB = new Date(b.acquired_date || '1970-01-01');
+            return dateB - dateA;
+        });
+
+        // Generate owner list HTML
+        const ownersHtml = sortedOwners.map(owner => {
+            const formattedDate = this.formatAcquisitionDate(owner.acquired_date);
+            return `
+                <div class="owner-item">
+                    <div class="owner-name">${owner.alias}</div>
+                    <div class="owner-date">${formattedDate}</div>
+                </div>
+            `;
+        }).join('');
+
+        body.innerHTML = ownersHtml;
+
+        // Position modal (now centers on screen for better UX)
+        this.positionOwnerModal(modal, badgeElement);
+
+        // Show modal with proper display
+        modal.style.display = 'flex';
+    }
+
+    hideOwnerInfo() {
+        const modal = document.getElementById('ownerInfoModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    formatAcquisitionDate(dateString) {
+        if (!dateString) {
+            return 'Unknown date';
+        }
+
+        try {
+            const date = new Date(dateString);
+            const options = { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            };
+            return date.toLocaleDateString('en-GB', options);
+        } catch (error) {
+            return 'Invalid date';
+        }
+    }
+
+    positionOwnerModal(modal, badgeElement) {
+        // For better UX, center the modal on screen instead of positioning relative to badge
+        // This provides more space and better readability
+        
+        // Reset any previous positioning
+        const modalContent = modal.querySelector('.owner-info-content');
+        modalContent.style.position = 'relative';
+        modalContent.style.top = 'auto';
+        modalContent.style.left = 'auto';
+        modalContent.style.margin = 'auto';
+        
+        // Set modal to full screen centered
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100%';
+        modal.style.height = '100%';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.display = 'flex';
     }
 }
