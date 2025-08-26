@@ -123,11 +123,9 @@ class CoinCatalog {
     }
 
     async init() {
-        console.log('=== CoinCatalog.init() called ===');
         console.log('Group context in init:', this.groupContext);
         try {
             await this.loadFilterOptions();
-            console.log('About to call populateGroupMemberFilter...');
             this.populateGroupMemberFilter(); // Populate group member filter if in group context
             await this.loadCoins();
             this.setupEventListeners();
@@ -156,8 +154,6 @@ class CoinCatalog {
             
             const apiUrl = this.getApiUrl(apiPath);
             
-            console.log('Fetching coins from:', apiUrl); // Debug logging
-            
             const response = await fetch(apiUrl);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -180,7 +176,9 @@ class CoinCatalog {
 
     async loadFilterOptions() {
         try {
-            const response = await fetch(this.getApiUrl('/api/coins/filters'));
+            const apiUrl = this.getApiUrl('/api/coins/filters');
+            
+            const response = await fetch(apiUrl);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -230,10 +228,18 @@ class CoinCatalog {
 
     populateCommemorativeFilter(commemoratives) {
         const select = document.getElementById('commemorative-filter');
-        if (!select) return;
+        if (!select) {
+            console.error('Commemorative filter select element not found!');
+            return;
+        }
         
         // Clear existing options except the first one
         select.innerHTML = '<option value="">All Commemoratives</option>';
+        
+        if (!commemoratives || commemoratives.length === 0) {
+            console.warn('No commemoratives data provided');
+            return;
+        }
         
         // Sort commemoratives in descending order (most recent first)
         const sortedCommemorative = commemoratives.sort((a, b) => {
