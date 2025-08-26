@@ -755,6 +755,49 @@ function initializeCoinsManagement() {
     if (nextPageBtn) {
         nextPageBtn.addEventListener('click', () => changePage(1));
     }
+
+    // Reset catalog button
+    const resetCatalogBtn = document.getElementById('resetCatalogBtn');
+    if (resetCatalogBtn) {
+        resetCatalogBtn.addEventListener('click', async function() {
+            // Require explicit confirmation
+            const confirmText = prompt('Type RESET to confirm deletion and recreation of the catalog table. This is irreversible.');
+            if (confirmText !== 'RESET') {
+                showAlert('Reset cancelled', 'info');
+                return;
+            }
+
+            try {
+                showLoading(true);
+                resetCatalogBtn.disabled = true;
+                const originalHtml = resetCatalogBtn.innerHTML;
+                resetCatalogBtn.innerHTML = '<i class="spinner-border spinner-border-sm me-1"></i>Resetting...';
+
+                const response = await fetch('/api/admin/coins/reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ recreate: true })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    showAlert(result.message || 'Catalog reset successfully', 'success');
+                    // Clear cached UI state if any
+                    try { window.uploadedCoinsData = []; } catch (e) {}
+                } else {
+                    showAlert(result.message || result.detail || 'Failed to reset catalog', 'danger');
+                }
+
+            } catch (error) {
+                console.error('Reset error:', error);
+                showAlert('Error resetting catalog. Check server logs.', 'danger');
+            } finally {
+                resetCatalogBtn.disabled = false;
+                resetCatalogBtn.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Reset Catalog';
+                showLoading(false);
+            }
+        });
+    }
 }
 
 /**
