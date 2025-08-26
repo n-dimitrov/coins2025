@@ -927,3 +927,133 @@ class BigQueryService:
         return {
             "countries": countries
         }
+
+    # History management methods
+    async def get_all_history(self) -> List[Dict[str, Any]]:
+        """Get all history entries with coin identifiers."""
+        query = f"""
+        SELECT 
+            h.name, 
+            COALESCE(h.coin_id, h.id) as id,  -- Use coin_id if available, fallback to id for legacy data
+            h.date
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+        ORDER BY h.date DESC
+        """
+        
+        return await self._get_cached_or_query(query, {})
+
+    async def import_history_batch(self, history_entries: List) -> int:
+        """Import a batch of history entries."""
+        def execute_batch_insert():
+            import uuid
+            from datetime import datetime as dt
+            
+            table_ref = self.client.dataset(self.dataset_id).table(settings.bq_history_table)
+            table = self.client.get_table(table_ref)
+            
+            rows_to_insert = []
+            current_time = dt.now().isoformat() + 'Z'  # ISO format for BigQuery
+            
+            for entry in history_entries:
+                row = {
+                    'id': str(uuid.uuid4()),  # Generate unique UUID for each record
+                    'name': entry.name,
+                    'coin_id': entry.id,  # The coin identifier from CSV is stored in coin_id field
+                    'date': entry.date.isoformat() + 'Z' if hasattr(entry.date, 'isoformat') else str(entry.date),
+                    'created_at': current_time,
+                    'created_by': 'import',
+                    'is_active': True
+                }
+                rows_to_insert.append(row)
+            
+            errors = self.client.insert_rows_json(table, rows_to_insert)
+            if errors:
+                raise Exception(f"Error inserting history batch: {errors}")
+            
+            return len(rows_to_insert)
+
+        loop = asyncio.get_event_loop()
+        imported_count = await loop.run_in_executor(None, execute_batch_insert)
+        
+        # Clear cache after import
+        self.clear_cache()
+        
+        return imported_count
+
+    async def get_history_paginated(self, page: int = 1, limit: int = 50, filters: dict = None) -> Dict[str, Any]:
+        """Get paginated history entries with optional filters."""
+        offset = (page - 1) * limit
+        
+        # Build WHERE clauses
+        where_clauses = []
+        params = {}
+        
+        if filters:
+            if filters.get('search'):
+                where_clauses.append("(LOWER(h.name) LIKE @search OR LOWER(COALESCE(h.coin_id, h.id)) LIKE @search)")
+                params['search'] = f"%{filters['search'].lower()}%"
+            
+            if filters.get('name'):
+                where_clauses.append("LOWER(h.name) = LOWER(@name)")
+                params['name'] = filters['name']
+            
+            if filters.get('date_filter'):
+                # Filter by year-month (e.g., "2024-02")
+                where_clauses.append("FORMAT_DATE('%Y-%m', h.date) = @date_filter")
+                params['date_filter'] = filters['date_filter']
+
+        where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
+        
+        # Get total count
+        count_query = f"""
+        SELECT COUNT(*) as total
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+        WHERE {where_sql}
+        """
+        
+        count_result = await self._get_cached_or_query(count_query, params)
+        total_count = count_result[0]['total'] if count_result else 0
+        
+        # Get paginated data
+        data_query = f"""
+        SELECT 
+            h.name, 
+            COALESCE(h.coin_id, h.id) as id,  -- Use coin_id if available, fallback to id for legacy data
+            h.date
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+        WHERE {where_sql}
+        ORDER BY h.date DESC
+        LIMIT @limit OFFSET @offset
+        """
+        
+        params.update({
+            'limit': limit,
+            'offset': offset
+        })
+        
+        data = await self._get_cached_or_query(data_query, params)
+        
+        total_pages = (total_count + limit - 1) // limit
+        
+        return {
+            'data': data,
+            'total_count': total_count,
+            'total_pages': total_pages
+        }
+
+    async def get_history_filter_options(self) -> Dict[str, Any]:
+        """Get filter options for history admin view."""
+        # Get unique names
+        names_query = f"""
+        SELECT DISTINCT h.name
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+        WHERE h.name IS NOT NULL AND h.name != ''
+        ORDER BY h.name ASC
+        """
+        
+        names_result = await self._get_cached_or_query(names_query, {})
+        names = [row['name'] for row in names_result]
+        
+        return {
+            "names": names
+        }

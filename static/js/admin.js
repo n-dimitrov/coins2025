@@ -8,6 +8,23 @@ let currentSelectedGroupId = null;
 let currentSelectedGroupKey = null;
 let currentSelectedGroupName = null;
 
+/**
+ * Utility function to escape HTML to prevent XSS attacks
+ */
+function escapeHtml(text) {
+    if (text === null || text === undefined) {
+        return '';
+    }
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
 // DOM Ready
 document.addEventListener('DOMContentLoaded', function() {
     initializeAdmin();
@@ -21,6 +38,7 @@ function initializeAdmin() {
     initializeGroupForms();
     initializeUserForms();
     initializeCoinsManagement();
+    initializeHistoryManagement();
     
     // Auto-generate group key from name
     setupGroupKeyAutoGeneration();
@@ -1319,4 +1337,461 @@ function updatePaginationButtons() {
 function showCoinsViewLoading(show) {
     document.getElementById('coinsViewLoading').style.display = show ? 'block' : 'none';
     document.getElementById('coinsViewContainer').style.display = show ? 'none' : 'block';
+}
+
+// History Management Functions
+let historyUploadData = [];
+let currentHistoryPage = 0;
+let currentHistoryLimit = 50;
+let currentHistoryTotal = 0;
+let currentHistoryFilters = {};
+
+/**
+ * Initialize history management functionality
+ */
+function initializeHistoryManagement() {
+    // File upload handler
+    const historyCsvFile = document.getElementById('historyCsvFile');
+    if (historyCsvFile) {
+        historyCsvFile.addEventListener('change', function(e) {
+            const uploadBtn = document.getElementById('uploadHistoryCsvBtn');
+            uploadBtn.disabled = !e.target.files[0];
+        });
+    }
+
+    // Upload button handler
+    const uploadHistoryCsvBtn = document.getElementById('uploadHistoryCsvBtn');
+    if (uploadHistoryCsvBtn) {
+        uploadHistoryCsvBtn.addEventListener('click', uploadHistoryCsv);
+    }
+
+    // Export button handler
+    const exportHistoryCsvBtn = document.getElementById('exportHistoryCsvBtn');
+    if (exportHistoryCsvBtn) {
+        exportHistoryCsvBtn.addEventListener('click', exportHistoryCsv);
+    }
+
+    // Import buttons
+    const selectAllHistoryBtn = document.getElementById('selectAllHistoryBtn');
+    if (selectAllHistoryBtn) {
+        selectAllHistoryBtn.addEventListener('click', () => selectAllHistoryEntries(true));
+    }
+
+    const deselectAllHistoryBtn = document.getElementById('deselectAllHistoryBtn');
+    if (deselectAllHistoryBtn) {
+        deselectAllHistoryBtn.addEventListener('click', () => selectAllHistoryEntries(false));
+    }
+
+    const importSelectedHistoryBtn = document.getElementById('importSelectedHistoryBtn');
+    if (importSelectedHistoryBtn) {
+        importSelectedHistoryBtn.addEventListener('click', importSelectedHistoryEntries);
+    }
+
+    // History view buttons
+    const loadHistoryBtn = document.getElementById('loadHistoryBtn');
+    if (loadHistoryBtn) {
+        loadHistoryBtn.addEventListener('click', loadHistoryData);
+    }
+
+    const prevHistoryPageBtn = document.getElementById('prevHistoryPageBtn');
+    if (prevHistoryPageBtn) {
+        prevHistoryPageBtn.addEventListener('click', () => changeHistoryPage(-1));
+    }
+
+    const nextHistoryPageBtn = document.getElementById('nextHistoryPageBtn');
+    if (nextHistoryPageBtn) {
+        nextHistoryPageBtn.addEventListener('click', () => changeHistoryPage(1));
+    }
+
+    // Filter buttons
+    const applyHistoryFiltersBtn = document.getElementById('applyHistoryFiltersBtn');
+    if (applyHistoryFiltersBtn) {
+        applyHistoryFiltersBtn.addEventListener('click', applyHistoryFilters);
+    }
+
+    const clearHistoryFiltersBtn = document.getElementById('clearHistoryFiltersBtn');
+    if (clearHistoryFiltersBtn) {
+        clearHistoryFiltersBtn.addEventListener('click', clearHistoryFilters);
+    }
+
+    // Checkbox handlers
+    const selectAllHistoryCheckbox = document.getElementById('selectAllHistoryCheckbox');
+    if (selectAllHistoryCheckbox) {
+        selectAllHistoryCheckbox.addEventListener('change', function(e) {
+            selectAllHistoryEntries(e.target.checked);
+        });
+    }
+}
+
+/**
+ * Upload and analyze History CSV
+ */
+async function uploadHistoryCsv() {
+    const fileInput = document.getElementById('historyCsvFile');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        showAlert('Please select a CSV file', 'warning');
+        return;
+    }
+
+    const uploadBtn = document.getElementById('uploadHistoryCsvBtn');
+    const originalText = uploadBtn.innerHTML;
+    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Analyzing...';
+    uploadBtn.disabled = true;
+
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch('/api/admin/history/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            historyUploadData = result.data;
+            displayHistoryUploadResults(result);
+            document.getElementById('historyUploadResults').style.display = 'block';
+            showAlert(`Analyzed ${result.total_uploaded} history entries. ${result.new_entries} new, ${result.duplicate_entries} duplicates.`, 'success');
+        } else {
+            showAlert('Error uploading file: ' + result.detail, 'danger');
+        }
+    } catch (error) {
+        console.error('Error uploading history CSV:', error);
+        showAlert('Error uploading file. Please try again.', 'danger');
+    } finally {
+        uploadBtn.innerHTML = originalText;
+        uploadBtn.disabled = false;
+    }
+}
+
+/**
+ * Display upload results
+ */
+function displayHistoryUploadResults(result) {
+    // Update summary cards
+    document.getElementById('totalHistoryUploaded').textContent = result.total_uploaded;
+    document.getElementById('newHistoryEntries').textContent = result.new_entries;
+    document.getElementById('duplicateHistoryEntries').textContent = result.duplicate_entries;
+    
+    // Update table
+    const tableBody = document.getElementById('historyPreviewTableBody');
+    tableBody.innerHTML = '';
+
+    result.data.forEach((entry, index) => {
+        const row = document.createElement('tr');
+        const statusClass = entry.status === 'new' ? 'badge bg-success' : 'badge bg-warning';
+        const isChecked = entry.status === 'new' ? 'checked' : '';
+        
+        row.innerHTML = `
+            <td>
+                <input type="checkbox" class="history-import-checkbox" data-index="${index}" ${isChecked} ${entry.status === 'duplicate' ? 'disabled' : ''}>
+            </td>
+            <td><span class="${statusClass}">${entry.status}</span></td>
+            <td>${escapeHtml(entry.name)}</td>
+            <td><code>${escapeHtml(entry.id)}</code></td>
+            <td>${formatDate(entry.date)}</td>
+        `;
+        
+        tableBody.appendChild(row);
+    });
+
+    // Add checkbox event listeners
+    document.querySelectorAll('.history-import-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', updateHistoryImportSummary);
+    });
+
+    updateHistoryImportSummary();
+}
+
+/**
+ * Update import summary
+ */
+function updateHistoryImportSummary() {
+    const checkboxes = document.querySelectorAll('.history-import-checkbox:not(:disabled)');
+    const checkedCount = document.querySelectorAll('.history-import-checkbox:checked').length;
+    
+    document.getElementById('selectedHistoryForImport').textContent = checkedCount;
+    
+    const importBtn = document.getElementById('importSelectedHistoryBtn');
+    importBtn.disabled = checkedCount === 0;
+    
+    const selectAllCheckbox = document.getElementById('selectAllHistoryCheckbox');
+    selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < checkboxes.length;
+    selectAllCheckbox.checked = checkedCount === checkboxes.length && checkboxes.length > 0;
+}
+
+/**
+ * Select/deselect all history entries
+ */
+function selectAllHistoryEntries(select) {
+    document.querySelectorAll('.history-import-checkbox:not(:disabled)').forEach(checkbox => {
+        checkbox.checked = select;
+    });
+    updateHistoryImportSummary();
+}
+
+/**
+ * Import selected history entries
+ */
+async function importSelectedHistoryEntries() {
+    const selectedEntries = [];
+    document.querySelectorAll('.history-import-checkbox:checked').forEach(checkbox => {
+        const index = parseInt(checkbox.dataset.index);
+        selectedEntries.push(historyUploadData[index]);
+    });
+
+    if (selectedEntries.length === 0) {
+        showAlert('No entries selected for import', 'warning');
+        return;
+    }
+
+    const importBtn = document.getElementById('importSelectedHistoryBtn');
+    const originalText = importBtn.innerHTML;
+    importBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Importing...';
+    importBtn.disabled = true;
+
+    try {
+        const response = await fetch('/api/admin/history/import', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedEntries)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showAlert(`Successfully imported ${result.imported_count} history entries`, 'success');
+            document.getElementById('historyUploadResults').style.display = 'none';
+            document.getElementById('historyCsvFile').value = '';
+            document.getElementById('uploadHistoryCsvBtn').disabled = true;
+        } else {
+            showAlert('Error importing entries: ' + result.detail, 'danger');
+        }
+    } catch (error) {
+        console.error('Error importing history entries:', error);
+        showAlert('Error importing entries. Please try again.', 'danger');
+    } finally {
+        importBtn.innerHTML = originalText;
+        importBtn.disabled = false;
+    }
+}
+
+/**
+ * Export history to CSV
+ */
+async function exportHistoryCsv() {
+    const exportBtn = document.getElementById('exportHistoryCsvBtn');
+    const originalText = exportBtn.innerHTML;
+    exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Exporting...';
+    exportBtn.disabled = true;
+
+    try {
+        const response = await fetch('/api/admin/history/export');
+        
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'history_export.csv';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            showAlert('History exported successfully', 'success');
+        } else {
+            const result = await response.json();
+            showAlert('Error exporting history: ' + result.detail, 'danger');
+        }
+    } catch (error) {
+        console.error('Error exporting history:', error);
+        showAlert('Error exporting history. Please try again.', 'danger');
+    } finally {
+        exportBtn.innerHTML = originalText;
+        exportBtn.disabled = false;
+    }
+}
+
+/**
+ * Load history data
+ */
+async function loadHistoryData() {
+    showHistoryViewLoading(true);
+    document.getElementById('historyFilters').style.display = 'none';
+    document.getElementById('historyViewEmpty').style.display = 'none';
+
+    try {
+        // Load filter options first
+        await loadHistoryFilterOptions();
+        
+        // Load history data
+        await loadHistoryPage();
+        
+        document.getElementById('historyFilters').style.display = 'flex';
+        document.getElementById('historyViewContainer').style.display = 'block';
+    } catch (error) {
+        console.error('Error loading history:', error);
+        showAlert('Error loading history data. Please try again.', 'danger');
+        document.getElementById('historyViewEmpty').style.display = 'block';
+    } finally {
+        showHistoryViewLoading(false);
+    }
+}
+
+/**
+ * Load history filter options
+ */
+async function loadHistoryFilterOptions() {
+    try {
+        const response = await fetch('/api/admin/history/filter-options');
+        const result = await response.json();
+        
+        if (result.success) {
+            // Populate name filter
+            const nameSelect = document.getElementById('filterHistoryName');
+            nameSelect.innerHTML = '<option value="">All Names</option>';
+            result.names.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                nameSelect.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading history filter options:', error);
+    }
+}
+
+/**
+ * Load history page
+ */
+async function loadHistoryPage() {
+    const params = new URLSearchParams({
+        page: currentHistoryPage + 1,
+        limit: currentHistoryLimit,
+        ...currentHistoryFilters
+    });
+
+    const response = await fetch(`/api/admin/history/view?${params}`);
+    const result = await response.json();
+
+    if (result.success) {
+        currentHistoryTotal = result.pagination.total_count;
+        displayHistoryData(result.data);
+        updateHistoryPaginationInfo();
+        updateHistoryPaginationButtons();
+    } else {
+        throw new Error(result.detail || 'Failed to load history');
+    }
+}
+
+/**
+ * Display history data in table
+ */
+function displayHistoryData(historyData) {
+    const tableBody = document.getElementById('historyViewTableBody');
+    tableBody.innerHTML = '';
+
+    historyData.forEach(entry => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${escapeHtml(entry.name)}</td>
+            <td><code>${escapeHtml(entry.id)}</code></td>
+            <td>${formatDate(entry.date)}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+/**
+ * Change history page
+ */
+async function changeHistoryPage(direction) {
+    const newPage = currentHistoryPage + direction;
+    const maxPage = Math.ceil(currentHistoryTotal / currentHistoryLimit) - 1;
+    
+    if (newPage >= 0 && newPage <= maxPage) {
+        currentHistoryPage = newPage;
+        await loadHistoryPage();
+    }
+}
+
+/**
+ * Apply history filters
+ */
+async function applyHistoryFilters() {
+    const search = document.getElementById('filterHistorySearch').value.trim();
+    const name = document.getElementById('filterHistoryName').value;
+    const dateFilter = document.getElementById('filterHistoryDate').value;
+
+    currentHistoryFilters = {};
+    if (search) currentHistoryFilters.search = search;
+    if (name) currentHistoryFilters.name = name;
+    if (dateFilter) currentHistoryFilters.date_filter = dateFilter;
+
+    currentHistoryPage = 0;
+    await loadHistoryPage();
+}
+
+/**
+ * Clear history filters
+ */
+async function clearHistoryFilters() {
+    document.getElementById('filterHistorySearch').value = '';
+    document.getElementById('filterHistoryName').value = '';
+    document.getElementById('filterHistoryDate').value = '';
+    
+    currentHistoryFilters = {};
+    currentHistoryPage = 0;
+    await loadHistoryPage();
+}
+
+/**
+ * Update history pagination info
+ */
+function updateHistoryPaginationInfo() {
+    const start = currentHistoryPage * currentHistoryLimit + 1;
+    const end = Math.min((currentHistoryPage + 1) * currentHistoryLimit, currentHistoryTotal);
+    
+    document.getElementById('historyViewInfo').textContent = 
+        `Showing ${start}-${end} of ${currentHistoryTotal} entries`;
+}
+
+/**
+ * Update history pagination buttons
+ */
+function updateHistoryPaginationButtons() {
+    const prevBtn = document.getElementById('prevHistoryPageBtn');
+    const nextBtn = document.getElementById('nextHistoryPageBtn');
+    const maxPage = Math.ceil(currentHistoryTotal / currentHistoryLimit) - 1;
+    
+    prevBtn.disabled = currentHistoryPage === 0;
+    nextBtn.disabled = currentHistoryPage >= maxPage;
+}
+
+/**
+ * Show/hide loading state for history view
+ */
+function showHistoryViewLoading(show) {
+    document.getElementById('historyViewLoading').style.display = show ? 'block' : 'none';
+    document.getElementById('historyViewContainer').style.display = show ? 'none' : 'block';
+}
+
+/**
+ * Format date for display
+ */
+function formatDate(dateStr) {
+    try {
+        const date = new Date(dateStr);
+        return date.toLocaleString();
+    } catch (error) {
+        return dateStr;
+    }
 }

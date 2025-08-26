@@ -27,6 +27,11 @@
                                 <i class="fas fa-coins me-1"></i>Coins
                             </button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="false">
+                                <i class="fas fa-history me-1"></i>History
+                            </button>
+                        </li>
                         <!-- Future tabs can be added here -->
                         <!-- <li class="nav-item" role="presentation">
                             <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">
@@ -322,6 +327,207 @@
                                             <i class="fas fa-coins fa-3x mb-3"></i>
                                             <h5>Click "Load Coins" to view the database</h5>
                                             <p>You can then filter and browse through all coins in the catalog.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- History Tab -->
+                        <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                            <div class="row">
+                                <!-- CSV Upload Section -->
+                                <div class="col-12 mb-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-upload me-2"></i>Import History from CSV
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label for="historyCsvFile" class="form-label">Select CSV File</label>
+                                                <input type="file" class="form-control" id="historyCsvFile" accept=".csv" />
+                                                <div class="form-text">
+                                                    Upload a CSV file with the same format as data/history.csv. 
+                                                    Required columns: name, id, date
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" id="uploadHistoryCsvBtn" disabled>
+                                                <i class="fas fa-cloud-upload-alt me-1"></i>Upload and Analyze
+                                            </button>
+                                            <button type="button" class="btn btn-outline-success ms-2" id="exportHistoryCsvBtn">
+                                                <i class="fas fa-download me-1"></i>Export All History to CSV
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Upload Results Section -->
+                                <div class="col-12" id="historyUploadResults" style="display: none;">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-list me-2"></i>Import Preview
+                                            </h5>
+                                            <div>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm me-2" id="selectAllHistoryBtn">
+                                                    <i class="fas fa-check-square me-1"></i>Select All New
+                                                </button>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm me-2" id="deselectAllHistoryBtn">
+                                                    <i class="fas fa-square me-1"></i>Deselect All
+                                                </button>
+                                                <button type="button" class="btn btn-success btn-sm" id="importSelectedHistoryBtn" disabled>
+                                                    <i class="fas fa-download me-1"></i>Import Selected
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <!-- Upload Summary -->
+                                            <div class="row mb-3" id="historyUploadSummary">
+                                                <div class="col-md-3">
+                                                    <div class="card bg-primary text-white">
+                                                        <div class="card-body text-center">
+                                                            <h4 id="totalHistoryUploaded">0</h4>
+                                                            <small>Total Uploaded</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="card bg-success text-white">
+                                                        <div class="card-body text-center">
+                                                            <h4 id="newHistoryEntries">0</h4>
+                                                            <small>New Entries</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="card bg-warning text-white">
+                                                        <div class="card-body text-center">
+                                                            <h4 id="duplicateHistoryEntries">0</h4>
+                                                            <small>Duplicates</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="card bg-info text-white">
+                                                        <div class="card-body text-center">
+                                                            <h4 id="selectedHistoryForImport">0</h4>
+                                                            <small>Selected for Import</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- History Table -->
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover" id="historyPreviewTable">
+                                                    <thead class="table-dark">
+                                                        <tr>
+                                                            <th width="50">
+                                                                <input type="checkbox" id="selectAllHistoryCheckbox" />
+                                                            </th>
+                                                            <th width="15%">Status</th>
+                                                            <th width="30%">Name</th>
+                                                            <th width="35%">Coin ID</th>
+                                                            <th width="20%">Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="historyPreviewTableBody">
+                                                        <!-- Dynamic content will be loaded here -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- View History Section -->
+                            <div class="col-12 mt-4">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-eye me-2"></i>View History Database
+                                        </h5>
+                                        <button type="button" class="btn btn-primary btn-sm" id="loadHistoryBtn">
+                                            <i class="fas fa-sync me-1"></i>Load History
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Filters -->
+                                        <div class="row mb-3" id="historyFilters" style="display: none;">
+                                            <div class="col-md-4">
+                                                <label for="filterHistorySearch" class="form-label">Search</label>
+                                                <input type="text" class="form-control" id="filterHistorySearch" placeholder="Search name, coin ID...">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="filterHistoryName" class="form-label">Name</label>
+                                                <select class="form-select" id="filterHistoryName">
+                                                    <option value="">All Names</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="filterHistoryDate" class="form-label">Date Range</label>
+                                                <input type="month" class="form-control" id="filterHistoryDate" placeholder="YYYY-MM">
+                                            </div>
+                                            <div class="col-md-2 d-flex align-items-end">
+                                                <button type="button" class="btn btn-outline-primary me-2" id="applyHistoryFiltersBtn">
+                                                    <i class="fas fa-filter me-1"></i>Apply
+                                                </button>
+                                                <button type="button" class="btn btn-outline-secondary" id="clearHistoryFiltersBtn">
+                                                    <i class="fas fa-times me-1"></i>Clear
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- History View Table -->
+                                        <div id="historyViewContainer" style="display: none;">
+                                            <!-- Pagination Info -->
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div id="historyViewInfo" class="text-muted">
+                                                    <!-- Will show: Showing X-Y of Z entries -->
+                                                </div>
+                                                <div>
+                                                    <button type="button" class="btn btn-outline-primary btn-sm me-2" id="prevHistoryPageBtn" disabled>
+                                                        <i class="fas fa-chevron-left"></i> Previous
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-primary btn-sm" id="nextHistoryPageBtn" disabled>
+                                                        Next <i class="fas fa-chevron-right"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Table -->
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover" id="historyViewTable">
+                                                    <thead class="table-dark">
+                                                        <tr>
+                                                            <th width="30%">Name</th>
+                                                            <th width="40%">Coin ID</th>
+                                                            <th width="30%">Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="historyViewTableBody">
+                                                        <!-- Dynamic content will be loaded here -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- Loading State -->
+                                        <div id="historyViewLoading" class="text-center py-4" style="display: none;">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <div class="mt-2">Loading history...</div>
+                                        </div>
+
+                                        <!-- Empty State -->
+                                        <div id="historyViewEmpty" class="text-center text-muted py-4">
+                                            <i class="fas fa-history fa-3x mb-3"></i>
+                                            <h5>Click "Load History" to view the database</h5>
+                                            <p>You can then filter and browse through all history entries.</p>
                                         </div>
                                     </div>
                                 </div>
