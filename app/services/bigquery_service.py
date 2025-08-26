@@ -178,7 +178,7 @@ class BigQueryService:
         
         return await self._get_cached_or_query(query, {'group_id': group_id})
 
-    async def get_coin_ownership_by_group(self, coin_id: str, group_id: int) -> List[Dict[str, Any]]:
+    async def get_coin_ownership_by_group(self, coin_id: str, group_id: str) -> List[Dict[str, Any]]:
         """Get ownership information for a specific coin within a group."""
         query = f"""
         WITH latest_ownership AS (
@@ -204,7 +204,7 @@ class BigQueryService:
             'group_id': group_id
         })
 
-    async def get_coins_with_ownership(self, group_id: int, filters: dict = None, limit: int = 100, offset: int = 0) -> List[Dict[str, Any]]:
+    async def get_coins_with_ownership(self, group_id: str, filters: dict = None, limit: int = 100, offset: int = 0) -> List[Dict[str, Any]]:
         """Get coins with ownership information for a group."""
         where_clauses = []
         params = {'group_id': group_id}
@@ -276,7 +276,7 @@ class BigQueryService:
 
         return await self._get_cached_or_query(query, params)
 
-    async def get_group_stats(self, group_id: int) -> Dict[str, int]:
+    async def get_group_stats(self, group_id: str) -> Dict[str, int]:
         """Get statistics for a group."""
         query = f"""
         WITH latest_ownership AS (
@@ -425,7 +425,7 @@ class BigQueryService:
         
         return await self._get_cached_or_query(query, params)
 
-    async def get_user_owned_coins(self, name: str, group_id: int = None) -> List[Dict[str, Any]]:
+    async def get_user_owned_coins(self, name: str, group_id: str = None) -> List[Dict[str, Any]]:
         """Get all coins currently owned by a user."""
         group_join = ""
         group_where = ""
@@ -454,7 +454,7 @@ class BigQueryService:
         
         return await self._get_cached_or_query(query, params)
 
-    async def _invalidate_ownership_cache(self, coin_id: str = None, user_name: str = None, group_id: int = None):
+    async def _invalidate_ownership_cache(self, coin_id: str = None, user_name: str = None, group_id: str = None):
         """Invalidate cache entries related to ownership changes."""
         keys_to_remove = []
         

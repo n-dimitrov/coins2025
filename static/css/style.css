@@ -1013,3 +1013,116 @@
         color: #868e96;
     }
 }
+
+/* Admin Panel Styles */
+.admin-panel {
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 120px);
+}
+
+.admin-panel .card {
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.admin-panel .nav-tabs .nav-link {
+    background-color: transparent;
+    border-color: transparent;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.admin-panel .nav-tabs .nav-link.active {
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.admin-panel .table {
+    margin-bottom: 0;
+}
+
+.admin-panel .table th {
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.admin-panel .btn-group .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+.admin-panel .modal-header {
+    background-color: var(--primary-color);
+    color: white;
+    border-bottom: none;
+}
+
+.admin-panel .modal-header .btn-close {
+    filter: invert(1);
+}
+
+.admin-panel .form-text {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.admin-panel .table-responsive {
+    border-radius: 0.375rem;
+    overflow: hidden;
+}
+
+.admin-panel .badge {
+    font-size: 0.75rem;
+    padding: 0.35em 0.65em;
+}
+
+/* Loading animation */
+.spinner-border {
+    animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Highlight selected group row */
+.admin-panel .table tbody tr.table-active {
+    background-color: rgba(0, 102, 204, 0.1);
+}
+
+/* Alert animations */
+.alert {
+    animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive admin table */
+@media (max-width: 768px) {
+    .admin-panel .btn-group {
+        flex-direction: column;
+    }
+    
+    .admin-panel .btn-group .btn {
+        margin-bottom: 2px;
+        border-radius: 0.25rem !important;
+    }
+    
+    .admin-panel .table-responsive {
+        font-size: 0.9rem;
+    }
+}

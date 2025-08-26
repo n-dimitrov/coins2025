@@ -75,6 +75,24 @@ async def coin_detail(request: Request, coin_id: str):
         }, status_code=500)
 
 
+@router.get("/Admin", response_class=HTMLResponse)
+async def admin_page(request: Request):
+    """Admin page for managing groups and other administrative tasks."""
+    try:
+        # Get all groups for admin interface
+        groups_data = await bigquery_service.list_active_groups()
+        
+        return templates.TemplateResponse("admin.html", {
+            "request": request,
+            "groups": groups_data
+        })
+    except Exception as e:
+        logger.error(f"Error loading admin page: {str(e)}")
+        return templates.TemplateResponse("error.html", {
+            "request": request,
+            "error": "Unable to load admin page"
+        }, status_code=500)
+
 @router.get("/favicon.ico")
 async def favicon():
     """Serve favicon.ico for browsers that request it directly."""
