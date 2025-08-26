@@ -4,7 +4,8 @@ from typing import Optional
 class Settings:
     # Google Cloud
     google_cloud_project: str = os.getenv("GOOGLE_CLOUD_PROJECT", "coins2025")
-    google_application_credentials: Optional[str] = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+    # Only set credentials path if explicitly provided (not needed in Cloud Run)
+    google_application_credentials: Optional[str] = os.getenv("GOOGLE_APPLICATION_CREDENTIALS") if os.getenv("GOOGLE_APPLICATION_CREDENTIALS") else None
     
     # BigQuery
     bq_dataset: str = os.getenv("BQ_DATASET", "db")

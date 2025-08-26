@@ -12,12 +12,19 @@ class BigQueryService:
     # Shared cache across all service instances to avoid stale reads after reset
     _global_cache: Dict[str, Any] = {}
     def __init__(self):
-        self.client = bigquery.Client(project=settings.google_cloud_project)
-        self.dataset_id = settings.bq_dataset
-        self.table_id = settings.bq_table
-        # Use a shared cache so clearing in one place affects all instances
-        self._cache = self.__class__._global_cache
-        self._cache_duration = timedelta(minutes=settings.cache_duration_minutes)
+        try:
+            logger.info(f"Initializing BigQuery client for project: {settings.google_cloud_project}")
+            self.client = bigquery.Client(project=settings.google_cloud_project)
+            self.dataset_id = settings.bq_dataset
+            self.table_id = settings.bq_table
+            # Use a shared cache so clearing in one place affects all instances
+            self._cache = self.__class__._global_cache
+            self._cache_duration = timedelta(minutes=settings.cache_duration_minutes)
+            logger.info("BigQuery client initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize BigQuery client: {str(e)}")
+            # Re-raise the exception so the application doesn't start with a broken service
+            raise
 
     def _get_cache_key(self, query: str, params: dict) -> str:
         """Generate cache key from query and parameters."""

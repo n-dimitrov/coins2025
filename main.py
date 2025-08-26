@@ -4,10 +4,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 import uvicorn
 import os
+import logging
 from dotenv import load_dotenv
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
+
+logger.info("Starting My EuroCoins application...")
+logger.info(f"Python version: {os.sys.version}")
+logger.info(f"Environment: {os.getenv('APP_ENV', 'development')}")
+logger.info(f"Port: {os.getenv('PORT', '8000')}")
 
 # Import routers
 from app.routers import coins, health, pages, ownership, groups, admin
@@ -64,4 +74,5 @@ app.include_router(pages.router, tags=["pages"])
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
+    logger.info(f"Starting server on 0.0.0.0:{port}")
     uvicorn.run(app, host="0.0.0.0", port=port)
