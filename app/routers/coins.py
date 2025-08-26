@@ -134,16 +134,24 @@ async def get_group_coins(
         coins = []
         for coin_data in coins_data:
             coin_dict = dict(coin_data)
-            # Handle owners array
+            # Handle owners array (defensively coerce NULL aliases to a string)
             owners = []
             if 'owners' in coin_dict and coin_dict['owners']:
                 for owner in coin_dict['owners']:
-                    if owner:  # Skip None values
-                        owners.append(dict(owner))
-            
+                    if not owner:
+                        # Skip null owner entries
+                        continue
+                    owner_dict = dict(owner)
+                    # Pydantic Owner.alias requires a string. If alias is None
+                    # (NULL coming from BigQuery), fallback to the owner name
+                    # or an empty string to satisfy validation.
+                    if owner_dict.get('alias') is None:
+                        owner_dict['alias'] = owner_dict.get('owner') or owner_dict.get('name') or ''
+                    owners.append(owner_dict)
+
             coin_dict['owners'] = owners
             coin_dict['is_owned'] = len(owners) > 0
-            
+
             coins.append(Coin(**coin_dict))
         
         # Client-side search if needed
