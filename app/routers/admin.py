@@ -4,8 +4,10 @@ from typing import List, Dict, Any, Optional
 import csv
 import io
 import logging
+from datetime import datetime
 from app.services.bigquery_service import BigQueryService
 from app.models.coin import Coin
+from app.models.history import History, HistoryCreate
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/admin")
@@ -247,3 +249,229 @@ async def get_coins_filter_options():
     except Exception as e:
         logger.error(f"Error getting filter options: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error getting filter options: {str(e)}")
+
+
+# History endpoints
+@router.post("/history/upload")
+async def upload_history_csv(file: UploadFile = File(...)):
+    """Upload and process CSV file for history import."""
+    try:
+        # Validate file type
+        if not file.filename.endswith('.csv'):
+            raise HTTPException(status_code=400, detail="File must be a CSV file")
+        
+        # Read file content
+        content = await file.read()
+        content_str = content.decode('utf-8')
+        
+        # Parse CSV
+        csv_reader = csv.DictReader(io.StringIO(content_str))
+        uploaded_history = []
+        
+        expected_headers = ['name', 'id', 'date']
+        
+        # Validate headers
+        if not all(header in csv_reader.fieldnames for header in expected_headers):
+            missing_headers = [h for h in expected_headers if h not in csv_reader.fieldnames]
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Missing required CSV headers: {', '.join(missing_headers)}"
+            )
+        
+        # Process each row
+        for row_num, row in enumerate(csv_reader, start=2):
+            try:
+                # Parse date
+                date_obj = datetime.strptime(row['date'], '%Y-%m-%d %H:%M:%S')
+                
+                # Map CSV columns to history model
+                history_data = {
+                    'name': row['name'],
+                    'id': row['id'],  # coin_id
+                    'date': date_obj
+                }
+                
+                uploaded_history.append(history_data)
+                
+            except ValueError as e:
+                logger.warning(f"Skipping row {row_num}: Invalid data - {str(e)}")
+                continue
+            except Exception as e:
+                logger.warning(f"Skipping row {row_num}: {str(e)}")
+                continue
+        
+        if not uploaded_history:
+            raise HTTPException(status_code=400, detail="No valid history entries found in CSV")
+        
+        # Check for duplicates against existing data
+        existing_history = await bigquery_service.get_all_history()
+        existing_keys = {f"{h['name']}_{h['id']}_{h['date'].strftime('%Y-%m-%d %H:%M:%S')}" for h in existing_history}
+        
+        new_entries = []
+        duplicate_entries = []
+        
+        for history in uploaded_history:
+            key = f"{history['name']}_{history['id']}_{history['date'].strftime('%Y-%m-%d %H:%M:%S')}"
+            if key in existing_keys:
+                duplicate_entries.append({**history, 'status': 'duplicate'})
+            else:
+                new_entries.append({**history, 'status': 'new'})
+        
+        return {
+            "success": True,
+            "total_uploaded": len(uploaded_history),
+            "new_entries": len(new_entries),
+            "duplicate_entries": len(duplicate_entries),
+            "data": new_entries + duplicate_entries
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error processing history CSV: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error processing CSV: {str(e)}")
+
+
+@router.post("/history/import")
+async def import_history_entries(history_data: List[Dict[str, Any]]):
+    """Import selected history entries to BigQuery."""
+    try:
+        if not history_data:
+            raise HTTPException(status_code=400, detail="No history data provided")
+        
+        # Convert to HistoryCreate objects and validate
+        validated_history = []
+        for item in history_data:
+            try:
+                # Ensure date is properly formatted
+                if isinstance(item['date'], str):
+                    item['date'] = datetime.fromisoformat(item['date'].replace('Z', '+00:00'))
+                
+                history_obj = HistoryCreate(**item)
+                validated_history.append(history_obj)
+            except Exception as e:
+                logger.warning(f"Invalid history data: {item}. Error: {str(e)}")
+                continue
+        
+        if not validated_history:
+            raise HTTPException(status_code=400, detail="No valid history entries to import")
+        
+        # Import to BigQuery
+        imported_count = await bigquery_service.import_history_batch(validated_history)
+        
+        return {
+            "success": True,
+            "imported_count": imported_count,
+            "message": f"Successfully imported {imported_count} history entries"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error importing history: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error importing history: {str(e)}")
+
+
+@router.get("/history/export")
+async def export_history_csv():
+    """Export all history entries to CSV."""
+    try:
+        # Get all history from BigQuery
+        history_data = await bigquery_service.get_all_history()
+        
+        if not history_data:
+            raise HTTPException(status_code=404, detail="No history entries found")
+        
+        # Create CSV content
+        output = io.StringIO()
+        fieldnames = ['name', 'id', 'date']
+        writer = csv.DictWriter(output, fieldnames=fieldnames)
+        
+        writer.writeheader()
+        for entry in history_data:
+            # Format date for CSV
+            date_str = entry['date'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(entry['date'], datetime) else str(entry['date'])
+            
+            writer.writerow({
+                'name': entry['name'],
+                'id': entry['id'],
+                'date': date_str
+            })
+        
+        # Prepare response
+        output.seek(0)
+        
+        def iter_csv():
+            yield output.getvalue()
+        
+        return StreamingResponse(
+            iter_csv(),
+            media_type="text/csv",
+            headers={"Content-Disposition": "attachment; filename=history_export.csv"}
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error exporting history: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error exporting history: {str(e)}")
+
+
+@router.get("/history/view")
+async def view_history(
+    page: int = 1,
+    limit: int = 50,
+    search: Optional[str] = None,
+    name: Optional[str] = None,
+    date_filter: Optional[str] = None
+):
+    """Get paginated history entries with optional filters."""
+    try:
+        # Build filters
+        filters = {}
+        if search:
+            filters['search'] = search
+        if name:
+            filters['name'] = name
+        if date_filter:
+            filters['date_filter'] = date_filter
+        
+        # Get paginated data
+        result = await bigquery_service.get_history_paginated(
+            page=page,
+            limit=limit,
+            filters=filters
+        )
+        
+        return {
+            "success": True,
+            "data": result['data'],
+            "pagination": {
+                "current_page": page,
+                "total_pages": result['total_pages'],
+                "total_count": result['total_count'],
+                "limit": limit,
+                "has_next": page < result['total_pages'],
+                "has_prev": page > 1
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting history: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error getting history: {str(e)}")
+
+
+@router.get("/history/filter-options")
+async def get_history_filter_options():
+    """Get available filter options for history."""
+    try:
+        filter_options = await bigquery_service.get_history_filter_options()
+        
+        return {
+            "success": True,
+            "names": filter_options.get("names", [])
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting history filter options: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error getting history filter options: {str(e)}")
