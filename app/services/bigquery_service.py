@@ -193,7 +193,7 @@ class BigQueryService:
         )
         SELECT 
             lo.name as owner,
-            gu.alias as alias,
+            COALESCE(gu.alias, lo.name) as alias,
             lo.date as acquired_date
         FROM latest_ownership lo
         JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu 
@@ -252,7 +252,7 @@ class BigQueryService:
             SELECT 
                 c.*,
                 lo.name as owner,
-                gu.alias as owner_alias,
+                COALESCE(gu.alias, lo.name) as owner_alias,
                 lo.date as acquired_date
             FROM `{self.client.project}.{self.dataset_id}.{self.table_id}` c
             LEFT JOIN latest_ownership lo 
