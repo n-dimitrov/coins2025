@@ -47,7 +47,7 @@ class GroupService:
             logger.error(f"Error getting group context for {group_name}: {str(e)}")
             return None
     
-    async def enrich_coins_with_ownership(self, coins: List[Dict], group_id: int) -> List[Dict]:
+    async def enrich_coins_with_ownership(self, coins: List[Dict], group_id: str) -> List[Dict]:
         """Enrich coin data with ownership information for the group."""
         try:
             enriched_coins = []
@@ -71,7 +71,7 @@ class GroupService:
             logger.error(f"Error enriching coins with ownership: {str(e)}")
             return coins
     
-    async def get_group_coins(self, group_id: int, filters: dict = None, limit: int = 100, offset: int = 0) -> List[Dict[str, Any]]:
+    async def get_group_coins(self, group_id: str, filters: dict = None, limit: int = 100, offset: int = 0) -> List[Dict[str, Any]]:
         """Get coins with ownership information for a group."""
         try:
             return await self.bigquery_service.get_coins_with_ownership(

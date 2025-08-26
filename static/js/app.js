@@ -32,8 +32,13 @@ function initializeApp() {
         });
     });
 
-    // Add hover effects to cards
+    // Add hover effects to cards (excluding admin panel cards)
     document.querySelectorAll('.card').forEach(card => {
+        // Skip hover effects for admin panel cards
+        if (card.closest('.admin-panel')) {
+            return;
+        }
+        
         card.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-5px)';
         });
