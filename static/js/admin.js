@@ -20,6 +20,7 @@ function initializeAdmin() {
     // Initialize form handlers
     initializeGroupForms();
     initializeUserForms();
+    initializeCoinsManagement();
     
     // Auto-generate group key from name
     setupGroupKeyAutoGeneration();
@@ -646,4 +647,676 @@ function showAlert(message, type = 'info') {
     setTimeout(() => {
         alertDiv.remove();
     }, 5000);
+}
+
+// ========================
+// COINS MANAGEMENT
+// ========================
+
+// Global variables for coins import
+let uploadedCoinsData = [];
+let currentCoinsPage = 0;
+let currentCoinsLimit = 100;
+let currentCoinsTotal = 0;
+let currentFilters = {};
+
+/**
+ * Initialize coins management functionality
+ */
+function initializeCoinsManagement() {
+    const csvFileInput = document.getElementById('csvFile');
+    const uploadCsvBtn = document.getElementById('uploadCsvBtn');
+    const exportCsvBtn = document.getElementById('exportCsvBtn');
+    const selectAllBtn = document.getElementById('selectAllBtn');
+    const deselectAllBtn = document.getElementById('deselectAllBtn');
+    const importSelectedBtn = document.getElementById('importSelectedBtn');
+    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+    
+    // View coins elements
+    const loadCoinsBtn = document.getElementById('loadCoinsBtn');
+    const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+    const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
+
+    // File input change handler
+    if (csvFileInput) {
+        csvFileInput.addEventListener('change', function() {
+            uploadCsvBtn.disabled = !this.files.length;
+        });
+    }
+
+    // Upload CSV button handler
+    if (uploadCsvBtn) {
+        uploadCsvBtn.addEventListener('click', handleCsvUpload);
+    }
+
+    // Export CSV button handler
+    if (exportCsvBtn) {
+        exportCsvBtn.addEventListener('click', handleCsvExport);
+    }
+
+    // Select/Deselect buttons
+    if (selectAllBtn) {
+        selectAllBtn.addEventListener('click', () => selectAllNewCoins(true));
+    }
+    
+    if (deselectAllBtn) {
+        deselectAllBtn.addEventListener('click', () => selectAllNewCoins(false));
+    }
+
+    // Import selected button
+    if (importSelectedBtn) {
+        importSelectedBtn.addEventListener('click', handleImportSelected);
+    }
+
+    // Select all checkbox
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function() {
+            selectAllNewCoins(this.checked);
+        });
+    }
+
+    // View coins handlers
+    if (loadCoinsBtn) {
+        loadCoinsBtn.addEventListener('click', loadCoinsFromDatabase);
+    }
+
+    if (applyFiltersBtn) {
+        applyFiltersBtn.addEventListener('click', applyCoinsFilters);
+    }
+
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', clearCoinsFilters);
+    }
+
+    if (prevPageBtn) {
+        prevPageBtn.addEventListener('click', () => changePage(-1));
+    }
+
+    if (nextPageBtn) {
+        nextPageBtn.addEventListener('click', () => changePage(1));
+    }
+}
+
+/**
+ * Handle CSV export
+ */
+async function handleCsvExport() {
+    const exportBtn = document.getElementById('exportCsvBtn');
+    
+    try {
+        // Show loading state
+        exportBtn.disabled = true;
+        exportBtn.innerHTML = '<i class="spinner-border spinner-border-sm me-1"></i>Exporting...';
+
+        // Make request to export endpoint
+        const response = await fetch('/api/admin/coins/export', {
+            method: 'GET'
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || 'Export failed');
+        }
+
+        // Get the CSV content as blob
+        const blob = await response.blob();
+        
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'coins_export.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        showAlert('Coins exported successfully!', 'success');
+
+    } catch (error) {
+        console.error('Export error:', error);
+        showAlert(`Export failed: ${error.message}`, 'danger');
+    } finally {
+        // Reset button state
+        exportBtn.disabled = false;
+        exportBtn.innerHTML = '<i class="fas fa-download me-1"></i>Export All Coins to CSV';
+    }
+}
+
+/**
+ * Handle CSV file upload
+ */
+async function handleCsvUpload() {
+    const fileInput = document.getElementById('csvFile');
+    const uploadBtn = document.getElementById('uploadCsvBtn');
+    
+    if (!fileInput.files.length) {
+        showAlert('Please select a CSV file', 'danger');
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        // Show loading state
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = '<i class="spinner-border spinner-border-sm me-1"></i>Analyzing...';
+
+        const response = await fetch('/api/admin/coins/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.detail || 'Upload failed');
+        }
+
+        // Store uploaded data
+        uploadedCoinsData = result.coins;
+
+        // Update UI with results
+        updateUploadSummary(result);
+        populateCoinsPreviewTable(result.coins);
+        
+        // Show results section
+        document.getElementById('uploadResults').style.display = 'block';
+        
+        showAlert('CSV file processed successfully!', 'success');
+
+    } catch (error) {
+        console.error('Upload error:', error);
+        showAlert(`Upload failed: ${error.message}`, 'danger');
+    } finally {
+        // Reset button state
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = '<i class="fas fa-cloud-upload-alt me-1"></i>Upload and Analyze';
+    }
+}
+
+/**
+ * Update upload summary statistics
+ */
+function updateUploadSummary(result) {
+    document.getElementById('totalUploaded').textContent = result.total_uploaded;
+    document.getElementById('newCoins').textContent = result.new_coins;
+    document.getElementById('duplicateCoins').textContent = result.duplicates;
+    updateSelectedCount();
+}
+
+/**
+ * Populate the coins preview table
+ */
+function populateCoinsPreviewTable(coins) {
+    const tbody = document.getElementById('coinsPreviewTableBody');
+    tbody.innerHTML = '';
+
+    coins.forEach((coin, index) => {
+        const row = document.createElement('tr');
+        
+        // Add class based on status
+        if (coin.status === 'duplicate') {
+            row.classList.add('table-warning');
+        }
+
+        row.innerHTML = `
+            <td>
+                <input type="checkbox" 
+                       class="coin-checkbox" 
+                       data-index="${index}"
+                       ${coin.selected_for_import ? 'checked' : ''}
+                       ${coin.status === 'duplicate' ? 'disabled' : ''} />
+            </td>
+            <td>
+                ${coin.status === 'new' 
+                    ? '<span class="badge bg-success">New</span>' 
+                    : '<span class="badge bg-warning">Duplicate</span>'}
+            </td>
+            <td>${coin.coin_type}</td>
+            <td>${coin.year}</td>
+            <td>${coin.country}</td>
+            <td>${coin.series}</td>
+            <td>${coin.value}€</td>
+            <td><code style="font-size: 0.9em; white-space: nowrap;">${coin.coin_id}</code></td>
+            <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis;" title="${coin.feature || ''}">${coin.feature || '-'}</td>
+            <td>
+                ${coin.image_url ? 
+                    `<div class="coin-image-preview">
+                        <a href="${coin.image_url}" target="_blank" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-image"></i>
+                        </a>
+                        <div class="preview-tooltip">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin"></i><br>Loading...
+                            </div>
+                        </div>
+                    </div>` : 
+                    '<span class="text-muted">-</span>'
+                }
+            </td>
+        `;
+
+        tbody.appendChild(row);
+    });
+
+    // Add event listeners to checkboxes
+    const checkboxes = tbody.querySelectorAll('.coin-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const index = parseInt(this.dataset.index);
+            uploadedCoinsData[index].selected_for_import = this.checked;
+            updateSelectedCount();
+        });
+    });
+
+    // Add image preview functionality if there are images
+    setupImagePreviews();
+}
+
+/**
+ * Select/deselect all new coins
+ */
+function selectAllNewCoins(select) {
+    uploadedCoinsData.forEach((coin, index) => {
+        if (coin.status === 'new') {
+            coin.selected_for_import = select;
+            const checkbox = document.querySelector(`input[data-index="${index}"]`);
+            if (checkbox) {
+                checkbox.checked = select;
+            }
+        }
+    });
+    
+    updateSelectedCount();
+    updateSelectAllCheckbox();
+}
+
+/**
+ * Update selected count display
+ */
+function updateSelectedCount() {
+    const selectedCount = uploadedCoinsData.filter(coin => coin.selected_for_import).length;
+    document.getElementById('selectedForImport').textContent = selectedCount;
+    
+    // Enable/disable import button
+    const importBtn = document.getElementById('importSelectedBtn');
+    importBtn.disabled = selectedCount === 0;
+    
+    updateSelectAllCheckbox();
+}
+
+/**
+ * Update select all checkbox state
+ */
+function updateSelectAllCheckbox() {
+    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+    const newCoins = uploadedCoinsData.filter(coin => coin.status === 'new');
+    const selectedNewCoins = newCoins.filter(coin => coin.selected_for_import);
+    
+    if (selectedNewCoins.length === 0) {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false;
+    } else if (selectedNewCoins.length === newCoins.length) {
+        selectAllCheckbox.checked = true;
+        selectAllCheckbox.indeterminate = false;
+    } else {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = true;
+    }
+}
+
+/**
+ * Handle import of selected coins
+ */
+async function handleImportSelected() {
+    const selectedCoins = uploadedCoinsData.filter(coin => coin.selected_for_import);
+    
+    if (selectedCoins.length === 0) {
+        showAlert('No coins selected for import', 'warning');
+        return;
+    }
+
+    // Confirm import
+    if (!confirm(`Are you sure you want to import ${selectedCoins.length} coins?`)) {
+        return;
+    }
+
+    const importBtn = document.getElementById('importSelectedBtn');
+    
+    try {
+        // Show loading state
+        importBtn.disabled = true;
+        importBtn.innerHTML = '<i class="spinner-border spinner-border-sm me-1"></i>Importing...';
+
+        const response = await fetch('/api/admin/coins/import', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedCoins)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.detail || 'Import failed');
+        }
+
+        showAlert(`Successfully imported ${result.imported_count} coins!`, 'success');
+        
+        // Reset the form
+        resetCoinsImport();
+
+    } catch (error) {
+        console.error('Import error:', error);
+        showAlert(`Import failed: ${error.message}`, 'danger');
+    } finally {
+        // Reset button state
+        importBtn.disabled = false;
+        importBtn.innerHTML = '<i class="fas fa-download me-1"></i>Import Selected';
+    }
+}
+
+/**
+ * Reset coins import form
+ */
+function resetCoinsImport() {
+    // Clear file input
+    document.getElementById('csvFile').value = '';
+    document.getElementById('uploadCsvBtn').disabled = true;
+    
+    // Hide results
+    document.getElementById('uploadResults').style.display = 'none';
+    
+    // Clear data
+    uploadedCoinsData = [];
+}
+
+// ========================
+// COINS VIEW FUNCTIONALITY
+// ========================
+
+/**
+ * Load coins from database
+ */
+async function loadCoinsFromDatabase() {
+    const loadBtn = document.getElementById('loadCoinsBtn');
+    
+    try {
+        // Show loading state
+        showCoinsViewLoading(true);
+        loadBtn.disabled = true;
+        loadBtn.innerHTML = '<i class="spinner-border spinner-border-sm me-1"></i>Loading...';
+
+        // Reset pagination
+        currentCoinsPage = 0;
+        currentFilters = {};
+
+        // Load coins
+        await fetchCoinsData();
+        
+        // Load filter options
+        await loadFilterOptions();
+        
+        // Show filters and table
+        document.getElementById('coinsFilters').style.display = 'block';
+        document.getElementById('coinsViewContainer').style.display = 'block';
+        document.getElementById('coinsViewEmpty').style.display = 'none';
+        
+        showAlert('Coins loaded successfully!', 'success');
+
+    } catch (error) {
+        console.error('Load coins error:', error);
+        showAlert(`Failed to load coins: ${error.message}`, 'danger');
+    } finally {
+        showCoinsViewLoading(false);
+        loadBtn.disabled = false;
+        loadBtn.innerHTML = '<i class="fas fa-sync me-1"></i>Load Coins';
+    }
+}
+
+/**
+ * Load filter options from API
+ */
+async function loadFilterOptions() {
+    try {
+        const response = await fetch('/api/admin/coins/filter-options');
+        
+        if (!response.ok) {
+            throw new Error('Failed to load filter options');
+        }
+
+        const result = await response.json();
+        
+        // Populate country dropdown
+        const countrySelect = document.getElementById('filterCountry');
+        const currentValue = countrySelect.value; // Preserve current selection
+        
+        // Clear existing options except "All Countries"
+        countrySelect.innerHTML = '<option value="">All Countries</option>';
+        
+        // Add country options
+        result.countries.forEach(country => {
+            const option = document.createElement('option');
+            option.value = country;
+            option.textContent = country;
+            if (country === currentValue) {
+                option.selected = true;
+            }
+            countrySelect.appendChild(option);
+        });
+        
+    } catch (error) {
+        console.error('Error loading filter options:', error);
+        // Don't show alert for this, just log the error
+    }
+}
+
+/**
+ * Fetch coins data from API
+ */
+async function fetchCoinsData() {
+    const params = new URLSearchParams({
+        limit: currentCoinsLimit,
+        offset: currentCoinsPage * currentCoinsLimit,
+        ...currentFilters
+    });
+
+    const response = await fetch(`/api/admin/coins/view?${params}`);
+    
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || 'Failed to load coins');
+    }
+
+    const result = await response.json();
+    currentCoinsTotal = result.total;
+    
+    populateCoinsViewTable(result.coins);
+    updatePaginationInfo();
+    updatePaginationButtons();
+}
+
+/**
+ * Populate the coins view table
+ */
+function populateCoinsViewTable(coins) {
+    const tbody = document.getElementById('coinsViewTableBody');
+    tbody.innerHTML = '';
+
+    coins.forEach(coin => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>
+                <span class="badge ${coin.coin_type === 'CC' ? 'bg-warning' : 'bg-primary'}">
+                    ${coin.coin_type}
+                </span>
+            </td>
+            <td>${coin.year}</td>
+            <td>${coin.country}</td>
+            <td>${coin.series}</td>
+            <td>${coin.value}€</td>
+            <td><code style="font-size: 0.9em; white-space: nowrap;">${coin.coin_id}</code></td>
+            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${coin.feature || ''}">${coin.feature || '-'}</td>
+            <td>
+                ${coin.image_url ? 
+                    `<div class="coin-image-preview">
+                        <a href="${coin.image_url}" target="_blank" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-image"></i>
+                        </a>
+                        <div class="preview-tooltip">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin"></i><br>Loading...
+                            </div>
+                        </div>
+                    </div>` : 
+                    '<span class="text-muted">-</span>'
+                }
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    // Add image preview functionality
+    setupImagePreviews();
+}
+
+/**
+ * Setup image preview functionality
+ */
+function setupImagePreviews() {
+    const imagePreviewElements = document.querySelectorAll('.coin-image-preview');
+    
+    imagePreviewElements.forEach(element => {
+        const link = element.querySelector('a');
+        const tooltip = element.querySelector('.preview-tooltip');
+        const imageUrl = link ? link.getAttribute('href') : null;
+        
+        if (!imageUrl || !tooltip) return;
+        
+        let imageLoaded = false;
+        let imageElement = null;
+        
+        element.addEventListener('mouseenter', function() {
+            if (!imageLoaded) {
+                // Create and load image
+                imageElement = new Image();
+                imageElement.onload = function() {
+                    tooltip.innerHTML = `<img src="${imageUrl}" alt="Coin preview" />`;
+                    imageLoaded = true;
+                };
+                imageElement.onerror = function() {
+                    tooltip.innerHTML = `<div class="error"><i class="fas fa-exclamation-triangle"></i><br>Failed to load image</div>`;
+                    imageLoaded = true;
+                };
+                imageElement.src = imageUrl;
+            }
+        });
+    });
+}
+
+/**
+ * Apply filters
+ */
+async function applyCoinsFilters() {
+    const search = document.getElementById('filterSearch').value.trim();
+    const country = document.getElementById('filterCountry').value;
+    const type = document.getElementById('filterType').value;
+
+    currentFilters = {};
+    if (search) currentFilters.search = search;
+    if (country) currentFilters.country = country;
+    if (type) currentFilters.coin_type = type;
+
+    currentCoinsPage = 0; // Reset to first page
+    
+    try {
+        showCoinsViewLoading(true);
+        await fetchCoinsData();
+    } catch (error) {
+        console.error('Filter error:', error);
+        showAlert(`Failed to apply filters: ${error.message}`, 'danger');
+    } finally {
+        showCoinsViewLoading(false);
+    }
+}
+
+/**
+ * Clear all filters
+ */
+async function clearCoinsFilters() {
+    document.getElementById('filterSearch').value = '';
+    document.getElementById('filterCountry').value = '';
+    document.getElementById('filterType').value = '';
+    
+    currentFilters = {};
+    currentCoinsPage = 0;
+    
+    try {
+        showCoinsViewLoading(true);
+        await fetchCoinsData();
+    } catch (error) {
+        console.error('Clear filters error:', error);
+        showAlert(`Failed to clear filters: ${error.message}`, 'danger');
+    } finally {
+        showCoinsViewLoading(false);
+    }
+}
+
+/**
+ * Change page
+ */
+async function changePage(direction) {
+    const newPage = currentCoinsPage + direction;
+    const maxPage = Math.ceil(currentCoinsTotal / currentCoinsLimit) - 1;
+    
+    if (newPage < 0 || newPage > maxPage) return;
+    
+    currentCoinsPage = newPage;
+    
+    try {
+        showCoinsViewLoading(true);
+        await fetchCoinsData();
+    } catch (error) {
+        console.error('Pagination error:', error);
+        showAlert(`Failed to load page: ${error.message}`, 'danger');
+    } finally {
+        showCoinsViewLoading(false);
+    }
+}
+
+/**
+ * Update pagination info
+ */
+function updatePaginationInfo() {
+    const start = currentCoinsPage * currentCoinsLimit + 1;
+    const end = Math.min((currentCoinsPage + 1) * currentCoinsLimit, currentCoinsTotal);
+    
+    document.getElementById('coinsViewInfo').textContent = 
+        `Showing ${start}-${end} of ${currentCoinsTotal} coins`;
+}
+
+/**
+ * Update pagination buttons
+ */
+function updatePaginationButtons() {
+    const prevBtn = document.getElementById('prevPageBtn');
+    const nextBtn = document.getElementById('nextPageBtn');
+    const maxPage = Math.ceil(currentCoinsTotal / currentCoinsLimit) - 1;
+    
+    prevBtn.disabled = currentCoinsPage === 0;
+    nextBtn.disabled = currentCoinsPage >= maxPage;
+}
+
+/**
+ * Show/hide loading state for coins view
+ */
+function showCoinsViewLoading(show) {
+    document.getElementById('coinsViewLoading').style.display = show ? 'block' : 'none';
+    document.getElementById('coinsViewContainer').style.display = show ? 'none' : 'block';
 }

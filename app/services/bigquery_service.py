@@ -767,3 +767,163 @@ class BigQueryService:
             del self._cache[key]
             
         logger.info(f"Invalidated {len(keys_to_remove)} cache entries due to group change")
+
+    async def get_existing_coin_ids(self, coin_ids: List[str]) -> List[str]:
+        """Get existing coin IDs from the database."""
+        if not coin_ids:
+            return []
+        
+        # Create parameterized query for coin IDs
+        placeholders = ', '.join([f"@coin_id_{i}" for i in range(len(coin_ids))])
+        params = {f"coin_id_{i}": coin_id for i, coin_id in enumerate(coin_ids)}
+        
+        query = f"""
+        SELECT DISTINCT coin_id
+        FROM `{self.client.project}.{self.dataset_id}.{self.table_id}`
+        WHERE coin_id IN ({placeholders})
+        """
+        
+        results = await self._get_cached_or_query(query, params)
+        return [row['coin_id'] for row in results]
+
+    async def import_coins(self, coins: List[Dict[str, Any]]) -> int:
+        """Import coins to BigQuery table."""
+        if not coins:
+            return 0
+        
+        def execute_import():
+            try:
+                table_ref = self.client.dataset(self.dataset_id).table(self.table_id)
+                table = self.client.get_table(table_ref)
+                
+                # Prepare rows for BigQuery
+                rows_to_insert = []
+                current_time = datetime.utcnow().isoformat() + 'Z'  # ISO format with Z suffix for UTC
+                
+                for coin in coins:
+                    row = {
+                        'coin_type': coin['coin_type'],
+                        'year': coin['year'],
+                        'country': coin['country'],
+                        'series': coin['series'],
+                        'value': coin['value'],
+                        'coin_id': coin['coin_id'],
+                        'image_url': coin.get('image_url'),
+                        'feature': coin.get('feature'),
+                        'volume': coin.get('volume'),
+                        'created_at': current_time,
+                        'updated_at': current_time
+                    }
+                    rows_to_insert.append(row)
+                
+                # Insert rows
+                errors = self.client.insert_rows_json(table, rows_to_insert)
+                
+                if errors:
+                    logger.error(f"BigQuery insert errors: {errors}")
+                    raise Exception(f"Failed to insert rows: {errors}")
+                
+                logger.info(f"Successfully imported {len(rows_to_insert)} coins to BigQuery")
+                
+                # Clear cache to force refresh
+                self._cache.clear()
+                
+                return len(rows_to_insert)
+                
+            except Exception as e:
+                logger.error(f"Error importing coins to BigQuery: {str(e)}")
+                raise
+        
+        # Run in thread pool to avoid blocking
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, execute_import)
+
+    async def get_all_coins_for_export(self) -> List[Dict[str, Any]]:
+        """Get all coins sorted by year, series, country for export."""
+        query = f"""
+        SELECT 
+            coin_type, year, country, series, value, coin_id,
+            image_url, feature, volume
+        FROM `{self.client.project}.{self.dataset_id}.{self.table_id}`
+        ORDER BY year ASC, series ASC, country ASC
+        """
+        
+        return await self._get_cached_or_query(query, {})
+
+    async def get_coins_for_admin_view(self, filters: dict = None, limit: int = 100, offset: int = 0, search: str = None) -> List[Dict[str, Any]]:
+        """Get coins for admin view with filtering and pagination."""
+        where_clauses = []
+        params = {}
+
+        if filters:
+            if filters.get('coin_type'):
+                where_clauses.append("coin_type = @coin_type")
+                params['coin_type'] = filters['coin_type']
+            
+            if filters.get('country'):
+                where_clauses.append("country = @country")
+                params['country'] = filters['country']
+
+        if search:
+            where_clauses.append("(LOWER(country) LIKE @search OR LOWER(series) LIKE @search OR LOWER(feature) LIKE @search)")
+            params['search'] = f"%{search.lower()}%"
+
+        where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
+        
+        query = f"""
+        SELECT 
+            coin_type, year, country, series, value, coin_id,
+            image_url, feature, volume
+        FROM `{self.client.project}.{self.dataset_id}.{self.table_id}`
+        WHERE {where_sql}
+        ORDER BY year DESC, country ASC, series ASC
+        LIMIT {limit} OFFSET {offset}
+        """
+        
+        return await self._get_cached_or_query(query, params)
+
+    async def get_coins_count(self, filters: dict = None, search: str = None) -> int:
+        """Get total count of coins for pagination."""
+        where_clauses = []
+        params = {}
+
+        if filters:
+            if filters.get('coin_type'):
+                where_clauses.append("coin_type = @coin_type")
+                params['coin_type'] = filters['coin_type']
+            
+            if filters.get('country'):
+                where_clauses.append("country = @country")
+                params['country'] = filters['country']
+
+        if search:
+            where_clauses.append("(LOWER(country) LIKE @search OR LOWER(series) LIKE @search OR LOWER(feature) LIKE @search)")
+            params['search'] = f"%{search.lower()}%"
+
+        where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
+        
+        query = f"""
+        SELECT COUNT(*) as total
+        FROM `{self.client.project}.{self.dataset_id}.{self.table_id}`
+        WHERE {where_sql}
+        """
+        
+        result = await self._get_cached_or_query(query, params)
+        return result[0]['total'] if result else 0
+
+    async def get_coins_filter_options(self) -> Dict[str, Any]:
+        """Get filter options for coins admin view."""
+        # Get unique countries
+        countries_query = f"""
+        SELECT DISTINCT country
+        FROM `{self.client.project}.{self.dataset_id}.{self.table_id}`
+        WHERE country IS NOT NULL AND country != ''
+        ORDER BY country ASC
+        """
+        
+        countries_result = await self._get_cached_or_query(countries_query, {})
+        countries = [row['country'] for row in countries_result]
+        
+        return {
+            "countries": countries
+        }

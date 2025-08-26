@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Import routers
-from app.routers import coins, health, pages, ownership, groups, groups
+from app.routers import coins, health, pages, ownership, groups, admin
 
 # Create FastAPI instance
 app = FastAPI(
@@ -59,6 +59,7 @@ app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(coins.router, prefix="/api", tags=["coins"])
 app.include_router(ownership.router, tags=["ownership"])
 app.include_router(groups.router, tags=["groups"])
+app.include_router(admin.router, prefix="/api", tags=["admin"])
 app.include_router(pages.router, tags=["pages"])
 
 if __name__ == "__main__":
