@@ -8,6 +8,67 @@
     --dark-color: #343a40;
 }
 
+/* Coin Image Preview Tooltip */
+.coin-image-preview {
+    position: relative;
+    cursor: pointer;
+}
+
+.coin-image-preview .preview-tooltip {
+    position: absolute;
+    top: -210px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.coin-image-preview:hover .preview-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.coin-image-preview .preview-tooltip img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+}
+
+.coin-image-preview .preview-tooltip .loading {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    color: #6c757d;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.coin-image-preview .preview-tooltip .error {
+    width: 150px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    color: #dc3545;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
 /* Navigation */
 .navbar-brand .coin-logo {
     font-size: 2rem;
