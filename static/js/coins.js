@@ -18,76 +18,11 @@ class CoinCatalog {
         this.loading = false;
         this.currentCoinIndex = 0;
         
-        // Static mapping for special commemorative series
-        this.commemorativeLabels = {
-            'CC-2004': '2004',
-            'CC-2005': '2005',
-            'CC-2006': '2006',
-            'CC-2007': '2007',
-            'CC-2007-TOR': '2007 Treaty of Rome',
-            'CC-2008': '2008',
-            'CC-2009': '2009',
-            'CC-2009-EMU': '2009 Economic and Monetary Union',
-            'CC-2010': '2010',
-            'CC-2011': '2011',
-            'CC-2012': '2012',
-            'CC-2012-TYE': '2012 Ten Years of Euro',
-            'CC-2013': '2013',
-            'CC-2014': '2014',
-            'CC-2015': '2015',
-            'CC-2015-EUF': '2015 European Flag',
-            'CC-2016': '2016',
-            'CC-2017': '2017',
-            'CC-2018': '2018',
-            'CC-2019': '2019',
-            'CC-2020': '2020',
-            'CC-2021': '2021',
-            'CC-2022': '2022',
-            'CC-2022-ERA': '2022 Erasmus Programme',
-            'CC-2023': '2023',
-            'CC-2024': '2024'
-        };
-
-        // Static mapping for regular series
-        this.regularLabels = {
-            'AND-01': 'Andorra (2014 - now)',
-            'AUT-01': 'Austria (2002 - now)', 
-            'BEL-01': 'Belgium (1999 - 2008)',
-            'BEL-02': 'Belgium (2008 - 2014)',
-            'BEL-03': 'Belgium (2014 - now)',
-            'CYP-01': 'Cyprus (2008 - now)',
-            'DEU-01': 'Germany (1999 - now)',
-            'ESP-01': 'Spain (1999 - 2014)',
-            'ESP-02': 'Spain (2014 - 2015)',
-            'ESP-03': 'Spain (2015 - now)',
-            'EST-01': 'Estonia (2011 - now)',
-            'FIN-01': 'Finland (1999 - 2007)',
-            'FIN-02': 'Finland (2007 - now)',
-            'FRA-01': 'France (1999 - 2022)',
-            'FRA-02': 'France (2022 - now)',
-            'GRC-01': 'Greece (2002 - now)',
-            'HRV-01': 'Croatia (2023 - now)',
-            'IRL-01': 'Ireland (2002 - now)',
-            'ITA-01': 'Italy (1999 - now)',
-            'LTU-01': 'Lithuania (2015 - now)',
-            'LUX-01': 'Luxembourg (2002 - now)',
-            'LVA-01': 'Latvia (2014 - now)',
-            'MCO-01': 'Monaco (2001 - 2006)',
-            'MCO-02': 'Monaco (2006 - now)',
-            'MLT-01': 'Malta (2008 - now)',
-            'NLD-01': 'Netherlands (1999 - 2014)',
-            'NLD-02': 'Netherlands (2014 - now)',
-            'PRT-01': 'Portugal (2002 - now)',
-            'SMR-01': 'San Marino (2006 - 2017)',
-            'SMR-02': 'San Marino (2017 - now)',
-            'SVK-01': 'Slovakia (2009 - now)',
-            'SVN-01': 'Slovenia (2007 - now)',
-            'VAT-01': 'Vatican City (2002 - 2005)',
-            'VAT-02': 'Vatican City (2005 - 2006)',
-            'VAT-03': 'Vatican City (2006 - 2014)',
-            'VAT-04': 'Vatican City (2014 - 2017)',
-            'VAT-05': 'Vatican City (2017 - now)'
-        };
+        // Initialize the series label generator
+        this.seriesLabelGenerator = new SeriesLabelGenerator();
+        
+        // Cache for generated labels to avoid recalculation
+        this.labelCache = new Map();
         
         this.init();
     }
@@ -111,6 +46,80 @@ class CoinCatalog {
         
         // Use relative URL for same-origin requests
         return path;
+    }
+
+    /**
+     * Generate a label for a series code using the auto-generation system
+     * @param {string} seriesCode - The series code to generate label for
+     * @param {Object} coinData - Optional coin data for additional context
+     * @returns {string} Generated label
+     */
+    getSeriesLabel(seriesCode, coinData = null) {
+        // Check cache first
+        const cacheKey = `${seriesCode}${coinData ? `_${coinData.year}` : ''}`;
+        if (this.labelCache.has(cacheKey)) {
+            return this.labelCache.get(cacheKey);
+        }
+
+        // Generate label using the enhanced generator with full context
+        const label = this.seriesLabelGenerator.generateLabel(seriesCode, coinData, this.coins);
+        
+        // Cache the result
+        this.labelCache.set(cacheKey, label);
+        
+        return label;
+    }
+
+    /**
+     * Generate labels for regular series with intelligent multi-series analysis
+     * This method provides the most accurate labels by analyzing all related series
+     * @param {string} seriesCode - Regular series code
+     * @returns {string} Generated label with proper year range
+     */
+    getRegularSeriesLabelWithRange(seriesCode) {
+        // Check cache first
+        const cacheKey = `${seriesCode}_range_context`;
+        if (this.labelCache.has(cacheKey)) {
+            return this.labelCache.get(cacheKey);
+        }
+
+        // Use the enhanced context-aware generation
+        const label = this.seriesLabelGenerator.generateRegular(seriesCode, null, this.coins);
+        
+        // Cache the result
+        this.labelCache.set(cacheKey, label);
+        
+        return label;
+    }
+
+    /**
+     * Batch generate labels for commemorative filter dropdown
+     * @param {Array} commemoratives - Array of commemorative series codes
+     * @returns {Object} Mapping of series codes to labels
+     */
+    generateCommemorativeLabels(commemoratives) {
+        const labels = {};
+        commemoratives.forEach(seriesCode => {
+            labels[seriesCode] = this.getSeriesLabel(seriesCode);
+        });
+        return labels;
+    }
+
+    /**
+     * Generate all series labels with full context (used for batch operations)
+     * @param {Array} seriesList - Array of all series codes
+     * @returns {Object} Mapping of series codes to labels
+     */
+    generateAllSeriesLabels(seriesList) {
+        return this.seriesLabelGenerator.generateBatchLabelsWithContext(seriesList, this.coins);
+    }
+
+    /**
+     * Clear the label cache (useful when coin data changes)
+     */
+    clearLabelCache() {
+        this.labelCache.clear();
+        this.seriesLabelGenerator.clearCache();
     }
 
     async init() {
@@ -237,8 +246,8 @@ class CoinCatalog {
         sortedCommemorative.forEach(commemorative => {
             const option = document.createElement('option');
             option.value = commemorative;
-            // Use the label from mapping, or fallback to the original value
-            const label = this.commemorativeLabels[commemorative] || commemorative;
+            // Use the auto-generated label
+            const label = this.getSeriesLabel(commemorative);
             option.textContent = label;
             select.appendChild(option);
         });
@@ -682,7 +691,9 @@ class CoinCatalog {
         const formattedValue = parseFloat(coin.value).toFixed(2);
         const typeClass = coin.coin_type === 'RE' ? 'bg-success' : 'bg-primary';
         const typeName = coin.coin_type === 'RE' ? 'Regular' : 'Commemorative';
-        const commemorativeLabel = this.commemorativeLabels[coin.series] || this.regularLabels[coin.series] || coin.series;
+        
+        // Use auto-generated series label
+        const commemorativeLabel = this.getSeriesLabel(coin.series, coin);
         
         // Create image gallery - for now use single image, can be enhanced later
         const mainImage = coin.image_url || '/static/images/coin-placeholder.png';
