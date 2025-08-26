@@ -9,11 +9,14 @@ from app.config import settings
 logger = logging.getLogger(__name__)
 
 class BigQueryService:
+    # Shared cache across all service instances to avoid stale reads after reset
+    _global_cache: Dict[str, Any] = {}
     def __init__(self):
         self.client = bigquery.Client(project=settings.google_cloud_project)
         self.dataset_id = settings.bq_dataset
         self.table_id = settings.bq_table
-        self._cache = {}
+        # Use a shared cache so clearing in one place affects all instances
+        self._cache = self.__class__._global_cache
         self._cache_duration = timedelta(minutes=settings.cache_duration_minutes)
 
     def _get_cache_key(self, query: str, params: dict) -> str:
@@ -881,6 +884,73 @@ class BigQueryService:
         """
         
         return await self._get_cached_or_query(query, params)
+
+    # Catalog reset utilities
+    async def delete_catalog_table(self) -> dict:
+        """Delete the main catalog table if it exists."""
+        def _delete():
+            try:
+                table_ref = self.client.dataset(self.dataset_id).table(self.table_id)
+                self.client.delete_table(table_ref, not_found_ok=True)
+                logger.info(f"Deleted table {self.dataset_id}.{self.table_id}")
+                return {'success': True, 'message': 'Table deleted'}
+            except Exception as e:
+                logger.error(f"Error deleting table: {str(e)}")
+                return {'success': False, 'message': str(e)}
+
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, _delete)
+
+    async def create_catalog_table(self) -> dict:
+        """Create the catalog table with schema matching the importer expectations."""
+        def _create():
+            try:
+                table_ref = self.client.dataset(self.dataset_id).table(self.table_id)
+
+                # Define schema similar to tools/import_catalog.py
+                schema = [
+                    bigquery.SchemaField("coin_type", "STRING", mode="REQUIRED"),
+                    bigquery.SchemaField("year", "INTEGER", mode="REQUIRED"),
+                    bigquery.SchemaField("country", "STRING", mode="REQUIRED"),
+                    bigquery.SchemaField("series", "STRING", mode="REQUIRED"),
+                    bigquery.SchemaField("value", "FLOAT", mode="REQUIRED"),
+                    bigquery.SchemaField("coin_id", "STRING", mode="REQUIRED"),
+                    bigquery.SchemaField("image_url", "STRING", mode="NULLABLE"),
+                    bigquery.SchemaField("feature", "STRING", mode="NULLABLE"),
+                    bigquery.SchemaField("volume", "STRING", mode="NULLABLE"),
+                    bigquery.SchemaField("created_at", "TIMESTAMP", mode="REQUIRED"),
+                    bigquery.SchemaField("updated_at", "TIMESTAMP", mode="REQUIRED"),
+                ]
+
+                table = bigquery.Table(table_ref, schema=schema)
+                # Partition by created_at and cluster for performance
+                table.time_partitioning = bigquery.TimePartitioning(type_=bigquery.TimePartitioningType.DAY, field="created_at")
+                table.clustering_fields = ["country", "coin_type", "year"]
+
+                self.client.create_table(table)
+                logger.info(f"Created table {self.dataset_id}.{self.table_id}")
+                return {'success': True, 'message': 'Table created'}
+            except Exception as e:
+                logger.error(f"Error creating table: {str(e)}")
+                return {'success': False, 'message': str(e)}
+
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, _create)
+
+    async def reset_catalog_table(self) -> dict:
+        """Delete and recreate the catalog table. Returns dict with success/message."""
+        # Optionally, we could backup table here before deletion.
+        delete_res = await self.delete_catalog_table()
+        if not delete_res.get('success'):
+            return {'success': False, 'message': f"Delete failed: {delete_res.get('message')}"}
+
+        create_res = await self.create_catalog_table()
+        if not create_res.get('success'):
+            return {'success': False, 'message': f"Create failed: {create_res.get('message')}"}
+
+        # Clear caches
+        self._cache.clear()
+        return {'success': True, 'message': 'Catalog table deleted and recreated'}
 
     async def get_coins_count(self, filters: dict = None, search: str = None) -> int:
         """Get total count of coins for pagination."""

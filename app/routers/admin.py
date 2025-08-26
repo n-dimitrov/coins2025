@@ -234,6 +234,28 @@ async def view_coins(
         logger.error(f"Error viewing coins: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error viewing coins: {str(e)}")
 
+
+@router.post("/coins/reset")
+async def reset_catalog(recreate: bool = True):
+    """Delete and recreate the catalog table. This is destructive and requires caution."""
+    try:
+        # Basic safety: require explicit recreate flag
+        if not recreate:
+            raise HTTPException(status_code=400, detail="Missing recreate flag")
+
+        result = await bigquery_service.reset_catalog_table()
+
+        if result.get('success'):
+            return {"success": True, "message": result.get('message', 'Catalog reset successfully')}
+        else:
+            raise HTTPException(status_code=500, detail=result.get('message', 'Failed to reset catalog'))
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error resetting catalog: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error resetting catalog: {str(e)}")
+
 @router.get("/coins/filter-options")
 async def get_coins_filter_options():
     """Get available filter options for coins (countries, etc)."""
