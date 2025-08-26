@@ -6,12 +6,19 @@ import io
 import logging
 from datetime import datetime
 from app.services.bigquery_service import BigQueryService
+from app.services.history_service import HistoryService
 from app.models.coin import Coin
 from app.models.history import History, HistoryCreate
+import pandas as pd
+import uuid
+from datetime import timezone
+from google.cloud import bigquery
+from app.config import settings
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/admin")
 bigquery_service = BigQueryService()
+history_service = HistoryService()
 
 @router.post("/coins/upload")
 async def upload_coins_csv(file: UploadFile = File(...)):
@@ -256,6 +263,27 @@ async def reset_catalog(recreate: bool = True):
         logger.error(f"Error resetting catalog: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error resetting catalog: {str(e)}")
 
+
+@router.post("/history/reset")
+async def reset_history(recreate: bool = True):
+    """Delete and recreate the history table. Destructive operation."""
+    try:
+        if not recreate:
+            raise HTTPException(status_code=400, detail="Missing recreate flag")
+
+        result = await bigquery_service.reset_history_table()
+
+        if result.get('success'):
+            return {"success": True, "message": result.get('message', 'History reset successfully')}
+        else:
+            raise HTTPException(status_code=500, detail=result.get('message', 'Failed to reset history'))
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error resetting history: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error resetting history: {str(e)}")
+
 @router.get("/coins/filter-options")
 async def get_coins_filter_options():
     """Get available filter options for coins (countries, etc)."""
@@ -276,7 +304,7 @@ async def get_coins_filter_options():
 # History endpoints
 @router.post("/history/upload")
 async def upload_history_csv(file: UploadFile = File(...)):
-    """Upload and process CSV file for history import."""
+    """Upload and process CSV file for history import - using HistoryService."""
     try:
         # Validate file type
         if not file.filename.endswith('.csv'):
@@ -286,65 +314,35 @@ async def upload_history_csv(file: UploadFile = File(...)):
         content = await file.read()
         content_str = content.decode('utf-8')
         
-        # Parse CSV
-        csv_reader = csv.DictReader(io.StringIO(content_str))
-        uploaded_history = []
+        # Parse CSV using pandas
+        df = pd.read_csv(io.StringIO(content_str))
         
+        # Validate required columns
         expected_headers = ['name', 'id', 'date']
-        
-        # Validate headers
-        if not all(header in csv_reader.fieldnames for header in expected_headers):
-            missing_headers = [h for h in expected_headers if h not in csv_reader.fieldnames]
+        if not all(header in df.columns for header in expected_headers):
+            missing_headers = [h for h in expected_headers if h not in df.columns]
             raise HTTPException(
                 status_code=400, 
                 detail=f"Missing required CSV headers: {', '.join(missing_headers)}"
             )
         
-        # Process each row
-        for row_num, row in enumerate(csv_reader, start=2):
-            try:
-                # Parse date
-                date_obj = datetime.strptime(row['date'], '%Y-%m-%d %H:%M:%S')
-                
-                # Map CSV columns to history model
-                history_data = {
-                    'name': row['name'],
-                    'id': row['id'],  # coin_id
-                    'date': date_obj
-                }
-                
-                uploaded_history.append(history_data)
-                
-            except ValueError as e:
-                logger.warning(f"Skipping row {row_num}: Invalid data - {str(e)}")
-                continue
-            except Exception as e:
-                logger.warning(f"Skipping row {row_num}: {str(e)}")
-                continue
+        logger.info(f"Processing {len(df)} history records from uploaded CSV")
         
-        if not uploaded_history:
-            raise HTTPException(status_code=400, detail="No valid history entries found in CSV")
+        # Process using HistoryService
+        processed_df = history_service.process_history_csv_dataframe(df, 'admin_upload')
+        history_list = history_service.dataframe_to_history_create_list(processed_df)
         
-        # Check for duplicates against existing data
-        existing_history = await bigquery_service.get_all_history()
-        existing_keys = {f"{h['name']}_{h['id']}_{h['date'].strftime('%Y-%m-%d %H:%M:%S')}" for h in existing_history}
+        # Validate and check duplicates
+        validation_result = await history_service.validate_and_check_duplicates(history_list)
         
-        new_entries = []
-        duplicate_entries = []
-        
-        for history in uploaded_history:
-            key = f"{history['name']}_{history['id']}_{history['date'].strftime('%Y-%m-%d %H:%M:%S')}"
-            if key in existing_keys:
-                duplicate_entries.append({**history, 'status': 'duplicate'})
-            else:
-                new_entries.append({**history, 'status': 'new'})
+        logger.info(f"Upload validation: {len(validation_result['new_entries'])} new, {len(validation_result['duplicate_entries'])} duplicates")
         
         return {
             "success": True,
-            "total_uploaded": len(uploaded_history),
-            "new_entries": len(new_entries),
-            "duplicate_entries": len(duplicate_entries),
-            "data": new_entries + duplicate_entries
+            "total_uploaded": len(history_list),
+            "new_entries": len(validation_result['new_entries']),
+            "duplicate_entries": len(validation_result['duplicate_entries']),
+            "data": validation_result['new_entries'] + validation_result['duplicate_entries']
         }
         
     except HTTPException:
@@ -356,10 +354,12 @@ async def upload_history_csv(file: UploadFile = File(...)):
 
 @router.post("/history/import")
 async def import_history_entries(history_data: List[Dict[str, Any]]):
-    """Import selected history entries to BigQuery."""
+    """Import selected history entries to BigQuery - using HistoryService."""
     try:
         if not history_data:
             raise HTTPException(status_code=400, detail="No history data provided")
+        
+        logger.info(f"Importing {len(history_data)} history entries")
         
         # Convert to HistoryCreate objects and validate
         validated_history = []
@@ -378,8 +378,10 @@ async def import_history_entries(history_data: List[Dict[str, Any]]):
         if not validated_history:
             raise HTTPException(status_code=400, detail="No valid history entries to import")
         
-        # Import to BigQuery
-        imported_count = await bigquery_service.import_history_batch(validated_history)
+        # Use HistoryService for bulk import (follows tools/import_history.py pattern)
+        imported_count = await history_service.bulk_import_history(validated_history, 'admin_import')
+        
+        logger.info(f"Successfully imported {imported_count} history entries")
         
         return {
             "success": True,
@@ -396,32 +398,20 @@ async def import_history_entries(history_data: List[Dict[str, Any]]):
 
 @router.get("/history/export")
 async def export_history_csv():
-    """Export all history entries to CSV."""
+    """Export all history entries to CSV - using HistoryService."""
     try:
-        # Get all history from BigQuery
-        history_data = await bigquery_service.get_all_history()
+        # Use HistoryService for export
+        export_df = await history_service.export_to_csv_format()
         
-        if not history_data:
+        if len(export_df) == 0:
             raise HTTPException(status_code=404, detail="No history entries found")
         
         # Create CSV content
         output = io.StringIO()
-        fieldnames = ['name', 'id', 'date']
-        writer = csv.DictWriter(output, fieldnames=fieldnames)
-        
-        writer.writeheader()
-        for entry in history_data:
-            # Format date for CSV
-            date_str = entry['date'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(entry['date'], datetime) else str(entry['date'])
-            
-            writer.writerow({
-                'name': entry['name'],
-                'id': entry['id'],
-                'date': date_str
-            })
-        
-        # Prepare response
+        export_df.to_csv(output, index=False)
         output.seek(0)
+        
+        logger.info(f"Exporting {len(export_df)} history entries to CSV")
         
         def iter_csv():
             yield output.getvalue()
@@ -437,6 +427,37 @@ async def export_history_csv():
     except Exception as e:
         logger.error(f"Error exporting history: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error exporting history: {str(e)}")
+
+
+@router.post("/history/import-csv-direct")
+async def import_history_csv_direct(file: UploadFile = File(...)):
+    """
+    Direct CSV import following tools/import_history.py workflow.
+    Combines upload, validation, and import in one step.
+    """
+    try:
+        # Validate file type
+        if not file.filename.endswith('.csv'):
+            raise HTTPException(status_code=400, detail="File must be a CSV file")
+        
+        # Read file content
+        content = await file.read()
+        content_str = content.decode('utf-8')
+        
+        logger.info(f"Starting direct CSV import from file: {file.filename}")
+        
+        # Use HistoryService for complete import workflow
+        result = await history_service.import_from_csv_content(content_str, 'admin_direct_import')
+        
+        logger.info(f"Direct CSV import completed: {result['imported_count']} records")
+        
+        return result
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in direct CSV import: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error importing CSV: {str(e)}")
 
 
 @router.get("/history/view")

@@ -1,7 +1,7 @@
 from google.cloud import bigquery
 from typing import List, Dict, Optional, Any
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import logging
 import asyncio
 from app.config import settings
@@ -801,8 +801,10 @@ class BigQueryService:
                 
                 # Prepare rows for BigQuery
                 rows_to_insert = []
-                current_time = datetime.utcnow().isoformat() + 'Z'  # ISO format with Z suffix for UTC
-                
+                # Use timezone-aware UTC datetime objects for TIMESTAMP fields
+                # (BigQuery client will handle conversion)
+                current_time = datetime.now(timezone.utc)
+
                 for coin in coins:
                     row = {
                         'coin_type': coin['coin_type'],
@@ -818,12 +820,37 @@ class BigQueryService:
                         'updated_at': current_time
                     }
                     rows_to_insert.append(row)
-                
+
+                # Log sample rows to help diagnose missing-field errors
+                try:
+                    logger.info(f"Preparing to insert {len(rows_to_insert)} coin rows. Sample keys: {list(rows_to_insert[0].keys()) if rows_to_insert else 'none'}")
+                    if rows_to_insert:
+                        # Serialize datetime fields for logging
+                        sample = rows_to_insert[0].copy()
+                        for k, v in sample.items():
+                            if isinstance(v, datetime):
+                                sample[k] = v.isoformat()
+                        logger.info(f"Sample row (truncated): { {k: sample[k] for k in list(sample.keys())[:8]} }")
+                except Exception:
+                    pass
+
                 # Insert rows
                 errors = self.client.insert_rows_json(table, rows_to_insert)
-                
+
                 if errors:
                     logger.error(f"BigQuery insert errors: {errors}")
+                    try:
+                        # Serialize datetimes for safer logging
+                        serializable = []
+                        for r in rows_to_insert[:5]:
+                            rr = r.copy()
+                            for k, v in rr.items():
+                                if isinstance(v, datetime):
+                                    rr[k] = v.isoformat()
+                            serializable.append(rr)
+                        logger.error(f"Rows sent to BigQuery (first 5): {serializable}")
+                    except Exception:
+                        pass
                     raise Exception(f"Failed to insert rows: {errors}")
                 
                 logger.info(f"Successfully imported {len(rows_to_insert)} coins to BigQuery")
@@ -998,6 +1025,24 @@ class BigQueryService:
             "countries": countries
         }
 
+    def _get_history_schema(self) -> List[bigquery.SchemaField]:
+        """Get the standardized history schema - centralized definition."""
+        return [
+            bigquery.SchemaField('id', 'STRING', mode='REQUIRED', 
+                                description="Primary key (UUID)"),
+            bigquery.SchemaField('name', 'STRING', mode='REQUIRED', 
+                                description="Owner name"),
+            bigquery.SchemaField('coin_id', 'STRING', mode='REQUIRED', 
+                                description="Coin identifier"),
+            bigquery.SchemaField('date', 'TIMESTAMP', mode='REQUIRED', 
+                                description="Acquisition date and time"),
+            bigquery.SchemaField('created_at', 'TIMESTAMP', mode='REQUIRED', 
+                                description="When this record was added to system"),
+            bigquery.SchemaField('created_by', 'STRING', mode='NULLABLE', 
+                                description="Who added this record"),
+            bigquery.SchemaField('is_active', 'BOOLEAN', mode='REQUIRED', 
+                                description="true = owned, false = removed/sold")
+        ]
     # History management methods
     async def get_all_history(self) -> List[Dict[str, Any]]:
         """Get all history entries with coin identifiers."""
@@ -1013,14 +1058,24 @@ class BigQueryService:
         return await self._get_cached_or_query(query, {})
 
     async def import_history_batch(self, history_entries: List) -> int:
-        """Import a batch of history entries."""
+        """Import a batch of history entries. Assumes table already exists."""
         def execute_batch_insert():
             import uuid
             from datetime import datetime as dt
             
+            # Get table reference - assume table exists (table creation is handled separately)
             table_ref = self.client.dataset(self.dataset_id).table(settings.bq_history_table)
-            table = self.client.get_table(table_ref)
             
+            try:
+                table = self.client.get_table(table_ref)
+                logger.info(f"Importing to existing history table {self.dataset_id}.{settings.bq_history_table}")
+            except Exception as e:
+                logger.error(f"History table not found: {self.client.project}.{self.dataset_id}.{settings.bq_history_table} ({str(e)})")
+                raise Exception(f"History table does not exist. Please create it first using create_history_table(). Error: {str(e)}")
+
+            # Log the target table for easier debugging (project may be numeric id)
+            logger.info(f"Inserting {len(history_entries)} history entries into {self.client.project}.{self.dataset_id}.{settings.bq_history_table}")
+
             rows_to_insert = []
             current_time = dt.now().isoformat() + 'Z'  # ISO format for BigQuery
             
@@ -1127,3 +1182,67 @@ class BigQueryService:
         return {
             "names": names
         }
+
+    # History reset utilities
+    async def delete_history_table(self) -> dict:
+        """Delete the history table if it exists."""
+        def _delete():
+            try:
+                table_ref = self.client.dataset(self.dataset_id).table(settings.bq_history_table)
+                self.client.delete_table(table_ref, not_found_ok=True)
+                logger.info(f"Deleted history table {self.dataset_id}.{settings.bq_history_table}")
+                return {'success': True, 'message': 'History table deleted'}
+            except Exception as e:
+                logger.error(f"Error deleting history table: {str(e)}")
+                return {'success': False, 'message': str(e)}
+
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, _delete)
+
+    async def create_history_table(self) -> dict:
+        """Create the history table with appropriate schema - aligned with tools/import_history.py."""
+        def _create():
+            try:
+                table_ref = self.client.dataset(self.dataset_id).table(settings.bq_history_table)
+                
+                # Check if table already exists (following tools/import_history.py pattern)
+                try:
+                    self.client.get_table(table_ref)
+                    logger.info(f"Table {settings.bq_history_table} already exists")
+                    return {'success': True, 'message': 'History table already exists'}
+                except Exception:
+                    # Table doesn't exist, create it
+                    schema = self._get_history_schema()  # Use centralized schema definition
+                    table = bigquery.Table(table_ref, schema=schema)
+                    
+                    # Add clustering for better query performance (following tools/import_history.py)
+                    table.clustering_fields = ["name", "coin_id"]
+                    
+                    # Also add time partitioning for performance (hybrid approach)
+                    # Partition by created_at to avoid issues with old event dates
+                    table.time_partitioning = bigquery.TimePartitioning(type_=bigquery.TimePartitioningType.DAY, field='created_at')
+
+                    self.client.create_table(table)
+                    logger.info(f"Created history table {self.dataset_id}.{settings.bq_history_table}")
+                    return {'success': True, 'message': 'History table created'}
+                    
+            except Exception as e:
+                logger.error(f"Error creating history table: {str(e)}")
+                return {'success': False, 'message': str(e)}
+
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, _create)
+
+    async def reset_history_table(self) -> dict:
+        """Delete and recreate the history table. Returns dict with success/message."""
+        delete_res = await self.delete_history_table()
+        if not delete_res.get('success'):
+            return {'success': False, 'message': f"Delete failed: {delete_res.get('message')}"}
+
+        create_res = await self.create_history_table()
+        if not create_res.get('success'):
+            return {'success': False, 'message': f"Create failed: {create_res.get('message')}"}
+
+        # Clear caches
+        self._cache.clear()
+        return {'success': True, 'message': 'History table deleted and recreated'}

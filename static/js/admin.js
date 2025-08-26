@@ -1436,6 +1436,46 @@ function initializeHistoryManagement() {
         loadHistoryBtn.addEventListener('click', loadHistoryData);
     }
 
+    // Reset history button (attach here so it registers on initialization)
+    const resetHistoryBtn = document.getElementById('resetHistoryBtn');
+    if (resetHistoryBtn) {
+        resetHistoryBtn.addEventListener('click', async function() {
+            const confirmText = prompt('Type RESET to confirm deletion and recreation of the history table. This is irreversible.');
+            if (confirmText !== 'RESET') {
+                showAlert('Reset cancelled', 'info');
+                return;
+            }
+
+            try {
+                showLoading(true);
+                resetHistoryBtn.disabled = true;
+                const originalHtml = resetHistoryBtn.innerHTML;
+                resetHistoryBtn.innerHTML = '<i class="spinner-border spinner-border-sm me-1"></i>Resetting...';
+
+                const response = await fetch('/api/admin/history/reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ recreate: true })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    showAlert(result.message || 'History reset successfully', 'success');
+                } else {
+                    showAlert(result.message || result.detail || 'Failed to reset history', 'danger');
+                }
+
+            } catch (error) {
+                console.error('Reset history error:', error);
+                showAlert('Error resetting history. Check server logs.', 'danger');
+            } finally {
+                resetHistoryBtn.disabled = false;
+                resetHistoryBtn.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Reset History';
+                showLoading(false);
+            }
+        });
+    }
+
     const prevHistoryPageBtn = document.getElementById('prevHistoryPageBtn');
     if (prevHistoryPageBtn) {
         prevHistoryPageBtn.addEventListener('click', () => changeHistoryPage(-1));
