@@ -503,7 +503,12 @@ class CoinCatalog {
     }
 
     getCountryFlag(country) {
-        const flags = {
+        // Prefer global implementation from /static/js/flags.js
+        if (typeof window !== 'undefined' && typeof window.getCountryFlag === 'function') {
+            return window.getCountryFlag(country);
+        }
+        // Fallback inline mapping
+        const fallback = {
             'Germany': '🇩🇪', 'France': '🇫🇷', 'Italy': '🇮🇹', 'Spain': '🇪🇸',
             'Finland': '🇫🇮', 'Croatia': '🇭🇷', 'Luxembourg': '🇱🇺', 'Belgium': '🇧🇪',
             'Austria': '🇦🇹', 'Netherlands': '🇳🇱', 'Portugal': '🇵🇹', 'Greece': '🇬🇷',
@@ -511,7 +516,7 @@ class CoinCatalog {
             'Latvia': '🇱🇻', 'Lithuania': '🇱🇹', 'Malta': '🇲🇹', 'Cyprus': '🇨🇾',
             'Monaco': '🇲🇨', 'Vatican City': '🇻🇦', 'San Marino': '🇸🇲', 'Andorra': '🇦🇩'
         };
-        return flags[country] || '🇪🇺';
+        return fallback[country] || '🇪🇺';
     }
 
     setupEventListeners() {

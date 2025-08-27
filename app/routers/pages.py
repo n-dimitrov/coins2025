@@ -4,6 +4,8 @@ from fastapi.responses import HTMLResponse, FileResponse
 from app.services.bigquery_service import BigQueryService
 from app.services.group_service import GroupService
 import logging
+from datetime import datetime
+import random
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -16,9 +18,45 @@ async def homepage(request: Request):
     """Homepage with statistics."""
     try:
         stats = await bigquery_service.get_stats()
+        # Fetch latest coins from BigQuery (this year and last year)
+        try:
+            coins_batch = await bigquery_service.get_latest_coins()
+            latest_coins = []
+            seen_ids = set()
+            for c in coins_batch:
+                coin_id = c.get('coin_id') or c.get('id')
+                if not coin_id or coin_id in seen_ids:
+                    continue
+                seen_ids.add(coin_id)
+                try:
+                    year_val = int(c.get('year') or 0)
+                except Exception:
+                    year_val = 0
+
+                latest_coins.append({
+                    'coin_id': coin_id,
+                    'image': c.get('image_url') or c.get('image') or '',
+                    'country': c.get('country') or '',
+                    'series': c.get('series') or '',
+                    'coin_type': c.get('coin_type') or '',
+                    'year': year_val,
+                    'value': c.get('value')
+                })
+            # Randomize order so the hero shows different coins on each page load.
+            # Do not slice here; allow the caller or upstream logic to decide how many
+            # coins should be displayed in the hero. The BigQueryService already accepts
+            # a `limit` parameter and can be called with None for no limit.
+            try:
+                random.shuffle(latest_coins)
+            except Exception:
+                # If shuffle fails for any reason, fall back to original order
+                pass
+        except Exception:
+            latest_coins = []
         return templates.TemplateResponse("index.html", {
             "request": request,
-            "stats": stats
+            "stats": stats,
+            "latest_coins": latest_coins
         })
     except Exception as e:
         logger.error(f"Error loading homepage: {str(e)}")
