@@ -30,61 +30,25 @@
                     <a href="{% if group_context %}/{{ group_context.group_key }}/catalog{% else %}/catalog{% endif %}" class="btn btn-light btn-lg">
                         <i class="fas fa-search me-2"></i>Browse Catalog
                     </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Statistics Section -->
-<section class="stats-section py-5">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-md-3 col-sm-6">
-                <div class="card text-center h-100 border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="stat-icon text-primary mb-3">
-                            <i class="fas fa-coins fa-3x"></i>
-                        </div>
-                        <h3 class="card-title text-primary mb-2">{{ stats.total_coins or 0 }}</h3>
-                        <p class="card-text text-muted">Total Coins</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-3 col-sm-6">
-                <div class="card text-center h-100 border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="stat-icon text-success mb-3">
-                            <i class="fas fa-flag fa-3x"></i>
-                        </div>
-                        <h3 class="card-title text-success mb-2">{{ stats.total_countries or 0 }}</h3>
-                        <p class="card-text text-muted">Countries</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-3 col-sm-6">
-                <div class="card text-center h-100 border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="stat-icon text-info mb-3">
-                            <i class="fas fa-circle fa-3x"></i>
-                        </div>
-                        <h3 class="card-title text-info mb-2">{{ stats.regular_coins or 0 }}</h3>
-                        <p class="card-text text-muted">Regular Coins</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-3 col-sm-6">
-                <div class="card text-center h-100 border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="stat-icon text-warning mb-3">
-                            <i class="fas fa-star fa-3x"></i>
-                        </div>
-                        <h3 class="card-title text-warning mb-2">{{ stats.commemorative_coins or 0 }}</h3>
-                        <p class="card-text text-muted">Commemorative</p>
-                    </div>
+                                    <!-- Compact stats inside hero -->
+                                    <div class="d-flex justify-content-center align-items-center mt-4 gap-3 flex-wrap">
+                                        <div class="text-center text-white-75 small">
+                                            <div class="fw-bold fs-5">{{ stats.total_coins or 0 }}</div>
+                                            <div class="text-white-50">Coins</div>
+                                        </div>
+                                        <div class="text-center text-white-75 small">
+                                            <div class="fw-bold fs-5">{{ stats.total_countries or 0 }}</div>
+                                            <div class="text-white-50">Countries</div>
+                                        </div>
+                                        <div class="text-center text-white-75 small">
+                                            <div class="fw-bold fs-5">{{ stats.regular_coins or 0 }}</div>
+                                            <div class="text-white-50">Regular</div>
+                                        </div>
+                                        <div class="text-center text-white-75 small">
+                                            <div class="fw-bold fs-5">{{ stats.commemorative_coins or 0 }}</div>
+                                            <div class="text-white-50">Commemorative</div>
+                                        </div>
+                                    </div>
                 </div>
             </div>
         </div>
