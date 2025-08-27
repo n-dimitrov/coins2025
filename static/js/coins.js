@@ -666,11 +666,22 @@ class CoinCatalog {
             
             // Populate modal content
             this.populateCoinModal(coinToDisplay);
-            
+
+            // Add a pop class to the corresponding card for a stronger 3D effect
+            this.clearAllCardPop();
+            const cardEl = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
+            if (cardEl) cardEl.classList.add('card-pop');
+
             // Show modal
-            const modal = new bootstrap.Modal(document.getElementById('coinDetailModal'));
+            const modalEl = document.getElementById('coinDetailModal');
+            const modal = new bootstrap.Modal(modalEl);
             modal.show();
-            
+
+            // When modal is hidden, remove the pop class
+            modalEl.addEventListener('hidden.bs.modal', () => {
+                if (cardEl) cardEl.classList.remove('card-pop');
+            }, { once: true });
+
             // Set up navigation handlers
             this.setupModalNavigation();
         } catch (error) {
@@ -678,8 +689,16 @@ class CoinCatalog {
             // Fallback to basic coin data
             this.currentCoinIndex = this.filteredCoins.findIndex(c => c.coin_id === coin.coin_id);
             this.populateCoinModal(coin);
-            const modal = new bootstrap.Modal(document.getElementById('coinDetailModal'));
+            const modalEl = document.getElementById('coinDetailModal');
+            const modal = new bootstrap.Modal(modalEl);
+            // Attempt to add pop class to the fallback coin card
+            this.clearAllCardPop();
+            const fallbackCard = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
+            if (fallbackCard) fallbackCard.classList.add('card-pop');
             modal.show();
+            modalEl.addEventListener('hidden.bs.modal', () => {
+                if (fallbackCard) fallbackCard.classList.remove('card-pop');
+            }, { once: true });
             this.setupModalNavigation();
         }
     }
@@ -902,7 +921,10 @@ class CoinCatalog {
                 const modalBody = document.querySelector('#coinDetailModal .modal-body');
                 modalBody.style.opacity = '0.5';
                 modalBody.style.transform = 'translateX(10px)';
-                
+                // Update card pop highlighting: remove previous, add to new
+                this.clearAllCardPop();
+                const newCard = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
+                if (newCard) newCard.classList.add('card-pop');
                 // Only fetch additional coin details if we're NOT in group context
                 // Group coins already have complete data including ownership
                 let coinToDisplay = coin;
@@ -925,6 +947,10 @@ class CoinCatalog {
                 this.populateCoinModal(coin);
             }
         }
+    }
+
+    clearAllCardPop() {
+        document.querySelectorAll('.coin-card.card-pop').forEach(el => el.classList.remove('card-pop'));
     }
 
     shareCoin(coinId) {
