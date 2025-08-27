@@ -791,6 +791,25 @@
     z-index: 1;
 }
 
+/* Footer-specific overrides */
+.footer-coin-logo {
+    /* Remove any spinning/animation on the small footer logo */
+    animation: none !important;
+    transform: none !important;
+}
+
+.footer-coin-text {
+    /* Make footer text more visible against dark background */
+    color: rgba(255,255,255,0.9) !important;
+    font-size: 0.9rem;
+}
+
+/* Ensure footer contrast for small screens */
+@media (max-width: 576px) {
+    .footer-coin-text {
+        color: rgba(255,255,255,0.95) !important;
+    }
+}
 /* Ensure arrow appears on all ownership badge types */
 .ownership-badge.ownership-full::after,
 .ownership-badge.ownership-partial::after {

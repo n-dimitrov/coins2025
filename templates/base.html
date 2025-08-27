@@ -38,7 +38,7 @@
     <!-- Custom CSS -->
     <link href="/static/css/style.css" rel="stylesheet">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom sticky-top">
         <div class="container position-relative">
@@ -79,7 +79,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="{% block main_class %}{% endblock %}">
+    <main class="flex-grow-1 {% block main_class %}{% endblock %}">
         {% if error %}
         <div class="container mt-3">
             <div class="alert alert-warning" role="alert">
@@ -91,27 +91,15 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white mt-5" style="background-color: #111827 !important;">
-        <div class="container py-5">
-            <div class="text-center">
-                <div class="d-flex align-items-center justify-content-center mb-4">
-                    <div class="coin-logo me-3 d-flex align-items-center justify-content-center" 
-                         style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden;">
-                        <img src="/static/images/favicon-16x16.png" alt="My EuroCoins" style="width: 24px; height: 24px;">
-                    </div>
-                    <h3 class="h5 mb-0 fw-bold">My EuroCoins</h3>
+    <!-- Minimal Footer -->
+    <footer class="bg-dark text-white py-2 mt-auto" style="background-color: #111827 !important;">
+        <div class="container">
+            <div class="d-flex justify-content-center align-items-center gap-2">
+                <div class="coin-logo footer-coin-logo d-flex align-items-center justify-content-center" 
+                     style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden;">
+                    <img src="/static/images/favicon-16x16.png" alt="My EuroCoins" style="width: 20px; height: 20px;">
                 </div>
-                <p class="text-muted mb-4 mx-auto" style="max-width: 600px;">
-                    Explore regular circulation and commemorative coins from all eurozone countries.
-                </p>
-                <div class="small text-muted mb-4">
-                    Data source: European Central Bank
-                </div>
-            </div>
-            
-            <div class="border-top pt-4 mt-4 text-center" style="border-color: #374151 !important;">
-                <p class="small text-muted mb-0">© 2025 My EuroCoins</p>
+                <small class="footer-coin-text mb-0">© 2025 My EuroCoins</small>
             </div>
         </div>
     </footer>
