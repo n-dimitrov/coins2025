@@ -78,31 +78,46 @@ async def upload_coins_csv(file: UploadFile = File(...)):
         if not uploaded_coins:
             raise HTTPException(status_code=400, detail="No valid coins found in CSV file")
         
-        # Check for duplicates against database
+        # Check for duplicates against database and compare features
         coin_ids = [coin['coin_id'] for coin in uploaded_coins]
-        existing_coins = await bigquery_service.get_existing_coin_ids(coin_ids)
-        existing_ids = set(existing_coins)
-        
-        # Categorize coins
+        existing_features = await bigquery_service.get_existing_coins_features(coin_ids)
+        existing_ids = set(existing_features.keys())
+
+        # Categorize coins. If coin_id exists but feature differs -> 'conflict'.
         new_coins = []
         duplicate_coins = []
-        
+        conflict_coins = []
+
         for coin in uploaded_coins:
-            if coin['coin_id'] in existing_ids:
-                coin['status'] = 'duplicate'
-                coin['selected_for_import'] = False
-                duplicate_coins.append(coin)
+            cid = coin['coin_id']
+            if cid in existing_ids:
+                # database feature may be None; normalize to empty string for comparison
+                db_feature = existing_features.get(cid) or ''
+                upload_feature = coin.get('feature') or ''
+                if db_feature != upload_feature:
+                    # Conflict: same id but different feature -> requires ID change or manual review
+                    coin['status'] = 'conflict'
+                    coin['existing_feature'] = db_feature
+                    coin['selected_for_import'] = False
+                    conflict_coins.append(coin)
+                else:
+                    coin['status'] = 'duplicate'
+                    coin['existing_feature'] = db_feature
+                    coin['selected_for_import'] = False
+                    duplicate_coins.append(coin)
             else:
                 coin['status'] = 'new'
                 coin['selected_for_import'] = True
                 new_coins.append(coin)
         
+        # Return combined list: new first, then duplicates, then conflicts so UI can surface conflicts
         return {
             "success": True,
             "total_uploaded": len(uploaded_coins),
             "new_coins": len(new_coins),
             "duplicates": len(duplicate_coins),
-            "coins": new_coins + duplicate_coins
+            "conflicts": len(conflict_coins),
+            "coins": new_coins + duplicate_coins + conflict_coins
         }
         
     except HTTPException:
@@ -115,15 +130,22 @@ async def upload_coins_csv(file: UploadFile = File(...)):
 async def import_selected_coins(coins: List[Dict[str, Any]]):
     """Import selected coins to the database."""
     try:
-        # Filter only selected coins that are new (not duplicates)
+        # Filter only selected coins (allow new or previously conflicted rows that were edited)
         coins_to_import = [
             coin for coin in coins 
-            if coin.get('selected_for_import', False) and coin.get('status') == 'new'
+            if coin.get('selected_for_import', False)
         ]
         
         if not coins_to_import:
             raise HTTPException(status_code=400, detail="No coins selected for import")
         
+        # Validate selected coin_ids do not already exist in DB (prevent accidental overwrite)
+        selected_ids = [coin.get('coin_id') for coin in coins_to_import]
+        existing_ids = set(await bigquery_service.get_existing_coin_ids(selected_ids))
+        if existing_ids:
+            # Inform user which IDs are already present
+            raise HTTPException(status_code=400, detail=f"The following coin_ids already exist: {', '.join(sorted(existing_ids))}")
+
         # Validate each coin before import
         validated_coins = []
         for coin in coins_to_import:

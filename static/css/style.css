@@ -655,6 +655,8 @@
         gap: 1.5rem;
         margin-bottom: 1rem;
     }
+
+    /* other responsive modal rules */
     
     .simple-detail {
         min-width: 70px;
@@ -675,8 +677,16 @@
     }
     
     .feature-description {
-        /* placeholder for any feature description styling */
+        font-size: 0.95rem;
+        color: #6c757d;
+        line-height: 1.3;
     }
+}
+
+/* Highlight feature cell when there is a conflict (same id but different feature) */
+.conflict-feature {
+    background: linear-gradient(90deg, rgba(255,245,230,0.9), rgba(255,250,240,0.9));
+    border-left: 4px solid rgba(255,193,7,0.6);
 }
 
 /* Responsive adjustments for simplified modal */
