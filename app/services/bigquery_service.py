@@ -842,9 +842,9 @@ class BigQueryService:
                 
                 # Prepare rows for BigQuery
                 rows_to_insert = []
-                # Use timezone-aware UTC datetime objects for TIMESTAMP fields
-                # (BigQuery client will handle conversion)
+                # Use ISO-formatted UTC timestamp strings for TIMESTAMP fields
                 current_time = datetime.now(timezone.utc)
+                current_time_iso = current_time.isoformat()  # e.g. '2025-08-27T12:34:56.789012+00:00'
 
                 for coin in coins:
                     row = {
@@ -857,8 +857,9 @@ class BigQueryService:
                         'image_url': coin.get('image_url'),
                         'feature': coin.get('feature'),
                         'volume': coin.get('volume'),
-                        'created_at': current_time,
-                        'updated_at': current_time
+                        # insert_rows_json expects JSON-serializable values; use ISO strings for timestamps
+                        'created_at': current_time_iso,
+                        'updated_at': current_time_iso
                     }
                     rows_to_insert.append(row)
 

@@ -828,7 +828,7 @@ async function handleCsvExport() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'coins_export.csv';
+    a.download = 'catalog.csv';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1048,11 +1048,14 @@ async function handleImportSelected() {
     }
 
     const importBtn = document.getElementById('importSelectedBtn');
-    
+    const originalText = importBtn ? importBtn.innerHTML : '<i class="fas fa-download me-1"></i>Import Selected';
+
     try {
-        // Show loading state
-        importBtn.disabled = true;
-        importBtn.innerHTML = '<i class="spinner-border spinner-border-sm me-1"></i>Importing...';
+        // Show loading state (preserve original text)
+        if (importBtn) {
+            importBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Importing...';
+            importBtn.disabled = true;
+        }
 
         const response = await fetch('/api/admin/coins/import', {
             method: 'POST',
@@ -1077,9 +1080,11 @@ async function handleImportSelected() {
         console.error('Import error:', error);
         showAlert(`Import failed: ${error.message}`, 'danger');
     } finally {
-        // Reset button state
-        importBtn.disabled = false;
-        importBtn.innerHTML = '<i class="fas fa-download me-1"></i>Import Selected';
+        // Restore button state
+        if (importBtn) {
+            importBtn.disabled = false;
+            importBtn.innerHTML = originalText;
+        }
     }
 }
 
@@ -1682,7 +1687,7 @@ async function exportHistoryCsv() {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'history_export.csv';
+            a.download = 'history.csv';
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
