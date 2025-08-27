@@ -34,7 +34,7 @@ class GroupService:
                 logger.error(f"Group '{group_key}' not found in validate_group")
                 return None
 
-            logger.info(f"Group found: {group}")
+            logger.debug(f"Group found: {group}")
 
             # Get group members
             members = await self.bigquery_service.get_group_users(group['id'])
@@ -53,7 +53,7 @@ class GroupService:
                 'stats': stats
             }
 
-            logger.info(f"Group context created: {context}")
+            logger.debug(f"Group context created: {context}")
             return context
         except Exception as e:
             logger.error(f"Error getting group context for {group_key}: {str(e)}")
