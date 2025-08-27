@@ -791,6 +791,46 @@
     z-index: 1;
 }
 
+/* Hero latest coin small card */
+#hero-latest-coin {
+    border-radius: 12px;
+    overflow: hidden;
+}
+#hero-latest-coin .card-body { padding: .5rem .75rem; }
+#hero-latest-coin .coin-image { height: 140px; object-fit: contain; background: #ffffff; }
+
+/* Hero-specific coin card styling */
+.hero-coin-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04);
+    transform-style: preserve-3d;
+    transition: transform 0.35s cubic-bezier(.2,.9,.2,1), box-shadow 0.35s ease;
+}
+.hero-coin-card .hero-flag { font-size: 2rem; }
+.hero-coin-card .fw-semibold { color: white; }
+.hero-coin-card .card-body { background: transparent; }
+
+.hero-card-pop {
+    transform: translateY(-6px) rotateX(3deg) scale(1.02);
+    box-shadow: 0 18px 30px rgba(0,0,0,0.22), inset 0 2px 0 rgba(255,255,255,0.06);
+}
+
+/* Hero coin image */
+.hero-coin-img {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.08);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+    background: #ffffff;
+}
+
+.hero-coin-card .d-flex.align-items-center { color: white; }
+#hero-latest-coin .fw-semibold { font-weight: 700; }
+
 /* Footer-specific overrides */
 .footer-coin-logo {
     /* Remove any spinning/animation on the small footer logo */

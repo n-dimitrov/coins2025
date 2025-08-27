@@ -30,6 +30,25 @@
                     <a href="{% if group_context %}/{{ group_context.group_key }}/catalog{% else %}/catalog{% endif %}" class="btn btn-light btn-lg">
                         <i class="fas fa-search me-2"></i>Browse Catalog
                     </a>
+                    
+                    <!-- Latest coins rotator (Hero) simplified -->
+                    <div class="d-flex justify-content-center mt-4">
+                        <div id="hero-latest-coin" class="card hero-coin-card text-white text-center" style="width: 240px;">
+                            <div class="card-body py-2 d-flex flex-column align-items-center">
+                                <img id="hero-coin-img" src="/static/images/myeurocoins-icon.png" alt="coin" class="hero-coin-img mb-2" style="width:96px;height:96px;object-fit:cover;border-radius:50%;background:#fff;">
+                                <div class="d-flex justify-content-between align-items-center w-100 mt-2">
+                                    <h6 class="card-title mb-0 text-start">
+                                        <span class="country-flag me-2" id="hero-country-flag">🇪🇺</span>
+                                        <span id="hero-country" class="fw-semibold"></span>
+                                    </h6>
+                                    <span id="hero-value" class="h5 mb-0 text-white fw-bold"></span>
+                                </div>
+                                <div class="w-100 mt-1">
+                                    <p id="hero-type-year" class="card-text text-white-50 small mb-0"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                                     <!-- Compact stats inside hero -->
                                     <div class="d-flex justify-content-center align-items-center mt-4 gap-3 flex-wrap">
                                         <div class="text-center text-white-75 small">
@@ -72,6 +91,60 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.card').forEach(card => {
         observer.observe(card);
     });
+});
+</script>
+<script src="/static/js/flags.js"></script>
+<script>
+// Hero latest coins rotator (emoji flags)
+document.addEventListener('DOMContentLoaded', function() {
+    const coins = {{ latest_coins | default([]) | tojson }};
+    if (!coins || coins.length === 0) return;
+
+    let idx = 0;
+    const countryEl = document.getElementById('hero-country');
+    const valueEl = document.getElementById('hero-value');
+    const flagEl = document.getElementById('hero-country-flag');
+    const cardEl = document.getElementById('hero-latest-coin');
+    const imgEl = document.getElementById('hero-coin-img');
+    const typeYearEl = document.getElementById('hero-type-year');
+
+    function setCoin(c) {
+        const flag = (typeof window !== 'undefined' && typeof window.getCountryFlag === 'function')
+            ? window.getCountryFlag(c.country)
+            : '🇪🇺';
+
+    flagEl.textContent = flag;
+    countryEl.textContent = c.country || '';
+    valueEl.textContent = c.value ? `€${parseFloat(c.value).toFixed(2)}` : '';
+    imgEl.src = c.image || c.image_url || '/static/images/coin-placeholder.png';
+    imgEl.alt = `${c.country || ''} coin`;
+    // Type + year: map RE -> Regular, CC -> Commemorative
+    const typeLabel = c.coin_type === 'RE' ? 'Regular' : (c.coin_type === 'CC' ? 'Commemorative' : c.coin_type || '');
+    // Show a middot between type and year when both are present, e.g. "Commemorative • 2024"
+    let typeYearText = '';
+    if (typeLabel && c.year) {
+        typeYearText = `${typeLabel} \u2022 ${c.year}`;
+    } else if (typeLabel) {
+        typeYearText = typeLabel;
+    } else if (c.year) {
+        typeYearText = `${c.year}`;
+    }
+    typeYearEl.textContent = typeYearText;
+
+        // Small 3D highlight animation
+        cardEl.classList.remove('hero-card-pop');
+        void cardEl.offsetWidth; // force reflow
+        cardEl.classList.add('hero-card-pop');
+    }
+
+    // Initial
+    setCoin(coins[idx]);
+
+    // Rotate every 4 seconds
+    setInterval(function() {
+        idx = (idx + 1) % coins.length;
+        setCoin(coins[idx]);
+    }, 4000);
 });
 </script>
 {% endblock %}

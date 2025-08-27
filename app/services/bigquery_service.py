@@ -111,6 +111,25 @@ class BigQueryService:
 
         return await self._get_cached_or_query(query, params)
 
+    async def get_latest_coins(self, limit: int = 40) -> List[Dict[str, Any]]:
+        """Get coins from this year or last year, ordered by year desc then country."""
+        # Use parameterized years to avoid SQL string concatenation issues
+        current_year = datetime.now().year
+        last_year = current_year - 1
+
+        query = f"""
+        SELECT
+            coin_type, year, country, series, value, coin_id,
+            image_url, feature, volume
+        FROM `{self.client.project}.{self.dataset_id}.{self.table_id}`
+        WHERE SAFE_CAST(year AS INT64) IN (@y1, @y2)
+        ORDER BY year DESC, country ASC
+        LIMIT {limit}
+        """
+
+        params = {'y1': current_year, 'y2': last_year}
+        return await self._get_cached_or_query(query, params)
+
     async def get_coin_by_id(self, coin_id: str) -> Optional[Dict[str, Any]]:
         """Get a specific coin by ID."""
         query = f"""
