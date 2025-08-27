@@ -722,7 +722,8 @@ class CoinCatalog {
     populateCoinModal(coin) {
         const flag = this.getCountryFlag(coin.country);
         const formattedValue = parseFloat(coin.value).toFixed(2);
-        const typeClass = coin.coin_type === 'RE' ? 'bg-success' : 'bg-primary';
+        // Use the same semantic classes as the coin cards so styling can be shared
+        const typeClass = coin.coin_type === 'RE' ? 'coin-type-re' : 'coin-type-cc';
         const typeName = coin.coin_type === 'RE' ? 'Regular' : 'Commemorative';
         
         // Use auto-generated series label
