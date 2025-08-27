@@ -38,7 +38,7 @@ class BigQueryService:
         if cache_key in self._cache:
             cached_data, cached_time = self._cache[cache_key]
             if datetime.now() - cached_time < self._cache_duration:
-                logger.info(f"Cache hit for query: {query[:50]}...")
+                logger.debug(f"Cache hit for query: {query[:50]}...")
                 return cached_data
 
         # Execute query in thread pool since BigQuery client is synchronous
@@ -56,10 +56,10 @@ class BigQueryService:
                 job_config.query_parameters = query_parameters
 
             try:
-                logger.info(f"Executing BigQuery: {query[:100]}...")
+                logger.debug(f"Executing BigQuery: {query[:100]}...")
                 query_job = self.client.query(query, job_config=job_config)
                 results = [dict(row) for row in query_job.result()]
-                logger.info(f"Query executed successfully, got {len(results)} results")
+                logger.debug(f"Query executed successfully, got {len(results)} results")
                 return results
                 
             except Exception as e:
@@ -72,7 +72,7 @@ class BigQueryService:
         
         # Cache results
         self._cache[cache_key] = (results, datetime.now())
-        logger.info(f"Query executed successfully, cached {len(results)} results")
+        logger.debug(f"Query executed successfully, cached {len(results)} results")
         return results
 
     async def get_coins(self, filters: dict = None, limit: int = 100, offset: int = 0) -> List[Dict[str, Any]]:
@@ -172,7 +172,12 @@ class BigQueryService:
 
     # Group-related methods
     async def get_group_by_name(self, group_name: str) -> Optional[Dict[str, Any]]:
-        """Get group by group_key (legacy method for backward compatibility)."""
+        """Deprecated compatibility wrapper.
+
+        Historically callers used "name"/"group" interchangeably with
+        "group_key". Prefer `get_group_by_key` in new code. This wrapper
+        delegates to `get_group_by_key` to preserve backward compatibility.
+        """
         return await self.get_group_by_key(group_name)
 
     async def get_group_users(self, group_id: str) -> List[Dict[str, Any]]:
@@ -765,17 +770,22 @@ class BigQueryService:
         
         return await self._get_cached_or_query(query, {'group_id': group_id})
 
-    async def _invalidate_group_cache(self):
-        """Invalidate cache entries related to groups."""
+    def _invalidate_group_cache(self):
+        """Invalidate cache entries related to groups.
+
+        This is synchronous because callers invoke it without awaiting. The
+        implementation performs only in-memory dict operations and logging, so
+        running it synchronously ensures cache is invalidated immediately.
+        """
         keys_to_remove = []
-        
+
         for cache_key in list(self._cache.keys()):
             if 'group' in cache_key.lower():
                 keys_to_remove.append(cache_key)
-        
+
         for key in keys_to_remove:
             del self._cache[key]
-            
+
         logger.info(f"Invalidated {len(keys_to_remove)} cache entries due to group change")
 
     async def get_existing_coin_ids(self, coin_ids: List[str]) -> List[str]:
