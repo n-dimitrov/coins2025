@@ -220,12 +220,43 @@ async def group_homepage(request: Request, group_name: str):
         
         # Get general stats (same as regular homepage)
         stats = await bigquery_service.get_stats()
-        
+        # Fetch latest coins for this group so the hero shows coins
+        try:
+            coins_batch = await bigquery_service.get_coins_with_ownership(group_context['id'], limit=40)
+            latest_coins = []
+            seen_ids = set()
+            for c in coins_batch:
+                coin_id = c.get('coin_id') or c.get('id')
+                if not coin_id or coin_id in seen_ids:
+                    continue
+                seen_ids.add(coin_id)
+                try:
+                    year_val = int(c.get('year') or 0)
+                except Exception:
+                    year_val = 0
+
+                latest_coins.append({
+                    'coin_id': coin_id,
+                    'image': c.get('image_url') or c.get('image') or '',
+                    'country': c.get('country') or '',
+                    'series': c.get('series') or '',
+                    'coin_type': c.get('coin_type') or '',
+                    'year': year_val,
+                    'value': c.get('value')
+                })
+            try:
+                random.shuffle(latest_coins)
+            except Exception:
+                pass
+        except Exception:
+            latest_coins = []
+
         return templates.TemplateResponse("index.html", {
             "request": request,
             "stats": stats,
             "group_context": group_context,
-            "group_mode": True
+            "group_mode": True,
+            "latest_coins": latest_coins
         })
     except Exception as e:
         logger.error(f"Error loading group homepage {group_name}: {str(e)}")
