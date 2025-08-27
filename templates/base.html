@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My EuroCoins{% endblock %}</title>
     
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    
     <!-- SEO Meta Tags -->
     <meta name="description" content="{% block description %}Explore the complete collection of Euro coins from 1999 to 2025. Discover regular circulation and commemorative coins from all eurozone countries.{% endblock %}">
     <meta name="keywords" content="euro coins, european coins, coin catalog, commemorative coins, eurozone, numismatics">
@@ -35,11 +38,11 @@
     <!-- Custom CSS -->
     <link href="/static/css/style.css" rel="stylesheet">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom sticky-top">
         <div class="container position-relative">
-            <a class="navbar-brand d-flex align-items-center" href="{% if group_context %}/{{ group_context.group }}{% else %}/{% endif %}">
+            <a class="navbar-brand d-flex align-items-center" href="{% if group_context %}/{{ group_context.group_key }}{% else %}/{% endif %}">
                 <div class="coin-logo me-3 d-flex align-items-center justify-content-center" 
                      style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden;">
                     <img src="/static/images/myeurocoins-icon.png" alt="My EuroCoins" style="width: 36px; height: 36px;">
@@ -50,25 +53,24 @@
                 </div>
             </a>
             
-            <!-- Group Indicator (top-right corner) -->
-            {% if group_context %}
-            <div class="group-indicator position-absolute top-50 end-0 translate-middle-y me-3">
-                <span class="badge bg-primary fs-6">
-                    <i class="fas fa-users me-2"></i>{{ group_context.name }}
-                </span>
-            </div>
-            {% endif %}
-            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav ms-auto">
-                    <a class="nav-link fw-medium" href="{% if group_context %}/{{ group_context.group }}{% else %}/{% endif %}">
+                    <!-- Group Indicator -->
+                    {% if group_context %}
+                    <div class="nav-item d-flex align-items-center me-3">
+                        <span class="badge bg-primary fs-6">
+                            <i class="fas fa-users me-2"></i>{{ group_context.name }}
+                        </span>
+                    </div>
+                    {% endif %}
+                    <a class="nav-link fw-medium" href="{% if group_context %}/{{ group_context.group_key }}{% else %}/{% endif %}">
                         <i class="fas fa-home me-1"></i>Home
                     </a>
-                    <a class="nav-link fw-medium" href="{% if group_context %}/{{ group_context.group }}/catalog{% else %}/catalog{% endif %}">
+                    <a class="nav-link fw-medium" href="{% if group_context %}/{{ group_context.group_key }}/catalog{% else %}/catalog{% endif %}">
                         <i class="fas fa-coins me-1"></i>Catalog
                     </a>
                 </div>
@@ -77,7 +79,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="{% block main_class %}{% endblock %}">
+    <main class="flex-grow-1 {% block main_class %}{% endblock %}">
         {% if error %}
         <div class="container mt-3">
             <div class="alert alert-warning" role="alert">
@@ -89,27 +91,25 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white mt-5" style="background-color: #111827 !important;">
-        <div class="container py-5">
-            <div class="text-center">
-                <div class="d-flex align-items-center justify-content-center mb-4">
-                    <div class="coin-logo me-3 d-flex align-items-center justify-content-center" 
-                         style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden;">
-                        <img src="/static/images/favicon-16x16.png" alt="My EuroCoins" style="width: 24px; height: 24px;">
+    <!-- Minimal Footer -->
+    <footer class="bg-dark text-white py-2 mt-auto" style="background-color: #111827 !important;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="coin-logo footer-coin-logo d-flex align-items-center justify-content-center" 
+                             style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden;">
+                            <img src="/static/images/favicon-16x16.png" alt="My EuroCoins" style="width: 20px; height: 20px;">
+                        </div>
+                        <small class="footer-coin-text mb-0">© 2025 My EuroCoins</small>
                     </div>
-                    <h3 class="h5 mb-0 fw-bold">My EuroCoins</h3>
                 </div>
-                <p class="text-muted mb-4 mx-auto" style="max-width: 600px;">
-                    Explore regular circulation and commemorative coins from all eurozone countries.
-                </p>
-                <div class="small text-muted mb-4">
-                    Data source: European Central Bank
+                <div class="col text-end">
+                    <small class="text-white-50 me-2">Data source:</small>
+                    <a href="https://www.ecb.europa.eu/" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none">
+                        <i class="fas fa-external-link-alt me-1"></i>European Central Bank
+                    </a>
                 </div>
-            </div>
-            
-            <div class="border-top pt-4 mt-4 text-center" style="border-color: #374151 !important;">
-                <p class="small text-muted mb-0">© 2025 My EuroCoins</p>
             </div>
         </div>
     </footer>

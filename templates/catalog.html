@@ -92,7 +92,7 @@
                     <select class="form-select" id="owned-by-filter">
                         <option value="">All Members</option>
                         {% for member in group_context.members %}
-                        <option value="{{ member.user }}">{{ member.alias }}</option>
+                        <option value="{{ member.user }}">{{ member.user }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -169,6 +169,8 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="/static/js/flags.js"></script>
+<script src="/static/js/series-label-generator.js"></script>
 <script src="/static/js/coins.js"></script>
 <script>
 // Initialize catalog when page loads

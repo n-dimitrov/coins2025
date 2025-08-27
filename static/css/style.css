@@ -8,6 +8,67 @@
     --dark-color: #343a40;
 }
 
+/* Coin Image Preview Tooltip */
+.coin-image-preview {
+    position: relative;
+    cursor: pointer;
+}
+
+.coin-image-preview .preview-tooltip {
+    position: absolute;
+    top: -210px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.coin-image-preview:hover .preview-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.coin-image-preview .preview-tooltip img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+}
+
+.coin-image-preview .preview-tooltip .loading {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    color: #6c757d;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.coin-image-preview .preview-tooltip .error {
+    width: 150px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    color: #dc3545;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
 /* Navigation */
 .navbar-brand .coin-logo {
     font-size: 2rem;
@@ -730,6 +791,65 @@
     z-index: 1;
 }
 
+/* Hero latest coin small card */
+#hero-latest-coin {
+    border-radius: 12px;
+    overflow: hidden;
+}
+#hero-latest-coin .card-body { padding: .5rem .75rem; }
+#hero-latest-coin .coin-image { height: 140px; object-fit: contain; background: #ffffff; }
+
+/* Hero-specific coin card styling */
+.hero-coin-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04);
+    transform-style: preserve-3d;
+    transition: transform 0.35s cubic-bezier(.2,.9,.2,1), box-shadow 0.35s ease;
+}
+.hero-coin-card .hero-flag { font-size: 2rem; }
+.hero-coin-card .fw-semibold { color: white; }
+.hero-coin-card .card-body { background: transparent; }
+
+.hero-card-pop {
+    transform: translateY(-6px) rotateX(3deg) scale(1.02);
+    box-shadow: 0 18px 30px rgba(0,0,0,0.22), inset 0 2px 0 rgba(255,255,255,0.06);
+}
+
+/* Hero coin image */
+.hero-coin-img {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.08);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+    background: #ffffff;
+}
+
+.hero-coin-card .d-flex.align-items-center { color: white; }
+#hero-latest-coin .fw-semibold { font-weight: 700; }
+
+/* Footer-specific overrides */
+.footer-coin-logo {
+    /* Remove any spinning/animation on the small footer logo */
+    animation: none !important;
+    transform: none !important;
+}
+
+.footer-coin-text {
+    /* Make footer text more visible against dark background */
+    color: rgba(255,255,255,0.9) !important;
+    font-size: 0.9rem;
+}
+
+/* Ensure footer contrast for small screens */
+@media (max-width: 576px) {
+    .footer-coin-text {
+        color: rgba(255,255,255,0.95) !important;
+    }
+}
 /* Ensure arrow appears on all ownership badge types */
 .ownership-badge.ownership-full::after,
 .ownership-badge.ownership-partial::after {
@@ -1011,5 +1131,118 @@
         text-align: left;
         font-size: 0.8rem;
         color: #868e96;
+    }
+}
+
+/* Admin Panel Styles */
+.admin-panel {
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 120px);
+}
+
+.admin-panel .card {
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.admin-panel .nav-tabs .nav-link {
+    background-color: transparent;
+    border-color: transparent;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.admin-panel .nav-tabs .nav-link.active {
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.admin-panel .table {
+    margin-bottom: 0;
+}
+
+.admin-panel .table th {
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.admin-panel .btn-group .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+.admin-panel .modal-header {
+    background-color: var(--primary-color);
+    color: white;
+    border-bottom: none;
+}
+
+.admin-panel .modal-header .btn-close {
+    filter: invert(1);
+}
+
+.admin-panel .form-text {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.admin-panel .table-responsive {
+    border-radius: 0.375rem;
+    overflow: hidden;
+}
+
+.admin-panel .badge {
+    font-size: 0.75rem;
+    padding: 0.35em 0.65em;
+}
+
+/* Loading animation */
+.spinner-border {
+    animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Highlight selected group row */
+.admin-panel .table tbody tr.table-active {
+    background-color: rgba(0, 102, 204, 0.1);
+}
+
+/* Alert animations */
+.alert {
+    animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive admin table */
+@media (max-width: 768px) {
+    .admin-panel .btn-group {
+        flex-direction: column;
+    }
+    
+    .admin-panel .btn-group .btn {
+        margin-bottom: 2px;
+        border-radius: 0.25rem !important;
+    }
+    
+    .admin-panel .table-responsive {
+        font-size: 0.9rem;
     }
 }

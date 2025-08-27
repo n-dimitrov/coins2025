@@ -10,6 +10,11 @@ async def health_check():
     """Basic health check endpoint."""
     return {"status": "healthy", "service": "My EuroCoins API"}
 
+@router.get("/ready")
+async def readiness_check():
+    """Readiness check - this can be more complex."""
+    return {"status": "ready", "service": "My EuroCoins API"}
+
 @router.get("/health/bigquery")
 async def bigquery_health():
     """Check BigQuery connection."""
