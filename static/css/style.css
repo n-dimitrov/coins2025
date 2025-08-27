@@ -265,6 +265,30 @@
     transform: scale(1.06);
 }
 
+/* White circular plate behind coin image like hero */
+.catalog-page .coin-image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2rem; /* even tighter padding so coin fills plate more */
+    background: #ffffff;
+    border-radius: 50%;
+    width: 160px; /* plate size retained */
+    height: 160px;
+    margin: 10px auto 0 auto;
+    box-shadow: 0 12px 26px rgba(0,0,0,0.20);
+}
+
+.catalog-page .coin-image-wrapper .coin-image {
+    width: 150px; /* slightly larger coin image to occupy more plate */
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.08);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+    background: #ffffff;
+}
+
 /* Value badge style (if shown inside card) */
 .catalog-page .coin-value-badge,
 .catalog-page .coin-card .coin-value-badge {

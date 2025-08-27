@@ -400,13 +400,15 @@ class CoinCatalog {
             <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
                 <div class="card coin-card h-100 ${this.groupContext ? 'group-mode' : ''}">
                     <div class="position-relative">
-                        <img 
-                            src="${imageUrl}" 
-                            class="card-img-top coin-image" 
-                            alt="${coin.country} ${coin.value} Euro"
-                            loading="lazy"
-                            onerror="this.src='/static/images/coin-placeholder.png'"
-                        >
+                        <div class="coin-image-wrapper">
+                            <img 
+                                src="${imageUrl}" 
+                                class="card-img-top coin-image" 
+                                alt="${coin.country} ${coin.value} Euro"
+                                loading="lazy"
+                                onerror="this.src='/static/images/coin-placeholder.png'"
+                            >
+                        </div>
                         <span class="badge ${typeClass} position-absolute top-0 start-0">
                             ${coin.coin_type}
                         </span>
