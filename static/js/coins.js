@@ -359,8 +359,9 @@ class CoinCatalog {
 
     createCoinCard(coin) {
         const flag = this.getCountryFlag(coin.country);
-        const typeClass = coin.coin_type === 'RE' ? 'bg-success' : 'bg-primary';
-        const typeName = coin.coin_type === 'RE' ? 'Regular' : 'Commemorative';
+    // Use semantic classes so we can style CC/RE independently of Bootstrap utility colors
+    const typeClass = coin.coin_type === 'RE' ? 'coin-type-re' : 'coin-type-cc';
+    const typeName = coin.coin_type === 'RE' ? 'Regular' : 'Commemorative';
         const imageUrl = coin.image_url || '/static/images/coin-placeholder.png';
         
         // Format value to always show 2 decimal places

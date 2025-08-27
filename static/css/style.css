@@ -306,7 +306,9 @@
     background: #ffffff;
 }
 
-/* Option 1: High-contrast solid circular badge for CC / RE */
+/* Option 1: High-contrast solid circular badge for CC / RE
+   Note: background color removed here so individual coin-type classes
+   control the badge color and avoid clashing with ownership badge. */
 .catalog-page .coin-card .badge.position-absolute.start-0 {
     color: #fff;
     font-weight: 800;
@@ -321,7 +323,9 @@
     box-shadow: 0 6px 14px rgba(0,0,0,0.35);
     z-index: 12;
     padding: 0; /* enforce circular geometry */
-    background: linear-gradient(145deg,#28a745,#1e7e34);
+    /* Default to blue for type badge unless overridden by .coin-type-re */
+    background: linear-gradient(145deg,#e6f4ff,#cfeaff) !important;
+    color: #03406a !important;
 }
 
 /* Blue variant for CC */
@@ -338,9 +342,10 @@
     padding: 0;
 }
 
-/* Green variant for RE */
+/* Green variant for RE removed to avoid conflict with ownership badge; use .coin-type-re instead */
 .catalog-page .coin-card .badge.bg-success.position-absolute.start-0 {
-    background: linear-gradient(145deg,#28a745,#1e7e34);
+    /* intentionally left as no-op to avoid empty ruleset; coin color is controlled by .coin-type-re */
+    --_noop: 0;
 }
 
 /* Value badge style (if shown inside card) */
@@ -968,6 +973,36 @@
     color: #6c757d;
     border: 1px solid #6c757d;
     background-color: transparent;
+}
+
+/* Semantic coin type badges (Option A) - avoid using bg-success for RE to keep ownership badge distinct */
+.catalog-page .coin-card .badge.coin-type-cc,
+.catalog-page .coin-card .coin-type-cc {
+    background: linear-gradient(145deg, #3b82f6, #1e40af) !important;
+    color: #fff !important;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    font-weight: 600;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 6px rgba(14,165,233,0.08);
+}
+.catalog-page .coin-card .badge.coin-type-re,
+.catalog-page .coin-card .coin-type-re {
+    background: linear-gradient(145deg, #6c757d, #495057) !important;
+    color: #fff !important;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.45rem;
+    font-weight: 600;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Extra-specific rules (matching the badge position classes) to guarantee override */
+.catalog-page .coin-card .badge.position-absolute.start-0.coin-type-cc {
+    background: linear-gradient(145deg, #3b82f6, #1e40af) !important;
+    color: #fff !important;
+}
+.catalog-page .coin-card .badge.position-absolute.start-0.coin-type-re {
+    background: linear-gradient(145deg, #6c757d, #495057) !important;
+    color: #fff !important;
 }
 
 /* Ownership badge in upper right corner - Override all Bootstrap styles */
