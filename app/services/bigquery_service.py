@@ -830,6 +830,31 @@ class BigQueryService:
         results = await self._get_cached_or_query(query, params)
         return [row['coin_id'] for row in results]
 
+    async def get_existing_coins_features(self, coin_ids: List[str]) -> Dict[str, Optional[str]]:
+        """Get existing coins' features for a list of coin_ids.
+
+        Returns a mapping coin_id -> feature (may be None).
+        """
+        if not coin_ids:
+            return {}
+
+        placeholders = ', '.join([f"@coin_id_{i}" for i in range(len(coin_ids))])
+        params = {f"coin_id_{i}": coin_id for i, coin_id in enumerate(coin_ids)}
+
+        query = f"""
+        SELECT DISTINCT coin_id, feature
+        FROM `{self.client.project}.{self.dataset_id}.{self.table_id}`
+        WHERE coin_id IN ({placeholders})
+        """
+
+        results = await self._get_cached_or_query(query, params)
+        # Build mapping
+        mapping: Dict[str, Optional[str]] = {}
+        for row in results:
+            # row['feature'] may be None
+            mapping[row['coin_id']] = row.get('feature')
+        return mapping
+
     async def import_coins(self, coins: List[Dict[str, Any]]) -> int:
         """Import coins to BigQuery table."""
         if not coins:
