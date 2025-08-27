@@ -94,12 +94,22 @@
     <!-- Minimal Footer -->
     <footer class="bg-dark text-white py-2 mt-auto" style="background-color: #111827 !important;">
         <div class="container">
-            <div class="d-flex justify-content-center align-items-center gap-2">
-                <div class="coin-logo footer-coin-logo d-flex align-items-center justify-content-center" 
-                     style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden;">
-                    <img src="/static/images/favicon-16x16.png" alt="My EuroCoins" style="width: 20px; height: 20px;">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="coin-logo footer-coin-logo d-flex align-items-center justify-content-center" 
+                             style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden;">
+                            <img src="/static/images/favicon-16x16.png" alt="My EuroCoins" style="width: 20px; height: 20px;">
+                        </div>
+                        <small class="footer-coin-text mb-0">© 2025 My EuroCoins</small>
+                    </div>
                 </div>
-                <small class="footer-coin-text mb-0">© 2025 My EuroCoins</small>
+                <div class="col text-end">
+                    <small class="text-white-50 me-2">Data source:</small>
+                    <a href="https://www.ecb.europa.eu/" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none">
+                        <i class="fas fa-external-link-alt me-1"></i>European Central Bank
+                    </a>
+                </div>
             </div>
         </div>
     </footer>
