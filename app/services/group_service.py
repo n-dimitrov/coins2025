@@ -8,43 +8,55 @@ class GroupService:
     def __init__(self):
         self.bigquery_service = BigQueryService()
     
-    async def validate_group(self, group_name: str) -> Optional[Dict[str, Any]]:
-        """Validate if group exists and return group data."""
+    async def validate_group(self, group_key: str) -> Optional[Dict[str, Any]]:
+        """Validate if group exists by group_key and return raw group data.
+
+        Note: this delegates to BigQueryService which historically accepted
+        both 'name' and 'group_key' terms; here we normalize the parameter
+        name to 'group_key' to be explicit.
+        """
         try:
-            group = await self.bigquery_service.get_group_by_name(group_name)
+            group = await self.bigquery_service.get_group_by_key(group_key)
             return group
         except Exception as e:
-            logger.error(f"Error validating group {group_name}: {str(e)}")
+            logger.error(f"Error validating group {group_key}: {str(e)}")
             return None
     
-    async def get_group_context(self, group_name: str) -> Optional[Dict[str, Any]]:
-        """Get complete group context including members and stats."""
+    async def get_group_context(self, group_key: str) -> Optional[Dict[str, Any]]:
+        """Get complete group context including members and stats.
+
+        Input is a canonical group_key. Returned context always includes a
+        canonical 'group_key' field regardless of legacy column names.
+        """
         try:
-            group = await self.validate_group(group_name)
+            group = await self.validate_group(group_key)
             if not group:
-                logger.error(f"Group '{group_name}' not found in validate_group")
+                logger.error(f"Group '{group_key}' not found in validate_group")
                 return None
-            
+
             logger.info(f"Group found: {group}")
 
             # Get group members
             members = await self.bigquery_service.get_group_users(group['id'])
-            
+
             # Get group stats
             stats = await self.bigquery_service.get_group_stats(group['id'])
-            
+
+            # Normalize to canonical keys
+            canonical_group_key = group.get('group_key') or group.get('group') or group_key
+
             context = {
                 'id': group['id'],
-                'name': group['name'],
-                'group_key': group.get('group_key', group.get('group', group_name)),  # Handle both old and new schema
+                'name': group.get('name'),
+                'group_key': canonical_group_key,
                 'members': members,
                 'stats': stats
             }
-            
+
             logger.info(f"Group context created: {context}")
             return context
         except Exception as e:
-            logger.error(f"Error getting group context for {group_name}: {str(e)}")
+            logger.error(f"Error getting group context for {group_key}: {str(e)}")
             return None
     
     async def enrich_coins_with_ownership(self, coins: List[Dict], group_id: str) -> List[Dict]:

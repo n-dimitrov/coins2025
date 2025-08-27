@@ -172,7 +172,12 @@ class BigQueryService:
 
     # Group-related methods
     async def get_group_by_name(self, group_name: str) -> Optional[Dict[str, Any]]:
-        """Get group by group_key (legacy method for backward compatibility)."""
+        """Deprecated compatibility wrapper.
+
+        Historically callers used "name"/"group" interchangeably with
+        "group_key". Prefer `get_group_by_key` in new code. This wrapper
+        delegates to `get_group_by_key` to preserve backward compatibility.
+        """
         return await self.get_group_by_key(group_name)
 
     async def get_group_users(self, group_id: str) -> List[Dict[str, Any]]:
@@ -765,17 +770,22 @@ class BigQueryService:
         
         return await self._get_cached_or_query(query, {'group_id': group_id})
 
-    async def _invalidate_group_cache(self):
-        """Invalidate cache entries related to groups."""
+    def _invalidate_group_cache(self):
+        """Invalidate cache entries related to groups.
+
+        This is synchronous because callers invoke it without awaiting. The
+        implementation performs only in-memory dict operations and logging, so
+        running it synchronously ensures cache is invalidated immediately.
+        """
         keys_to_remove = []
-        
+
         for cache_key in list(self._cache.keys()):
             if 'group' in cache_key.lower():
                 keys_to_remove.append(cache_key)
-        
+
         for key in keys_to_remove:
             del self._cache[key]
-            
+
         logger.info(f"Invalidated {len(keys_to_remove)} cache entries due to group change")
 
     async def get_existing_coin_ids(self, coin_ids: List[str]) -> List[str]:
