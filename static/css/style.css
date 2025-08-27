@@ -243,7 +243,24 @@
 
 /* Ownership badge contrast on dark hero background */
 .catalog-page .coin-card .ownership-badge {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+    /* Match RE badge visual: green circular gradient */
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(145deg,#28a745,#1e7e34) !important;
+    color: white !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 2px solid rgba(255,255,255,0.12) !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.22) !important;
+    z-index: 15 !important;
+    cursor: pointer !important;
 }
 
 /* Value on card: make it white and bolder, similar to hero */
@@ -287,6 +304,43 @@
     border: 3px solid rgba(255,255,255,0.08);
     box-shadow: 0 10px 24px rgba(0,0,0,0.18);
     background: #ffffff;
+}
+
+/* Option 1: High-contrast solid circular badge for CC / RE */
+.catalog-page .coin-card .badge.position-absolute.start-0 {
+    color: #fff;
+    font-weight: 800;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255,255,255,0.06);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+    z-index: 12;
+    padding: 0; /* enforce circular geometry */
+    background: linear-gradient(145deg,#28a745,#1e7e34);
+}
+
+/* Blue variant for CC */
+.catalog-page .coin-card .badge.bg-primary.position-absolute.start-0 {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    display:inline-flex; align-items:center; justify-content:center;
+    background: linear-gradient(145deg,#e6f4ff,#cfeaff); /* light-blue fill */
+    color: #03406a; /* darker blue text for contrast */
+    border: 1px solid rgba(3,64,106,0.08);
+    box-shadow: 0 6px 16px rgba(3,64,106,0.08);
+    padding: 0;
+}
+
+/* Green variant for RE */
+.catalog-page .coin-card .badge.bg-success.position-absolute.start-0 {
+    background: linear-gradient(145deg,#28a745,#1e7e34);
 }
 
 /* Value badge style (if shown inside card) */
@@ -944,17 +998,6 @@
     line-height: 1 !important;
 }
 
-.ownership-badge::after {
-    content: "▼";
-    position: absolute;
-    bottom: -3px;
-    right: -1px;
-    font-size: 8px;
-    color: rgba(255,255,255,0.8);
-    text-shadow: 0 1px 1px rgba(0,0,0,0.3);
-    animation: pulse 2s infinite;
-    z-index: 1;
-}
 
 /* Hero latest coin small card */
 #hero-latest-coin {
@@ -1016,18 +1059,7 @@
     }
 }
 /* Ensure arrow appears on all ownership badge types */
-.ownership-badge.ownership-full::after,
-.ownership-badge.ownership-partial::after {
-    content: "▼";
-    position: absolute;
-    bottom: -3px;
-    right: -1px;
-    font-size: 8px;
-    color: rgba(255,255,255,0.9);
-    text-shadow: 0 1px 1px rgba(0,0,0,0.4);
-    animation: pulse 2s infinite;
-    z-index: 1;
-}
+/* Removed ::after arrow from ownership badges to prevent the small ▼ pointer from appearing */
 
 @keyframes pulse {
     0%, 100% {
