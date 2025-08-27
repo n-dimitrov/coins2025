@@ -5,6 +5,7 @@ from app.services.bigquery_service import BigQueryService
 from app.services.group_service import GroupService
 import logging
 from datetime import datetime
+import random
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -19,7 +20,7 @@ async def homepage(request: Request):
         stats = await bigquery_service.get_stats()
         # Fetch latest coins from BigQuery (this year and last year)
         try:
-            coins_batch = await bigquery_service.get_latest_coins(limit=40)
+            coins_batch = await bigquery_service.get_latest_coins()
             latest_coins = []
             seen_ids = set()
             for c in coins_batch:
@@ -41,8 +42,15 @@ async def homepage(request: Request):
                     'year': year_val,
                     'value': c.get('value')
                 })
-
-            latest_coins = latest_coins[:8]
+            # Randomize order so the hero shows different coins on each page load.
+            # Do not slice here; allow the caller or upstream logic to decide how many
+            # coins should be displayed in the hero. The BigQueryService already accepts
+            # a `limit` parameter and can be called with None for no limit.
+            try:
+                random.shuffle(latest_coins)
+            except Exception:
+                # If shuffle fails for any reason, fall back to original order
+                pass
         except Exception:
             latest_coins = []
         return templates.TemplateResponse("index.html", {
