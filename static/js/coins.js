@@ -359,8 +359,9 @@ class CoinCatalog {
 
     createCoinCard(coin) {
         const flag = this.getCountryFlag(coin.country);
-        const typeClass = coin.coin_type === 'RE' ? 'bg-success' : 'bg-primary';
-        const typeName = coin.coin_type === 'RE' ? 'Regular' : 'Commemorative';
+    // Use semantic classes so we can style CC/RE independently of Bootstrap utility colors
+    const typeClass = coin.coin_type === 'RE' ? 'coin-type-re' : 'coin-type-cc';
+    const typeName = coin.coin_type === 'RE' ? 'Regular' : 'Commemorative';
         const imageUrl = coin.image_url || '/static/images/coin-placeholder.png';
         
         // Format value to always show 2 decimal places
@@ -400,13 +401,15 @@ class CoinCatalog {
             <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
                 <div class="card coin-card h-100 ${this.groupContext ? 'group-mode' : ''}">
                     <div class="position-relative">
-                        <img 
-                            src="${imageUrl}" 
-                            class="card-img-top coin-image" 
-                            alt="${coin.country} ${coin.value} Euro"
-                            loading="lazy"
-                            onerror="this.src='/static/images/coin-placeholder.png'"
-                        >
+                        <div class="coin-image-wrapper">
+                            <img 
+                                src="${imageUrl}" 
+                                class="card-img-top coin-image" 
+                                alt="${coin.country} ${coin.value} Euro"
+                                loading="lazy"
+                                onerror="this.src='/static/images/coin-placeholder.png'"
+                            >
+                        </div>
                         <span class="badge ${typeClass} position-absolute top-0 start-0">
                             ${coin.coin_type}
                         </span>
@@ -666,11 +669,22 @@ class CoinCatalog {
             
             // Populate modal content
             this.populateCoinModal(coinToDisplay);
-            
+
+            // Add a pop class to the corresponding card for a stronger 3D effect
+            this.clearAllCardPop();
+            const cardEl = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
+            if (cardEl) cardEl.classList.add('card-pop');
+
             // Show modal
-            const modal = new bootstrap.Modal(document.getElementById('coinDetailModal'));
+            const modalEl = document.getElementById('coinDetailModal');
+            const modal = new bootstrap.Modal(modalEl);
             modal.show();
-            
+
+            // When modal is hidden, remove the pop class
+            modalEl.addEventListener('hidden.bs.modal', () => {
+                if (cardEl) cardEl.classList.remove('card-pop');
+            }, { once: true });
+
             // Set up navigation handlers
             this.setupModalNavigation();
         } catch (error) {
@@ -678,8 +692,16 @@ class CoinCatalog {
             // Fallback to basic coin data
             this.currentCoinIndex = this.filteredCoins.findIndex(c => c.coin_id === coin.coin_id);
             this.populateCoinModal(coin);
-            const modal = new bootstrap.Modal(document.getElementById('coinDetailModal'));
+            const modalEl = document.getElementById('coinDetailModal');
+            const modal = new bootstrap.Modal(modalEl);
+            // Attempt to add pop class to the fallback coin card
+            this.clearAllCardPop();
+            const fallbackCard = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
+            if (fallbackCard) fallbackCard.classList.add('card-pop');
             modal.show();
+            modalEl.addEventListener('hidden.bs.modal', () => {
+                if (fallbackCard) fallbackCard.classList.remove('card-pop');
+            }, { once: true });
             this.setupModalNavigation();
         }
     }
@@ -700,7 +722,8 @@ class CoinCatalog {
     populateCoinModal(coin) {
         const flag = this.getCountryFlag(coin.country);
         const formattedValue = parseFloat(coin.value).toFixed(2);
-        const typeClass = coin.coin_type === 'RE' ? 'bg-success' : 'bg-primary';
+        // Use the same semantic classes as the coin cards so styling can be shared
+        const typeClass = coin.coin_type === 'RE' ? 'coin-type-re' : 'coin-type-cc';
         const typeName = coin.coin_type === 'RE' ? 'Regular' : 'Commemorative';
         
         // Use auto-generated series label
@@ -902,7 +925,10 @@ class CoinCatalog {
                 const modalBody = document.querySelector('#coinDetailModal .modal-body');
                 modalBody.style.opacity = '0.5';
                 modalBody.style.transform = 'translateX(10px)';
-                
+                // Update card pop highlighting: remove previous, add to new
+                this.clearAllCardPop();
+                const newCard = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
+                if (newCard) newCard.classList.add('card-pop');
                 // Only fetch additional coin details if we're NOT in group context
                 // Group coins already have complete data including ownership
                 let coinToDisplay = coin;
@@ -925,6 +951,10 @@ class CoinCatalog {
                 this.populateCoinModal(coin);
             }
         }
+    }
+
+    clearAllCardPop() {
+        document.querySelectorAll('.coin-card.card-pop').forEach(el => el.classList.remove('card-pop'));
     }
 
     shareCoin(coinId) {
