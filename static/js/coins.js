@@ -646,9 +646,10 @@ class CoinCatalog {
         if (!this._coinModalHideHandlerInstalled) {
             const coinModalEl = document.getElementById('coinDetailModal');
             if (coinModalEl) {
-                coinModalEl.addEventListener('hidden.bs.modal', () => {
-                    this.clearAllCardPop();
-                });
+                // Use a bound instance method so `this` is always correct and
+                // so the handler reference can be removed later if needed.
+                this._boundClearAllCardPop = this.clearAllCardPop.bind(this);
+                coinModalEl.addEventListener('hidden.bs.modal', this._boundClearAllCardPop);
                 this._coinModalHideHandlerInstalled = true;
             }
         }
