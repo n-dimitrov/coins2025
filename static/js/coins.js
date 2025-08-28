@@ -884,6 +884,18 @@ class CoinCatalog {
                 
                 
                 <div class="coin-image-section">
+                    ${selected ? (() => {
+                        // Show Add/Remove pill when a user is selected
+                        const selectedName = (typeof selected === 'string') ? selected : (selected.user || selected.name || '');
+                        const pillLabel = ownedBySelected ? 'Remove' : 'Add';
+                        const pillTitle = ownedBySelected ? `Remove ${selectedName} from this coin` : `Add ${selectedName} to this coin`;
+                        // Use inline onclick to call methods on window.coinCatalog
+                        const pillOnclick = ownedBySelected ? `window.coinCatalog.removeCoinFromSelectedUser('${coin.coin_id}')` : `window.coinCatalog.addCoinToSelectedUser('${coin.coin_id}')`;
+                        return `
+                            <button class="history-pill btn btn-sm btn-outline-primary me-3" title="${pillTitle}" onclick="${pillOnclick}">${pillLabel}</button>
+                        `;
+                    })() : ''}
+
                     <img src="${mainImage}" 
                          class="coin-main-image ${imageClass}" 
                          id="coinMainImage"
@@ -1196,6 +1208,185 @@ class CoinCatalog {
             return date.toLocaleDateString('en-GB', options);
         } catch (error) {
             return 'Invalid date';
+        }
+    }
+
+    // Add coin to the currently selected user (with confirmation)
+    async addCoinToSelectedUser(coinId) {
+        if (!this.selectedMember) return;
+        const name = (typeof this.selectedMember === 'string') ? this.selectedMember : (this.selectedMember.user || this.selectedMember.name);
+        if (!name) return;
+        const confirmAdd = confirm(`Add ${name} to coin ${coinId}?`);
+        if (!confirmAdd) return;
+
+        // Find the pill in the modal (may be recreated after refresh)
+        const pill = document.querySelector('#coinDetailModal .history-pill');
+        // Prevent duplicate requests
+        if (pill && pill.dataset.loading === 'true') return;
+
+        // Show inline loading state on the pill
+        if (pill) {
+            pill.dataset.loading = 'true';
+            pill.disabled = true;
+            pill.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
+        }
+
+        let refreshed = false;
+        try {
+            const payload = {
+                name: name,
+                coin_id: coinId,
+                date: new Date().toISOString(),
+                created_by: 'web-ui'
+            };
+
+            const res = await fetch(this.getApiUrl('/api/ownership/add'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                // If server indicates user already owns the coin, refresh modal from server
+                if (res.status === 400 && err.detail && err.detail.toLowerCase().includes('already owns')) {
+                    this.showToast(err.detail || 'User already owns this coin');
+                    const detailed = await this.fetchCoinDetails(coinId);
+                    if (detailed) {
+                        const idx = this.coins.findIndex(c => c.coin_id === coinId);
+                        if (idx !== -1) this.coins[idx].owners = detailed.owners || this.coins[idx].owners;
+                        this.filteredCoins = this.filteredCoins.map(c => c.coin_id === coinId ? { ...c, owners: detailed.owners || c.owners } : c);
+                        this.populateCoinModal(detailed);
+                        refreshed = true;
+                    } else {
+                        // As a fallback, enable pill and show Remove (server considers user owner)
+                        if (pill) {
+                            pill.dataset.loading = 'false';
+                            pill.disabled = false;
+                            pill.textContent = 'Remove';
+                        }
+                        refreshed = true;
+                    }
+                    // Stop further processing
+                    return;
+                }
+
+                throw new Error(err.detail || 'Failed to add ownership');
+            }
+
+            this.showToast('Added to history');
+
+            // Try to refresh the coin details from the server and update modal
+            const detailed = await this.fetchCoinDetails(coinId);
+            if (detailed) {
+                // Update local caches where possible
+                const idx = this.coins.findIndex(c => c.coin_id === coinId);
+                if (idx !== -1) this.coins[idx].owners = detailed.owners || this.coins[idx].owners;
+
+                // Also update filteredCoins reference used for navigation
+                this.filteredCoins = this.filteredCoins.map(c => c.coin_id === coinId ? { ...c, owners: detailed.owners || c.owners } : c);
+
+                this.populateCoinModal(detailed);
+                refreshed = true;
+            } else {
+                // If we couldn't fetch details, do an optimistic local update so the modal reflects the new ownership
+                const ownerEntry = { owner: name, acquired_date: new Date().toISOString() };
+
+                const idx = this.coins.findIndex(c => c.coin_id === coinId);
+                if (idx !== -1) {
+                    this.coins[idx].owners = this.coins[idx].owners || [];
+                    // Avoid duplicate
+                    if (!this.coins[idx].owners.some(o => (o.owner || o) === name)) {
+                        this.coins[idx].owners.unshift(ownerEntry);
+                    }
+                }
+
+                this.filteredCoins = this.filteredCoins.map(c => {
+                    if (c.coin_id === coinId) {
+                        c.owners = c.owners || [];
+                        if (!c.owners.some(o => (o.owner || o) === name)) c.owners.unshift(ownerEntry);
+                    }
+                    return c;
+                });
+
+                // Re-render modal using the local optimistic state
+                const coin = this.coins.find(c => c.coin_id === coinId) || { coin_id: coinId, owners: [ownerEntry] };
+                this.populateCoinModal(coin);
+                refreshed = true;
+            }
+        } catch (error) {
+            console.error('Add ownership error:', error);
+            this.showToast('Failed to add ownership');
+        } finally {
+            // If modal wasn't refreshed (e.g. fetch failed), restore pill state
+            if (pill && !refreshed) {
+                // If we didn't refresh but the server call likely succeeded, ensure pill is enabled and shows state consistent with ownership
+                pill.dataset.loading = 'false';
+                pill.disabled = false;
+                // If add succeeded but fetch failed, assume ownership and show 'Remove'
+                pill.textContent = 'Remove';
+            }
+        }
+    }
+
+    // Remove coin from the currently selected user (with confirmation)
+    async removeCoinFromSelectedUser(coinId) {
+        if (!this.selectedMember) return;
+        const name = (typeof this.selectedMember === 'string') ? this.selectedMember : (this.selectedMember.user || this.selectedMember.name);
+        if (!name) return;
+        const confirmRemove = confirm(`Remove ${name} from coin ${coinId}?`);
+        if (!confirmRemove) return;
+
+        const pill = document.querySelector('#coinDetailModal .history-pill');
+        if (pill && pill.dataset.loading === 'true') return;
+
+        if (pill) {
+            pill.dataset.loading = 'true';
+            pill.disabled = true;
+            pill.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Removing...';
+        }
+
+        let refreshed = false;
+        try {
+            const payload = {
+                name: name,
+                coin_id: coinId,
+                removal_date: new Date().toISOString(),
+                created_by: 'web-ui'
+            };
+
+            const res = await fetch(this.getApiUrl('/api/ownership/remove'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.detail || 'Failed to remove ownership');
+            }
+
+            this.showToast('Removed from history');
+
+            const detailed = await this.fetchCoinDetails(coinId);
+            if (detailed) {
+                const idx = this.coins.findIndex(c => c.coin_id === coinId);
+                if (idx !== -1) this.coins[idx].owners = detailed.owners || this.coins[idx].owners;
+
+                this.filteredCoins = this.filteredCoins.map(c => c.coin_id === coinId ? { ...c, owners: detailed.owners || c.owners } : c);
+
+                this.populateCoinModal(detailed);
+                refreshed = true;
+            }
+        } catch (error) {
+            console.error('Remove ownership error:', error);
+            this.showToast('Failed to remove ownership');
+        } finally {
+            if (pill && !refreshed) {
+                pill.dataset.loading = 'false';
+                pill.disabled = false;
+                pill.textContent = 'Remove';
+            }
         }
     }
 
