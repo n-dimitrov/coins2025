@@ -228,12 +228,12 @@ class BigQueryService:
             WHERE h.coin_id = @coin_id
         )
         SELECT 
-            lo.name as owner,
-            COALESCE(gu.alias, lo.name) as alias,
+            gu.name as owner,
+            COALESCE(gu.alias, gu.name) as alias,
             lo.date as acquired_date
         FROM latest_ownership lo
         JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu 
-            ON lo.name = gu.name AND gu.group_id = @group_id
+            ON LOWER(TRIM(lo.name)) = LOWER(TRIM(gu.name)) AND gu.group_id = @group_id
         WHERE lo.rn = 1 AND lo.is_active = true AND gu.is_active = true
         ORDER BY lo.date DESC
         """
@@ -266,14 +266,16 @@ class BigQueryService:
                 params['series'] = filters['series']
             
             if filters.get('owned_by'):
-                where_clauses.append("h.name = @owned_by")
+                # Use latest_ownership alias (lo) here - 'h' is not in scope inside coin_ownership
+                where_clauses.append("lo.name = @owned_by")
                 params['owned_by'] = filters['owned_by']
             
             if filters.get('ownership_status'):
+                # Apply ownership status against the latest_ownership alias (lo)
                 if filters['ownership_status'] == 'owned':
-                    where_clauses.append("h.coin_id IS NOT NULL")
+                    where_clauses.append("lo.coin_id IS NOT NULL")
                 elif filters['ownership_status'] == 'missing':
-                    where_clauses.append("h.coin_id IS NULL")
+                    where_clauses.append("lo.coin_id IS NULL")
 
         where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
         
@@ -287,14 +289,14 @@ class BigQueryService:
         coin_ownership AS (
             SELECT 
                 c.*,
-                lo.name as owner,
+                gu.name as owner,
                 COALESCE(gu.alias, lo.name) as owner_alias,
                 lo.date as acquired_date
             FROM `{self.client.project}.{self.dataset_id}.{self.table_id}` c
             LEFT JOIN latest_ownership lo 
                 ON c.coin_id = lo.coin_id AND lo.rn = 1 AND lo.is_active = true
             LEFT JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu 
-                ON lo.name = gu.name AND gu.group_id = @group_id AND gu.is_active = true
+                ON LOWER(TRIM(lo.name)) = LOWER(TRIM(gu.name)) AND gu.group_id = @group_id AND gu.is_active = true
             WHERE {where_sql}
         )
         SELECT 
