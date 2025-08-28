@@ -268,8 +268,10 @@ class CoinCatalog {
         
         this.groupContext.members.forEach(member => {
             const option = document.createElement('option');
-            option.value = member.name;
-            option.textContent = member.name;
+            // Template uses member.user; fall back to member.name or string member
+            const memberLabel = member.user || member.name || (typeof member === 'string' ? member : '');
+            option.value = memberLabel;
+            option.textContent = memberLabel;
             select.appendChild(option);
         });
     }
@@ -524,7 +526,8 @@ class CoinCatalog {
 
     setupEventListeners() {
         // Search functionality
-        const searchInput = document.getElementById('searchInput');
+        // Template uses id="search-input" (kebab-case)
+        const searchInput = document.getElementById('search-input');
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
                 this.currentFilters.search = e.target.value;
@@ -623,7 +626,8 @@ class CoinCatalog {
         // Close owner info modal when clicking outside
         document.addEventListener('click', (e) => {
             const modal = document.getElementById('ownerInfoModal');
-            if (modal && modal.style.display === 'block' && 
+            // showOwnerInfo() sets display to 'flex', hideOwnerInfo() sets to 'none'
+            if (modal && modal.style.display && modal.style.display !== 'none' && 
                 !e.target.closest('.owner-info-content') && 
                 !e.target.classList.contains('ownership-badge')) {
                 this.hideOwnerInfo();
@@ -634,7 +638,7 @@ class CoinCatalog {
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 const modal = document.getElementById('ownerInfoModal');
-                if (modal && modal.style.display === 'block') {
+                if (modal && modal.style.display && modal.style.display !== 'none') {
                     this.hideOwnerInfo();
                 }
             }
@@ -786,12 +790,21 @@ class CoinCatalog {
         const modalContent = `
             <div class="coin-detail-container">
                 <div class="coin-header">
-                    <div class="coin-title">
-                        <span class="country-flag">${flag}</span>
-                        ${coin.country}
-                        <span class="coin-value-badge">€${formattedValue}</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center flex-grow-1 me-2">
+                            <span class="country-flag modal-coin-flag">${flag}</span>
+                            <span class="ms-2 coin-country modal-coin-country text-truncate" title="${coin.country}">${coin.country}</span>
+                        </div>
+                        <div class="ms-2">
+                            <div class="modal-coin-value">€${formattedValue}</div>
+                        </div>
                     </div>
-                    <div class="coin-year">${coin.year}</div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <div class="coin-type-year text-muted">
+                            ${typeName} &bull; ${coin.year}
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="coin-navigation">
@@ -810,11 +823,6 @@ class CoinCatalog {
                     </button>
                 </div>
                 
-                <div class="coin-type-section">
-                    <span class="badge ${typeClass}">
-                        ${typeName}
-                    </span>
-                </div>
                 
                 <div class="coin-image-section">
                     <img src="${mainImage}" 
@@ -1076,7 +1084,7 @@ class CoinCatalog {
         };
         
         // Reset all form elements
-        const searchInput = document.getElementById('searchInput');
+    const searchInput = document.getElementById('search-input');
         if (searchInput) searchInput.value = '';
         
         const typeFilter = document.getElementById('type-filter');

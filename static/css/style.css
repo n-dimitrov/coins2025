@@ -657,6 +657,88 @@
     border-bottom: 2px solid #e9ecef;
 }
 
+/* Modal-specific header overrides: align left and ensure country name truncates */
+#coinDetailModal .coin-header {
+    text-align: left;
+}
+
+#coinDetailModal .coin-country {
+    max-width: 220px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+#coinDetailModal .coin-value-badge {
+    /* keep the same visual style but ensure it doesn't wrap */
+    white-space: nowrap;
+}
+
+/* Modal-specific visual adjustments */
+#coinDetailModal .modal-coin-flag {
+    font-size: 2.2rem; /* larger flag */
+    line-height: 1;
+}
+
+#coinDetailModal .modal-coin-country {
+    font-size: 1.25rem; /* larger country text */
+    font-weight: 700;
+    color: rgba(255,255,255,0.95);
+}
+
+#coinDetailModal .modal-coin-value {
+    font-size: 1.6rem; /* larger value */
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+#coinDetailModal .coin-type-year {
+    /* match card small muted text: smaller, muted white */
+    font-size: 0.875rem; /* small */
+    color: rgba(255,255,255,0.5) !important;
+    font-weight: 500;
+}
+
+/* Remove the pill background for the value in the modal */
+#coinDetailModal .modal-coin-value {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Make the modal header sticky so it remains visible while scrolling */
+#coinDetailModal .coin-header {
+    position: sticky;
+    top: 0;
+    /* layered background: translucent overlay on top of the hero gradient so the
+       header matches the card look even inside the white modal shell */
+    background-image: 
+        linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+        linear-gradient(135deg, var(--primary-color) 0%, #004499 100%);
+    z-index: 10;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    /* offset text from edges */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    /* rounded top corners to match modal content */
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    /* ensure background respects rounded corners */
+    background-clip: padding-box;
+    color: rgba(255,255,255,0.95);
+    /* subtle inner separation */
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.03);
+}
+
+#coinDetailModal .modal-body {
+    max-height: calc(100vh - 120px);
+    overflow: auto;
+}
+
 .coin-title {
     font-size: 1.4rem;
     font-weight: 700;
