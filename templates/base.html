@@ -41,7 +41,8 @@
 <body class="d-flex flex-column min-vh-100">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom sticky-top">
-        <div class="container position-relative">
+        <!-- use container-fluid with small horizontal padding to reduce offset from edges -->
+        <div class="container-fluid px-3 position-relative">
             <a class="navbar-brand d-flex align-items-center" href="{% if group_context %}/{{ group_context.group_key }}{% else %}/{% endif %}">
                 <div class="coin-logo me-3 d-flex align-items-center justify-content-center" 
                      style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden;">
@@ -58,21 +59,25 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="navbar-nav ms-auto">
-                    <!-- Group Indicator -->
-                    {% if group_context %}
-                    <div class="nav-item d-flex align-items-center me-3">
-                        <span class="badge bg-primary fs-6">
-                            <i class="fas fa-users me-2"></i>{{ group_context.name }}
-                        </span>
-                    </div>
-                    {% endif %}
+                <!-- Left-aligned primary menu -->
+                <div class="navbar-nav me-auto">
                     <a class="nav-link fw-medium" href="{% if group_context %}/{{ group_context.group_key }}{% else %}/{% endif %}">
                         <i class="fas fa-home me-1"></i>Home
                     </a>
                     <a class="nav-link fw-medium" href="{% if group_context %}/{{ group_context.group_key }}/catalog{% else %}/catalog{% endif %}">
                         <i class="fas fa-coins me-1"></i>Catalog
                     </a>
+                </div>
+
+                <!-- Right-aligned group indicator -->
+                <div class="navbar-nav ms-auto">
+                    {% if group_context %}
+                    <div class="nav-item d-flex align-items-center">
+                        <span class="badge bg-primary fs-6">
+                            <i class="fas fa-users me-2"></i>{{ group_context.name }}
+                        </span>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -93,7 +98,8 @@
 
     <!-- Minimal Footer -->
     <footer class="bg-dark text-white py-2 mt-auto" style="background-color: #111827 !important;">
-        <div class="container">
+        <!-- use container-fluid with small horizontal padding to reduce footer offset -->
+        <div class="container-fluid px-3">
             <div class="row align-items-center">
                 <div class="col-auto">
                     <div class="d-flex align-items-center gap-2">
