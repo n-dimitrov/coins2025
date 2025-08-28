@@ -776,6 +776,24 @@
     font-size: 1.6rem; /* larger value */
     font-weight: 800;
     color: white;
+.ownership-modal-badges .badge.bg-primary,
+.badge.bg-primary {
+    background: var(--primary-color) !important;
+    color: #fff !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* Owner info modal: selected owner row */
+.owner-item.selected-owner {
+    background: rgba(0, 102, 204, 0.08);
+    border-left: 4px solid var(--primary-color);
+    padding-left: 0.5rem;
+    border-radius: 6px;
+}
+
+.owner-item .owner-name {
+    font-weight: 600;
+}
     text-shadow: 0 1px 0 rgba(0,0,0,0.25);
 }
 

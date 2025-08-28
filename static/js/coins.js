@@ -765,9 +765,22 @@ class CoinCatalog {
                     return dateA - dateB;
                 });
 
-                const ownerBadges = sortedOwners.map(owner => 
-                    `<span class="badge bg-success me-1 mb-1" title="Owned by ${owner.owner}${owner.acquired_date ? ' (acquired: ' + new Date(owner.acquired_date).toLocaleDateString() + ')' : ''}">${owner.owner}</span>`
-                ).join('');
+                const ownerBadges = sortedOwners.map(owner => {
+                    const ownerName = owner.owner || '';
+                    // Determine if this owner matches the currently selected member
+                    let isSelected = false;
+                    if (this.selectedMember) {
+                        if (typeof this.selectedMember === 'string') {
+                            isSelected = this.selectedMember === ownerName;
+                        } else if (typeof this.selectedMember === 'object') {
+                            isSelected = (this.selectedMember.user === ownerName) || (this.selectedMember.name === ownerName);
+                        }
+                    }
+
+                    const badgeClass = isSelected ? 'badge bg-primary text-white' : 'badge bg-success';
+                    const titleSuffix = owner.acquired_date ? ' (acquired: ' + new Date(owner.acquired_date).toLocaleDateString() + ')' : '';
+                    return `<span class="${badgeClass} me-1 mb-1" title="Owned by ${ownerName}${titleSuffix}">${ownerName}</span>`;
+                }).join('');
                 
                 ownershipModalHtml = `
                     <div class="ownership-modal-section">
@@ -1053,9 +1066,22 @@ class CoinCatalog {
         // Generate owner list HTML
         const ownersHtml = sortedOwners.map(owner => {
             const formattedDate = this.formatAcquisitionDate(owner.acquired_date);
+            const ownerName = owner.owner || '';
+
+            let isSelected = false;
+            if (this.selectedMember) {
+                if (typeof this.selectedMember === 'string') {
+                    isSelected = this.selectedMember === ownerName;
+                } else if (typeof this.selectedMember === 'object') {
+                    isSelected = (this.selectedMember.user === ownerName) || (this.selectedMember.name === ownerName);
+                }
+            }
+
+            const itemClass = isSelected ? 'owner-item selected-owner' : 'owner-item';
+
             return `
-                <div class="owner-item">
-                    <div class="owner-name">${owner.owner}</div>
+                <div class="${itemClass}">
+                    <div class="owner-name">${ownerName}</div>
                     <div class="owner-date">${formattedDate}</div>
                 </div>
             `;
