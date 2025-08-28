@@ -806,6 +806,46 @@ class CoinCatalog {
             }
         }
         
+        // Decide circle color class for coin image according to rules:
+        // - no group mode -> default (whiter)
+        // - group mode (no selected user) -> green if any group member owns coin, otherwise default
+        // - group user mode -> blue if selected user owns coin, else green if someone in group owns it, else default
+        const isGroupMode = !!this.groupContext;
+        const selected = this.selectedMember;
+
+        const ownerNames = (coin.owners || []).map(o => (o.owner || '').toString());
+
+        const matchesSelected = (ownerName) => {
+            if (!selected) return false;
+            if (typeof selected === 'string') return selected === ownerName;
+            if (typeof selected === 'object') return (selected.user === ownerName) || (selected.name === ownerName);
+            return false;
+        };
+
+        const ownedBySelected = ownerNames.some(n => matchesSelected(n));
+
+        // Determine if any owner belongs to the group members (match by member.user/member.name or owner string)
+        let ownedByGroup = false;
+        if (isGroupMode && this.groupContext && Array.isArray(this.groupContext.members)) {
+            const memberNames = new Set(this.groupContext.members.map(m => (m.user || m.name || m).toString()));
+            ownedByGroup = ownerNames.some(n => memberNames.has(n));
+        } else {
+            // fallback: if not in groupContext but owners exist, consider ownedByGroup true when owners exist
+            ownedByGroup = ownerNames.length > 0;
+        }
+
+        let imageClass = 'circle-default';
+        if (!isGroupMode) {
+            imageClass = 'circle-default';
+        } else if (isGroupMode && !selected) {
+            imageClass = ownedByGroup ? 'circle-green' : 'circle-default';
+        } else {
+            // group user mode
+            if (ownedBySelected) imageClass = 'circle-blue';
+            else if (ownedByGroup) imageClass = 'circle-green';
+            else imageClass = 'circle-default';
+        }
+
         const modalContent = `
             <div class="coin-detail-container">
                 <div class="coin-header">
@@ -845,7 +885,7 @@ class CoinCatalog {
                 
                 <div class="coin-image-section">
                     <img src="${mainImage}" 
-                         class="coin-main-image" 
+                         class="coin-main-image ${imageClass}" 
                          id="coinMainImage"
                          alt="${coin.country} ${coin.value} Euro"
                          onerror="this.src='/static/images/coin-placeholder.png'">

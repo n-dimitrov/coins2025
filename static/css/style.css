@@ -703,6 +703,22 @@
     transform: scale(1.05);
 }
 
+/* Circle color variants for coin detail image */
+.coin-main-image.circle-default {
+    border-color: rgba(255,255,255,0.85);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+.coin-main-image.circle-green {
+    border-color: var(--secondary-color, #28a745);
+    box-shadow: 0 15px 35px rgba(40,167,69,0.18);
+}
+
+.coin-main-image.circle-blue {
+    border-color: var(--primary-color);
+    box-shadow: 0 15px 35px rgba(0,102,204,0.28);
+}
+
 .coin-thumbnail-gallery {
     display: flex;
     gap: 0.5rem;
