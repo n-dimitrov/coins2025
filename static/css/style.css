@@ -657,6 +657,69 @@
     border-bottom: 2px solid #e9ecef;
 }
 
+/* Modal-specific header overrides: align left and ensure country name truncates */
+#coinDetailModal .coin-header {
+    text-align: left;
+}
+
+#coinDetailModal .coin-country {
+    max-width: 220px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+#coinDetailModal .coin-value-badge {
+    /* keep the same visual style but ensure it doesn't wrap */
+    white-space: nowrap;
+}
+
+/* Modal-specific visual adjustments */
+#coinDetailModal .modal-coin-flag {
+    font-size: 2.2rem; /* larger flag */
+    line-height: 1;
+}
+
+#coinDetailModal .modal-coin-country {
+    font-size: 1.25rem; /* larger country text */
+    font-weight: 700;
+}
+
+#coinDetailModal .modal-coin-value {
+    font-size: 1.6rem; /* larger value */
+    font-weight: 700;
+    color: var(--dark-color);
+}
+
+#coinDetailModal .coin-type-year {
+    font-size: 1rem;
+    color: var(--muted-color, #6c757d);
+}
+
+/* Remove the pill background for the value in the modal */
+#coinDetailModal .modal-coin-value {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Make the modal header sticky so it remains visible while scrolling */
+#coinDetailModal .coin-header {
+    position: sticky;
+    top: 0;
+    background: white; /* match modal background */
+    z-index: 10;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+#coinDetailModal .modal-body {
+    max-height: calc(100vh - 120px);
+    overflow: auto;
+}
+
 .coin-title {
     font-size: 1.4rem;
     font-weight: 700;
