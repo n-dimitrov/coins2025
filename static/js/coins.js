@@ -131,12 +131,39 @@ class CoinCatalog {
         try {
             await this.loadFilterOptions();
             this.populateGroupMemberFilter(); // Populate group member filter if in group context
+            // Update page title according to group / selected member
+            this.updatePageTitle();
             await this.loadCoins();
             this.setupEventListeners();
             this.renderCoins();
         } catch (error) {
             console.error('Error initializing catalog:', error);
             this.showError('Failed to initialize catalog');
+        }
+    }
+
+    /**
+     * Update the browser page title according to rules:
+     * - no group: "My EuroCoins"
+     * - group mode: "My EuroCoins | <group>"
+     * - selected member: "My EuroCoins | <user>@<group>"
+     */
+    updatePageTitle() {
+        try {
+            const base = 'My EuroCoins';
+            if (this.groupContext) {
+                const groupName = this.groupContext.name || this.groupContext.group_key || '';
+                if (this.selectedMember) {
+                    document.title = `${base} | ${this.selectedMember}@${groupName}`;
+                } else {
+                    document.title = `${base} | ${groupName}`;
+                }
+            } else {
+                document.title = base;
+            }
+        } catch (err) {
+            // If anything fails, leave title as-is
+            console.warn('Failed to update page title', err);
         }
     }
 

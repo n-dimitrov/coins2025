@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My EuroCoins{% endblock %}</title>
+    <title>{% if group_context %}{% if selected_member %}My EuroCoins | {{ selected_member }}@{{ group_context.name }}{% else %}My EuroCoins | {{ group_context.name }}{% endif %}{% else %}My EuroCoins{% endif %}</title>
     
     <!-- Security Headers -->
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
@@ -17,7 +17,7 @@
     <link rel="canonical" href="https://myeurocoins.org{% block canonical_path %}/{% endblock %}">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="{% block og_title %}My EuroCoins - Euro Coin Collection{% endblock %}">
+    <meta property="og:title" content="{% if group_context %}{% if selected_member %}My EuroCoins | {{ selected_member }}@{{ group_context.name }}{% else %}My EuroCoins | {{ group_context.name }}{% endif %}{% else %}My EuroCoins - Euro Coin Collection{% endif %}">
     <meta property="og:description" content="{% block og_description %}Explore the complete collection of Euro coins from 1999 to 2025.{% endblock %}">
     <meta property="og:url" content="https://myeurocoins.org{% block og_url %}/{% endblock %}">
     <meta property="og:type" content="website">
