@@ -406,7 +406,8 @@ class CoinCatalog {
                         <div class="coin-image-wrapper">
                             <img 
                                 src="${imageUrl}" 
-                                class="card-img-top coin-image" 
+                                class="card-img-top coin-image coin-image-clickable" 
+                                data-coin-id="${coin.coin_id}"
                                 alt="${coin.country} ${coin.value} Euro"
                                 loading="lazy"
                                 onerror="this.src='/static/images/coin-placeholder.png'"
@@ -417,7 +418,7 @@ class CoinCatalog {
                         </span>
                         ${ownershipBadgeHtml}
                     </div>
-                    <div class="card-body coin-card-clickable" data-coin-id="${coin.coin_id}" style="cursor: pointer;">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h6 class="card-title mb-0">
                                 <span class="country-flag me-2">${flag}</span>${coin.country}
@@ -593,16 +594,15 @@ class CoinCatalog {
             });
         }
 
-        // Coin card clicks (for coin detail modal)
+        // Coin image clicks (for coin detail modal)
         document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('coin-card-clickable') || 
-                e.target.closest('.coin-card-clickable')) {
-                
-                const coinElement = e.target.classList.contains('coin-card-clickable') 
-                    ? e.target 
-                    : e.target.closest('.coin-card-clickable');
-                
-                const coinId = coinElement.dataset.coinId;
+            if (e.target.classList.contains('coin-image-clickable') || 
+                e.target.closest('.coin-image-clickable')) {
+                const imgEl = e.target.classList.contains('coin-image-clickable')
+                    ? e.target
+                    : e.target.closest('.coin-image-clickable');
+
+                const coinId = imgEl.dataset.coinId;
                 const coin = this.coins.find(c => c.coin_id === coinId);
                 if (coin) {
                     this.showCoinDetailModal(coin);
@@ -661,9 +661,9 @@ class CoinCatalog {
 
     setupCoinCardClickHandlers() {
         document.addEventListener('click', (e) => {
-            const clickableArea = e.target.closest('.coin-card-clickable');
-            if (clickableArea) {
-                const coinId = clickableArea.dataset.coinId;
+            const imgEl = e.target.closest('.coin-image-clickable');
+            if (imgEl) {
+                const coinId = imgEl.dataset.coinId;
                 const coin = this.coins.find(c => c.coin_id === coinId);
                 if (coin) {
                     this.showCoinDetailModal(coin);
