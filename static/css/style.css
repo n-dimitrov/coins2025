@@ -158,6 +158,11 @@
     transition: transform 0.3s ease;
 }
 
+/* Indicate the coin image is interactive when it opens the detail modal */
+.coin-image-clickable {
+    cursor: pointer;
+}
+
 .coin-card:hover .coin-image {
     transform: scale(1.05);
 }
