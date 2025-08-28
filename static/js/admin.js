@@ -1767,7 +1767,10 @@ async function loadHistoryData() {
         // Load history data
         await loadHistoryPage();
         
-        document.getElementById('historyFilters').style.display = 'flex';
+    document.getElementById('historyFilters').style.display = 'flex';
+    // Show the include-inactive checkbox row alongside filters
+    const includeRow = document.getElementById('historyIncludeInactiveRow');
+    if (includeRow) includeRow.style.display = 'block';
         document.getElementById('historyViewContainer').style.display = 'block';
     } catch (error) {
         console.error('Error loading history:', error);
@@ -1863,11 +1866,14 @@ async function applyHistoryFilters() {
     const search = document.getElementById('filterHistorySearch').value.trim();
     const name = document.getElementById('filterHistoryName').value;
     const dateFilter = document.getElementById('filterHistoryDate').value;
+    const includeInactiveCheckbox = document.getElementById('filterIncludeInactive');
+    const includeInactive = includeInactiveCheckbox && includeInactiveCheckbox.checked;
 
     currentHistoryFilters = {};
     if (search) currentHistoryFilters.search = search;
     if (name) currentHistoryFilters.name = name;
     if (dateFilter) currentHistoryFilters.date_filter = dateFilter;
+    if (includeInactive) currentHistoryFilters.include_inactive = true;
 
     currentHistoryPage = 0;
     await loadHistoryPage();
@@ -1880,6 +1886,8 @@ async function clearHistoryFilters() {
     document.getElementById('filterHistorySearch').value = '';
     document.getElementById('filterHistoryName').value = '';
     document.getElementById('filterHistoryDate').value = '';
+    const includeInactiveCheckbox = document.getElementById('filterIncludeInactive');
+    if (includeInactiveCheckbox) includeInactiveCheckbox.checked = false;
     
     currentHistoryFilters = {};
     currentHistoryPage = 0;

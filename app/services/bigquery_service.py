@@ -342,52 +342,95 @@ class BigQueryService:
         """Add a new coin ownership record."""
         import uuid
         from datetime import datetime as dt
-        
+
         record_id = str(uuid.uuid4())
         current_time = dt.now()
-        
-        # First check if user already owns this coin
-        existing = await self.get_current_coin_ownership(coin_id, name)
+
+        # Lightweight existence check (cheaper than windowed query)
+        check_query = f"""
+        SELECT 1 as exists_flag
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+        WHERE h.coin_id = @coin_id AND h.name = @name AND h.is_active = true
+        LIMIT 1
+        """
+
+        start_check = datetime.now()
+        existing = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
+        check_duration = (datetime.now() - start_check).total_seconds()
+        logger.info(f"Lightweight ownership check took {check_duration:.3f}s for {name}/{coin_id}")
+
         if existing:
             raise ValueError(f"User {name} already owns coin {coin_id}")
-        
-        query = f"""
-        INSERT INTO `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}`
-        (id, name, coin_id, date, created_at, created_by, is_active)
-        VALUES (@id, @name, @coin_id, @date, @created_at, @created_by, true)
-        """
-        
-        params = {
+
+        # Prepare row for streaming insert
+        # Ensure datetime fields are JSON-serializable for streaming insert
+        row = {
             'id': record_id,
             'name': name,
             'coin_id': coin_id,
-            'date': date,
-            'created_at': current_time,
+            'date': date.isoformat() if hasattr(date, 'isoformat') else date,
+            'created_at': current_time.isoformat() if hasattr(current_time, 'isoformat') else current_time,
             'created_by': created_by or 'api',
+            'is_active': True
         }
-        
-        # Execute query in thread pool
-        def execute_insert():
-            job_config = bigquery.QueryJobConfig()
-            query_parameters = []
-            for k, v in params.items():
-                if k in ['date', 'created_at']:
-                    query_parameters.append(bigquery.ScalarQueryParameter(k, "TIMESTAMP", v))
-                elif k == 'is_active':
-                    query_parameters.append(bigquery.ScalarQueryParameter(k, "BOOL", v))
-                else:
-                    query_parameters.append(bigquery.ScalarQueryParameter(k, "STRING", str(v)))
-            job_config.query_parameters = query_parameters
-            
-            query_job = self.client.query(query, job_config=job_config)
-            query_job.result()
-            
-        loop = asyncio.get_event_loop()
-        await loop.run_in_executor(None, execute_insert)
-        
-        # Invalidate related cache
+
+        # Try streaming insert (fast) with safe fallback to query-based INSERT
+        start_insert = datetime.now()
+        try:
+            table_ref = f"{self.client.project}.{self.dataset_id}.{settings.bq_history_table}"
+            table = self.client.get_table(table_ref)
+            errors = self.client.insert_rows_json(table, [row])
+            if errors:
+                # If streaming errors, raise to trigger fallback
+                raise RuntimeError(f"Streaming insert errors: {errors}")
+            insert_duration = (datetime.now() - start_insert).total_seconds()
+            logger.info(f"Streaming insert succeeded in {insert_duration:.3f}s for {record_id}")
+        except Exception as e:
+            logger.warning(f"Streaming insert failed, falling back to query insert: {e}")
+            # Fallback to previous INSERT query job
+            query = f"""
+            INSERT INTO `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}`
+            (id, name, coin_id, date, created_at, created_by, is_active)
+            VALUES (@id, @name, @coin_id, @date, @created_at, @created_by, true)
+            """
+
+            params = {
+                'id': record_id,
+                'name': name,
+                'coin_id': coin_id,
+                'date': date,
+                'created_at': current_time,
+                'created_by': created_by or 'api',
+            }
+
+            def execute_insert():
+                job_config = bigquery.QueryJobConfig()
+                query_parameters = []
+                for k, v in params.items():
+                    if k in ['date', 'created_at']:
+                        query_parameters.append(bigquery.ScalarQueryParameter(k, "TIMESTAMP", v))
+                    else:
+                        query_parameters.append(bigquery.ScalarQueryParameter(k, "STRING", str(v)))
+                job_config.query_parameters = query_parameters
+
+                query_job = self.client.query(query, job_config=job_config)
+                query_job.result()
+
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, execute_insert)
+
+            insert_duration = (datetime.now() - start_insert).total_seconds()
+            logger.info(f"Query insert fallback completed in {insert_duration:.3f}s for {record_id}")
+
+        # Invalidate related cache (timed)
+        start_invalidate = datetime.now()
         await self._invalidate_ownership_cache(coin_id=coin_id, user_name=name)
-        
+        invalidate_duration = (datetime.now() - start_invalidate).total_seconds()
+        logger.info(f"Cache invalidation took {invalidate_duration:.3f}s for {name}/{coin_id}")
+
+        total_duration = (datetime.now() - start_check).total_seconds()
+        logger.info(f"Total add_coin_ownership duration: {total_duration:.3f}s for {name}/{coin_id}")
+
         return record_id
 
     async def remove_coin_ownership(self, name: str, coin_id: str, removal_date: datetime, created_by: str = None) -> str:
@@ -395,49 +438,91 @@ class BigQueryService:
         import uuid
         from datetime import datetime as dt
         
-        # Check if user currently owns this coin
-        current_ownership = await self.get_current_coin_ownership(coin_id, name)
+        # Lightweight existence check to confirm current ownership
+        check_query = f"""
+        SELECT 1 as exists_flag
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+        WHERE h.coin_id = @coin_id AND h.name = @name AND h.is_active = true
+        LIMIT 1
+        """
+
+        start_check = datetime.now()
+        current_ownership = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
+        check_duration = (datetime.now() - start_check).total_seconds()
+        logger.info(f"Lightweight ownership existence check took {check_duration:.3f}s for {name}/{coin_id}")
+
         if not current_ownership:
             raise ValueError(f"User {name} does not currently own coin {coin_id}")
-        
+
         record_id = str(uuid.uuid4())
         current_time = dt.now()
-        
-        query = f"""
-        INSERT INTO `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}`
-        (id, name, coin_id, date, created_at, created_by, is_active)
-        VALUES (@id, @name, @coin_id, @removal_date, @created_at, @created_by, false)
-        """
-        
-        params = {
+
+        # Ensure datetime fields are JSON-serializable for streaming insert
+        row = {
             'id': record_id,
             'name': name,
             'coin_id': coin_id,
-            'removal_date': removal_date,
-            'created_at': current_time,
+            'date': removal_date.isoformat() if hasattr(removal_date, 'isoformat') else removal_date,
+            'created_at': current_time.isoformat() if hasattr(current_time, 'isoformat') else current_time,
             'created_by': created_by or 'api',
+            'is_active': False
         }
-        
-        # Execute query in thread pool
-        def execute_insert():
-            job_config = bigquery.QueryJobConfig()
-            query_parameters = []
-            for k, v in params.items():
-                if k in ['removal_date', 'created_at']:
-                    query_parameters.append(bigquery.ScalarQueryParameter(k, "TIMESTAMP", v))
-                else:
-                    query_parameters.append(bigquery.ScalarQueryParameter(k, "STRING", str(v)))
-            job_config.query_parameters = query_parameters
-            
-            query_job = self.client.query(query, job_config=job_config)
-            query_job.result()
-            
-        loop = asyncio.get_event_loop()
-        await loop.run_in_executor(None, execute_insert)
-        
-        # Invalidate related cache
+
+        # Try streaming insert with fallback
+        start_insert = datetime.now()
+        try:
+            table_ref = f"{self.client.project}.{self.dataset_id}.{settings.bq_history_table}"
+            table = self.client.get_table(table_ref)
+            errors = self.client.insert_rows_json(table, [row])
+            if errors:
+                raise RuntimeError(f"Streaming insert errors: {errors}")
+            insert_duration = (datetime.now() - start_insert).total_seconds()
+            logger.info(f"Streaming removal insert succeeded in {insert_duration:.3f}s for {record_id}")
+        except Exception as e:
+            logger.warning(f"Streaming remove insert failed, falling back to query insert: {e}")
+            query = f"""
+            INSERT INTO `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}`
+            (id, name, coin_id, date, created_at, created_by, is_active)
+            VALUES (@id, @name, @coin_id, @removal_date, @created_at, @created_by, false)
+            """
+
+            params = {
+                'id': record_id,
+                'name': name,
+                'coin_id': coin_id,
+                'removal_date': removal_date,
+                'created_at': current_time,
+                'created_by': created_by or 'api',
+            }
+
+            def execute_insert():
+                job_config = bigquery.QueryJobConfig()
+                query_parameters = []
+                for k, v in params.items():
+                    if k in ['removal_date', 'created_at']:
+                        query_parameters.append(bigquery.ScalarQueryParameter(k, "TIMESTAMP", v))
+                    else:
+                        query_parameters.append(bigquery.ScalarQueryParameter(k, "STRING", str(v)))
+                job_config.query_parameters = query_parameters
+
+                query_job = self.client.query(query, job_config=job_config)
+                query_job.result()
+
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, execute_insert)
+
+            insert_duration = (datetime.now() - start_insert).total_seconds()
+            logger.info(f"Query-based removal insert completed in {insert_duration:.3f}s for {record_id}")
+
+        # Invalidate related cache (timed)
+        start_invalidate = datetime.now()
         await self._invalidate_ownership_cache(coin_id=coin_id, user_name=name)
-        
+        invalidate_duration = (datetime.now() - start_invalidate).total_seconds()
+        logger.info(f"Cache invalidation took {invalidate_duration:.3f}s for {name}/{coin_id}")
+
+        total_duration = (datetime.now() - start_check).total_seconds()
+        logger.info(f"Total remove_coin_ownership duration: {total_duration:.3f}s for {name}/{coin_id}")
+
         return record_id
 
     async def get_current_coin_ownership(self, coin_id: str, name: str = None) -> List[Dict[str, Any]]:
@@ -1193,6 +1278,12 @@ class BigQueryService:
                 # Filter by year-month (e.g., "2024-02")
                 where_clauses.append("FORMAT_DATE('%Y-%m', h.date) = @date_filter")
                 params['date_filter'] = filters['date_filter']
+
+        # By default, exclude inactive history entries from admin view unless explicitly requested.
+        # If caller sets filters['include_inactive'] = True, we will include inactive entries.
+        include_inactive = bool(filters and filters.get('include_inactive'))
+        if not include_inactive:
+            where_clauses.append("h.is_active = TRUE")
 
         where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
         
