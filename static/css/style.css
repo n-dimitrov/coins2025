@@ -1200,6 +1200,31 @@
         color: rgba(255,255,255,0.95) !important;
     }
 }
+
+/* Compact footer adjustments to reduce offsets from edges and vertical padding */
+.bg-dark.py-2.mt-auto {
+    padding-top: 0.45rem !important;
+    padding-bottom: 0.45rem !important;
+}
+
+.footer-coin-text {
+    font-size: 0.85rem;
+}
+
+.footer .row > div {
+    padding-top: 0.15rem;
+    padding-bottom: 0.15rem;
+}
+
+@media (max-width: 768px) {
+    .footer .row {
+        text-align: center;
+    }
+    .footer .col.text-end {
+        text-align: center !important;
+        margin-top: 0.25rem;
+    }
+}
 /* Ensure arrow appears on all ownership badge types */
 /* Removed ::after arrow from ownership badges to prevent the small ▼ pointer from appearing */
 
@@ -1434,7 +1459,8 @@
         text-align: center;
     }
     
-    .navbar .container {
+    .navbar .container,
+    .navbar .container-fluid {
         flex-direction: column;
         align-items: center;
     }
@@ -1471,6 +1497,36 @@
         font-size: 0.8rem;
         color: #868e96;
     }
+}
+
+/* Compact navbar: reduce horizontal padding and align items closer to edges */
+.navbar {
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+}
+
+.navbar .container-fluid.px-3,
+.navbar .container.px-3 {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+}
+
+/* Make brand slightly more compact */
+.navbar-brand {
+    gap: 0.5rem;
+    padding-right: 0.25rem;
+}
+
+/* Reduce space between nav links and edges */
+.navbar-nav .nav-link {
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
+}
+
+/* Ensure group badge sits flush to the right with small left margin */
+.navbar-nav .nav-item .badge {
+    margin-left: 0.25rem;
+    margin-right: 0; /* remove extra margin */
 }
 
 /* Admin Panel Styles */
