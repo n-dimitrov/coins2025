@@ -14,7 +14,11 @@
     <meta name="author" content="My EuroCoins">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://myeurocoins.org{% block canonical_path %}/{% endblock %}">
+    {% if canonical_path %}
+    <link rel="canonical" href="https://myeurocoins.org{{ canonical_path }}">
+    {% else %}
+    <link rel="canonical" href="https://myeurocoins.org{% block canonical_path %}{% endblock %}">
+    {% endif %}
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="{% if group_context %}{% if selected_member %}My EuroCoins | {{ selected_member }}@{{ group_context.name }}{% else %}My EuroCoins | {{ group_context.name }}{% endif %}{% else %}My EuroCoins - Euro Coin Collection{% endif %}">

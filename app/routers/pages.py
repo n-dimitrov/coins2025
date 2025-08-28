@@ -56,7 +56,8 @@ async def homepage(request: Request):
         return templates.TemplateResponse("index.html", {
             "request": request,
             "stats": stats,
-            "latest_coins": latest_coins
+            "latest_coins": latest_coins,
+            "canonical_path": "/"
         })
     except Exception as e:
         logger.error(f"Error loading homepage: {str(e)}")
@@ -80,7 +81,8 @@ async def catalog_page(request: Request):
         filter_options = await bigquery_service.get_filter_options()
         return templates.TemplateResponse("catalog.html", {
             "request": request,
-            "filter_options": filter_options
+            "filter_options": filter_options,
+            "canonical_path": "/catalog"
         })
     except Exception as e:
         logger.error(f"Error loading catalog: {str(e)}")
@@ -103,7 +105,8 @@ async def coin_detail(request: Request, coin_id: str):
         
         return templates.TemplateResponse("coin_detail.html", {
             "request": request,
-            "coin": coin_data
+            "coin": coin_data,
+            "canonical_path": f"/coin/{coin_id}"
         })
     except Exception as e:
         logger.error(f"Error loading coin detail {coin_id}: {str(e)}")
@@ -122,7 +125,8 @@ async def admin_page(request: Request):
         
         return templates.TemplateResponse("admin.html", {
             "request": request,
-            "groups": groups_data
+            "groups": groups_data,
+            "canonical_path": "/Admin"
         })
     except Exception as e:
         logger.error(f"Error loading admin page: {str(e)}")
@@ -159,7 +163,8 @@ async def group_catalog_page(request: Request, group_name: str):
             "group_context": group_context,
             "group_mode": True,
             # No specific selected member for this route
-            "selected_member": None
+            "selected_member": None,
+            "canonical_path": f"/{group_context.get('group_key')}/catalog"
         })
     except Exception as e:
         logger.error(f"Error loading group catalog {group_name}: {str(e)}")
@@ -207,7 +212,8 @@ async def group_member_catalog_page(request: Request, group_name: str, member_na
             "filter_options": filter_options,
             "group_context": group_context,
             "group_mode": True,
-            "selected_member": matched
+            "selected_member": matched,
+            "canonical_path": f"/{group_context.get('group_key')}/{matched}/catalog"
         })
     except Exception as e:
         logger.error(f"Error loading group member catalog {group_name}/{member_name}: {str(e)}")
@@ -247,7 +253,8 @@ async def group_coin_detail(request: Request, group_name: str, coin_id: str):
             "request": request,
             "coin": coin_data,
             "group_context": group_context,
-            "group_mode": True
+            "group_mode": True,
+            "canonical_path": f"/{group_context.get('group_key')}/coin/{coin_id}"
         })
     except Exception as e:
         logger.error(f"Error loading group coin detail {group_name}/{coin_id}: {str(e)}")
@@ -307,7 +314,8 @@ async def group_homepage(request: Request, group_name: str):
             "group_context": group_context,
             "group_mode": True,
             "latest_coins": latest_coins,
-            "selected_member": None
+            "selected_member": None,
+            "canonical_path": f"/{group_context.get('group_key')}"
         })
     except Exception as e:
         logger.error(f"Error loading group homepage {group_name}: {str(e)}")
@@ -384,7 +392,8 @@ async def group_member_homepage(request: Request, group_name: str, member_name: 
             "group_context": group_context,
             "group_mode": True,
             "latest_coins": latest_coins,
-            "selected_member": matched
+            "selected_member": matched,
+            "canonical_path": f"/{group_context.get('group_key')}/{matched}"
         })
     except Exception as e:
         logger.error(f"Error loading group member homepage {group_name}/{member_name}: {str(e)}")
