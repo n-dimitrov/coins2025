@@ -757,6 +757,17 @@ class CoinCatalog {
         // Generate ownership info for modal
         let ownershipModalHtml = '';
         if (this.groupContext && coin.owners !== undefined) {
+            // Prepare Add/Remove button HTML if a member is selected
+            let addRemoveButtonHtml = '';
+            if (this.selectedMember) {
+                const selectedName = (typeof this.selectedMember === 'string') ? this.selectedMember : (this.selectedMember.user || this.selectedMember.name || '');
+                const ownedBySelectedLocal = (coin.owners || []).some(o => ((o.owner || o) + '') === (selectedName + ''));
+                const pillLabelLocal = ownedBySelectedLocal ? 'Remove' : 'Add';
+                const pillOnclickLocal = ownedBySelectedLocal ? `window.coinCatalog.removeCoinFromSelectedUser('${coin.coin_id}')` : `window.coinCatalog.addCoinToSelectedUser('${coin.coin_id}')`;
+                const pillClassLocal = ownedBySelectedLocal ? 'btn-outline-danger' : 'btn-outline-primary';
+                addRemoveButtonHtml = `<button class="history-pill btn btn-sm ${pillClassLocal} ms-2" title="${pillLabelLocal} ${selectedName}" onclick="${pillOnclickLocal}">${pillLabelLocal}</button>`;
+            }
+
             if (coin.owners.length > 0) {
                 // Sort owners by date (oldest first)
                 const sortedOwners = [...coin.owners].sort((a, b) => {
@@ -784,19 +795,21 @@ class CoinCatalog {
                 
                 ownershipModalHtml = `
                     <div class="ownership-modal-section">
-                        <div class="ownership-modal-header">
-                            <i class="fas fa-users me-2"></i>Owned by:
+                        <div class="ownership-modal-header d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center"><i class="fas fa-users me-2"></i>Owned by:</div>
+                            <div class="ownership-modal-actions">${addRemoveButtonHtml}</div>
                         </div>
                         <div class="ownership-modal-badges">
                             ${ownerBadges}
                         </div>
                     </div>
                 `;
-            } else {
+                } else {
                 ownershipModalHtml = `
                     <div class="ownership-modal-section">
-                        <div class="ownership-modal-header">
-                            <i class="fas fa-users me-2"></i>Collection Status:
+                        <div class="ownership-modal-header d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center"><i class="fas fa-users me-2"></i>Owned by:</div>
+                            <div class="ownership-modal-actions">${addRemoveButtonHtml}</div>
                         </div>
                         <div class="ownership-modal-badges">
                             <span class="badge bg-outline-secondary">Not owned by group</span>
@@ -884,18 +897,6 @@ class CoinCatalog {
                 
                 
                 <div class="coin-image-section">
-                    ${selected ? (() => {
-                        // Show Add/Remove pill when a user is selected
-                        const selectedName = (typeof selected === 'string') ? selected : (selected.user || selected.name || '');
-                        const pillLabel = ownedBySelected ? 'Remove' : 'Add';
-                        const pillTitle = ownedBySelected ? `Remove ${selectedName} from this coin` : `Add ${selectedName} to this coin`;
-                        // Use inline onclick to call methods on window.coinCatalog
-                        const pillOnclick = ownedBySelected ? `window.coinCatalog.removeCoinFromSelectedUser('${coin.coin_id}')` : `window.coinCatalog.addCoinToSelectedUser('${coin.coin_id}')`;
-                        return `
-                            <button class="history-pill btn btn-sm btn-outline-primary me-3" title="${pillTitle}" onclick="${pillOnclick}">${pillLabel}</button>
-                        `;
-                    })() : ''}
-
                     <img src="${mainImage}" 
                          class="coin-main-image ${imageClass}" 
                          id="coinMainImage"
