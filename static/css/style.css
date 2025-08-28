@@ -75,6 +75,26 @@
     animation: coin-spin 3s infinite ease-in-out;
 }
 
+/* Group badge in header (slightly larger for visibility in user-mode) */
+.group-badge {
+    font-size: 1.05rem; /* slightly larger than default badge text */
+    padding: 0.45rem 0.8rem;
+    border-radius: 12px;
+    line-height: 1; /* keep compact */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.group-badge .fa-users {
+    font-size: 1.0rem;
+}
+
+.group-badge small {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
 /* Hero section coin logo */
 .coin-logo {
     animation: coin-spin 3s infinite ease-in-out;

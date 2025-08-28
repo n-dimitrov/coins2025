@@ -157,13 +157,63 @@ async def group_catalog_page(request: Request, group_name: str):
             "request": request,
             "filter_options": filter_options,
             "group_context": group_context,
-            "group_mode": True
+            "group_mode": True,
+            # No specific selected member for this route
+            "selected_member": None
         })
     except Exception as e:
         logger.error(f"Error loading group catalog {group_name}: {str(e)}")
         return templates.TemplateResponse("error.html", {
             "request": request,
             "error": "Unable to load group catalog"
+        }, status_code=500)
+
+
+@router.get("/{group_name}/{member_name}/catalog", response_class=HTMLResponse)
+async def group_member_catalog_page(request: Request, group_name: str, member_name: str):
+    """Group catalog page scoped to a specific member (extender mode).
+
+    This route validates both the group and the member, then passes
+    `selected_member` into the template so the frontend can pre-filter the
+    catalog (and update links) for the member.
+    """
+    try:
+        group_context = await group_service.get_group_context(group_name)
+        if not group_context:
+            return templates.TemplateResponse("404.html", {
+                "request": request,
+                "message": f"Group '{group_name}' not found"
+            }, status_code=404)
+
+        # Validate member exists in group (case-insensitive match)
+        members = [m for m in group_context.get('members', [])]
+        matched = None
+        for m in members:
+            # member record may have 'user' or 'name' fields depending on source
+            candidate = m.get('user') if isinstance(m, dict) and 'user' in m else (m.get('name') if isinstance(m, dict) else None)
+            if candidate and candidate.lower() == member_name.lower():
+                matched = candidate
+                break
+
+        if not matched:
+            return templates.TemplateResponse("404.html", {
+                "request": request,
+                "message": f"Member '{member_name}' not found in group '{group_name}'"
+            }, status_code=404)
+
+        filter_options = await bigquery_service.get_filter_options()
+        return templates.TemplateResponse("catalog.html", {
+            "request": request,
+            "filter_options": filter_options,
+            "group_context": group_context,
+            "group_mode": True,
+            "selected_member": matched
+        })
+    except Exception as e:
+        logger.error(f"Error loading group member catalog {group_name}/{member_name}: {str(e)}")
+        return templates.TemplateResponse("error.html", {
+            "request": request,
+            "error": "Unable to load group member catalog"
         }, status_code=500)
 
 @router.get("/{group_name}/coin/{coin_id}", response_class=HTMLResponse)
@@ -256,12 +306,91 @@ async def group_homepage(request: Request, group_name: str):
             "stats": stats,
             "group_context": group_context,
             "group_mode": True,
-            "latest_coins": latest_coins
+            "latest_coins": latest_coins,
+            "selected_member": None
         })
     except Exception as e:
         logger.error(f"Error loading group homepage {group_name}: {str(e)}")
         return templates.TemplateResponse("index.html", {
             "request": request,
             "stats": {"total_coins": 0, "total_countries": 0, "regular_coins": 0, "commemorative_coins": 0},
-            "error": "Unable to load group statistics"
+            "error": "Unable to load group statistics",
+            "selected_member": None
+        })
+
+
+@router.get("/{group_name}/{member_name}", response_class=HTMLResponse)
+async def group_member_homepage(request: Request, group_name: str, member_name: str):
+    """Group homepage scoped to a member (extender mode). Shows group homepage but
+    with `selected_member` prefilled so templates/scripts can act accordingly.
+    """
+    try:
+        group_context = await group_service.get_group_context(group_name)
+        if not group_context:
+            return templates.TemplateResponse("404.html", {
+                "request": request,
+                "message": f"Group '{group_name}' not found"
+            }, status_code=404)
+
+        # Validate member exists
+        members = [m for m in group_context.get('members', [])]
+        matched = None
+        for m in members:
+            candidate = m.get('user') if isinstance(m, dict) and 'user' in m else (m.get('name') if isinstance(m, dict) else None)
+            if candidate and candidate.lower() == member_name.lower():
+                matched = candidate
+                break
+
+        if not matched:
+            return templates.TemplateResponse("404.html", {
+                "request": request,
+                "message": f"Member '{member_name}' not found in group '{group_name}'"
+            }, status_code=404)
+
+        stats = await bigquery_service.get_stats()
+        try:
+            coins_batch = await bigquery_service.get_coins_with_ownership(group_context['id'], limit=40)
+            latest_coins = []
+            seen_ids = set()
+            for c in coins_batch:
+                coin_id = c.get('coin_id') or c.get('id')
+                if not coin_id or coin_id in seen_ids:
+                    continue
+                seen_ids.add(coin_id)
+                try:
+                    year_val = int(c.get('year') or 0)
+                except Exception:
+                    year_val = 0
+
+                latest_coins.append({
+                    'coin_id': coin_id,
+                    'image': c.get('image_url') or c.get('image') or '',
+                    'country': c.get('country') or '',
+                    'series': c.get('series') or '',
+                    'coin_type': c.get('coin_type') or '',
+                    'year': year_val,
+                    'value': c.get('value')
+                })
+            try:
+                random.shuffle(latest_coins)
+            except Exception:
+                pass
+        except Exception:
+            latest_coins = []
+
+        return templates.TemplateResponse("index.html", {
+            "request": request,
+            "stats": stats,
+            "group_context": group_context,
+            "group_mode": True,
+            "latest_coins": latest_coins,
+            "selected_member": matched
+        })
+    except Exception as e:
+        logger.error(f"Error loading group member homepage {group_name}/{member_name}: {str(e)}")
+        return templates.TemplateResponse("index.html", {
+            "request": request,
+            "stats": {"total_coins": 0, "total_countries": 0, "regular_coins": 0, "commemorative_coins": 0},
+            "error": "Unable to load group member statistics",
+            "selected_member": None
         })

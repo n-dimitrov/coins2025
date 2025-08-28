@@ -1,6 +1,7 @@
 class CoinCatalog {
-    constructor(groupContext = null) {
+    constructor(groupContext = null, selectedMember = null) {
         this.groupContext = groupContext;
+        this.selectedMember = selectedMember;
         this.coins = [];
         this.filteredCoins = [];
         this.currentFilters = {
@@ -24,6 +25,9 @@ class CoinCatalog {
         // Cache for generated labels to avoid recalculation
         this.labelCache = new Map();
         
+    // selectedMember is used only for display (header/etc.).
+    // Do not preselect filters automatically when viewing as a member.
+
         this.init();
     }
 
@@ -274,6 +278,8 @@ class CoinCatalog {
             option.textContent = memberLabel;
             select.appendChild(option);
         });
+
+    // Do not auto-select member in the filter dropdown when in user mode.
     }
 
     applyFilters() {

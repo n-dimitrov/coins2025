@@ -43,7 +43,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom sticky-top">
         <!-- use container-fluid with small horizontal padding to reduce offset from edges -->
         <div class="container-fluid px-3 position-relative">
-            <a class="navbar-brand d-flex align-items-center" href="{% if group_context %}/{{ group_context.group_key }}{% else %}/{% endif %}">
+            <a class="navbar-brand d-flex align-items-center" href="{% if group_context %}{% if selected_member %}/{{ group_context.group_key }}/{{ selected_member }}{% else %}/{{ group_context.group_key }}{% endif %}{% else %}/{% endif %}">
                 <div class="coin-logo me-3 d-flex align-items-center justify-content-center" 
                      style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden;">
                     <img src="/static/images/myeurocoins-icon.png" alt="My EuroCoins" style="width: 36px; height: 36px;">
@@ -61,10 +61,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <!-- Left-aligned primary menu -->
                 <div class="navbar-nav me-auto">
-                    <a class="nav-link fw-medium" href="{% if group_context %}/{{ group_context.group_key }}{% else %}/{% endif %}">
+                    <a class="nav-link fw-medium" href="{% if group_context %}{% if selected_member %}/{{ group_context.group_key }}/{{ selected_member }}{% else %}/{{ group_context.group_key }}{% endif %}{% else %}/{% endif %}">
                         <i class="fas fa-home me-1"></i>Home
                     </a>
-                    <a class="nav-link fw-medium" href="{% if group_context %}/{{ group_context.group_key }}/catalog{% else %}/catalog{% endif %}">
+                    <a class="nav-link fw-medium" href="{% if group_context %}{% if selected_member %}/{{ group_context.group_key }}/{{ selected_member }}/catalog{% else %}/{{ group_context.group_key }}/catalog{% endif %}{% else %}/catalog{% endif %}">
                         <i class="fas fa-coins me-1"></i>Catalog
                     </a>
                 </div>
@@ -72,11 +72,17 @@
                 <!-- Right-aligned group indicator -->
                 <div class="navbar-nav ms-auto">
                     {% if group_context %}
-                    <div class="nav-item d-flex align-items-center">
-                        <span class="badge bg-primary fs-6">
-                            <i class="fas fa-users me-2"></i>{{ group_context.name }}
-                        </span>
-                    </div>
+                        <div class="nav-item d-flex align-items-center">
+                            <span class="badge bg-primary group-badge d-flex align-items-center gap-2 py-1 px-2">
+                                <i class="fas fa-users"></i>
+                                <span class="fw-semibold">{{ group_context.name }}</span>
+                                {% if selected_member %}
+                                <small class="text-white-50 ms-2 d-inline-flex align-items-center" title="Viewing as {{ selected_member }}">
+                                    <i class="fas fa-user fa-sm me-1"></i>{{ selected_member }}
+                                </small>
+                                {% endif %}
+                            </span>
+                        </div>
                     {% endif %}
                 </div>
             </div>
