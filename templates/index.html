@@ -22,7 +22,7 @@
                         Discover regular circulation and commemorative coins from all eurozone countries.
                     </p>
                     <!-- data source moved to footer -->
-                    <a href="{% if group_context %}/{{ group_context.group_key }}/catalog{% else %}/catalog{% endif %}" class="btn btn-light btn-lg">
+                    <a href="{% if group_context %}{% if selected_member %}/{{ group_context.group_key }}/{{ selected_member }}/catalog{% else %}/{{ group_context.group_key }}/catalog{% endif %}{% else %}/catalog{% endif %}" class="btn btn-light btn-lg">
                         <i class="fas fa-search me-2"></i>Browse Catalog
                     </a>
                     

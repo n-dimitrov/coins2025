@@ -75,6 +75,85 @@
     animation: coin-spin 3s infinite ease-in-out;
 }
 
+/* Group badge in header (slightly larger for visibility in user-mode) */
+.group-badge {
+    font-size: 1.125rem; /* slightly larger for better click target */
+    padding: 0.5rem 0.95rem;
+    border-radius: 12px;
+    line-height: 1; /* keep compact */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer; /* indicate clickable */
+    transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+}
+
+.group-badge .fa-users {
+    font-size: 1.1rem;
+}
+
+.group-badge small {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* If group-badge is used as an anchor, remove default anchor styles but keep accessibility */
+.group-badge[href] {
+    color: inherit;
+    text-decoration: none;
+}
+
+.group-badge[href]:hover,
+.group-badge[href]:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    opacity: 0.98;
+}
+
+.group-badge[href]:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Make the group badge a solid primary pill for clear contrast on white navbar */
+.group-badge.bg-primary,
+.group-badge.bg-primary[href],
+.group-badge {
+    background-color: var(--primary-color) !important; /* primary blue */
+    color: #ffffff !important; /* white text for contrast */
+    border: none !important;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+}
+
+.group-badge .fa-users,
+.group-badge .fw-semibold,
+.group-badge small {
+    color: inherit; /* icon and text stay white */
+}
+
+.group-badge small {
+    opacity: 0.9;
+}
+
+/* Hover/focus: slightly darker primary to indicate interactivity */
+.group-badge[href]:hover,
+.group-badge[href]:focus {
+    background-color: #005bb5 !important; /* darker blue */
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(2,6,23,0.08);
+}
+
+.group-badge[href]:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 12px rgba(2,6,23,0.06);
+}
+
+/* Focus ring for keyboard users */
+.group-badge[href]:focus {
+    outline: 3px solid rgba(59,130,246,0.16);
+    outline-offset: 2px;
+}
+
 /* Hero section coin logo */
 .coin-logo {
     animation: coin-spin 3s infinite ease-in-out;
@@ -600,14 +679,25 @@
     display: flex;
     flex-direction: column;
     padding: 1.5rem;
-    max-height: 80vh;
-    overflow-y: auto;
+    /* Allow the modal body to control scrolling. Removing max-height/overflow
+       from the inner container avoids nested scrollbars in the modal. */
+    max-height: none;
+    overflow: visible;
 }
 
 .coin-image-section {
     display: flex;
     justify-content: center;
     margin: 1rem 0;
+}
+
+/* Small pill button used to add/remove coin for selected user */
+.history-pill {
+    position: relative;
+    left: 0;
+    top: 0;
+    z-index: 20;
+    align-self: center;
 }
 
 .coin-main-image {
@@ -622,6 +712,22 @@
 
 .coin-main-image:hover {
     transform: scale(1.05);
+}
+
+/* Circle color variants for coin detail image */
+.coin-main-image.circle-default {
+    border-color: rgba(255,255,255,0.85);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+.coin-main-image.circle-green {
+    border-color: var(--secondary-color, #28a745);
+    box-shadow: 0 15px 35px rgba(40,167,69,0.18);
+}
+
+.coin-main-image.circle-blue {
+    border-color: var(--primary-color);
+    box-shadow: 0 15px 35px rgba(0,102,204,0.28);
 }
 
 .coin-thumbnail-gallery {
@@ -697,6 +803,24 @@
     font-size: 1.6rem; /* larger value */
     font-weight: 800;
     color: white;
+.ownership-modal-badges .badge.bg-primary,
+.badge.bg-primary {
+    background: var(--primary-color) !important;
+    color: #fff !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* Owner info modal: selected owner row */
+.owner-item.selected-owner {
+    background: rgba(0, 102, 204, 0.08);
+    border-left: 4px solid var(--primary-color);
+    padding-left: 0.5rem;
+    border-radius: 6px;
+}
+
+.owner-item .owner-name {
+    font-weight: 600;
+}
     text-shadow: 0 1px 0 rgba(0,0,0,0.25);
 }
 
