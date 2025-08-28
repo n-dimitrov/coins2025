@@ -679,8 +679,10 @@
     display: flex;
     flex-direction: column;
     padding: 1.5rem;
-    max-height: 80vh;
-    overflow-y: auto;
+    /* Allow the modal body to control scrolling. Removing max-height/overflow
+       from the inner container avoids nested scrollbars in the modal. */
+    max-height: none;
+    overflow: visible;
 }
 
 .coin-image-section {
