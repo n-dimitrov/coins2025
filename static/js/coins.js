@@ -639,6 +639,19 @@ class CoinCatalog {
                 }
             }
         });
+
+        // Install a single persistent handler to remove card-pop when the
+        // coin detail modal is hidden. This avoids adding a new listener
+        // every time the modal is shown which would leak memory.
+        if (!this._coinModalHideHandlerInstalled) {
+            const coinModalEl = document.getElementById('coinDetailModal');
+            if (coinModalEl) {
+                coinModalEl.addEventListener('hidden.bs.modal', () => {
+                    this.clearAllCardPop();
+                });
+                this._coinModalHideHandlerInstalled = true;
+            }
+        }
     }
 
     setupCoinCardClickHandlers() {
@@ -680,10 +693,9 @@ class CoinCatalog {
             const modal = new bootstrap.Modal(modalEl);
             modal.show();
 
-            // When modal is hidden, remove the pop class
-            modalEl.addEventListener('hidden.bs.modal', () => {
-                if (cardEl) cardEl.classList.remove('card-pop');
-            }, { once: true });
+            // The modal hide handler for removing the card-pop class is
+            // installed once in setupEventListeners to avoid adding
+            // a new listener on every show (prevents memory leaks).
 
             // Set up navigation handlers
             this.setupModalNavigation();
@@ -699,9 +711,8 @@ class CoinCatalog {
             const fallbackCard = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
             if (fallbackCard) fallbackCard.classList.add('card-pop');
             modal.show();
-            modalEl.addEventListener('hidden.bs.modal', () => {
-                if (fallbackCard) fallbackCard.classList.remove('card-pop');
-            }, { once: true });
+            // The modal hide handler is installed centrally; no per-show
+            // handler is needed here.
             this.setupModalNavigation();
         }
     }
