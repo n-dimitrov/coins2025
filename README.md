@@ -11,7 +11,44 @@ A comprehensive, interactive web application for exploring and cataloging Euro c
 [![FastAPI](https://img.shields.io/badge/FastAPI-latest-green?style=flat-square)](https://fastapi.tiangolo.com)
 [![Google Cloud](https://img.shields.io/badge/Google%20Cloud-Run-blue?style=flat-square)](https://cloud.google.com/run)
 
-## 🚀 Quick Start
+## � Changelog
+
+### [Unreleased] - 2025-08-XX
+
+#### ✨ New Features
+- **BigQuery Service Initialization**: Initialize BigQueryService at startup and remove runtime fallback in GroupService
+- **Group Member Management**: Add group member extender mode with header display and ownership management
+- **Admin History View**: Default history shows current-owned coins with include-inactive toggle and per-user export
+- **Modal Image Interaction**: Make coin image clickable to open modal with pointer cursor
+- **Catalog 3D Effects**: Add 3D card hover effects, hero background, and improved coin card styling
+- **Admin Import UX**: Enhanced import UX with conflict handling and editable IDs
+- **Group Homepage Hero**: Show group-specific latest coins in homepage hero section
+
+#### 🔧 Improvements
+- **Ownership Tracking**: Accept string UUID group_id in ownership endpoints and merge owners into coin details
+- **UI Enhancements**: 
+  - Move Add/Remove buttons to ownership header
+  - Highlight selected group member in ownership lists
+  - Make group badge clickable with improved contrast
+  - Align modal header with card layout and make it sticky
+  - Remove nested scrollbars in coin detail modal
+  - Color coin-detail image circle by group/owner/selected rules
+- **Header Layout**: Move menu left, group badge right with compact navbar spacing
+- **SEO Optimization**: Use explicit canonical_path to avoid alternate/redirect canonicals
+- **Admin UI**: Various tweaks and improvements to admin interface
+
+#### 🐛 Bug Fixes
+- **Ownership Filter**: Ensure ownership lists include only group members with case-insensitive joins
+- **Modal Hide Listener**: Fix binding of clearAllCardPop handler for coinDetailModal hide event
+- **Memory Leak Prevention**: Use single persistent hidden.bs.modal handler instead of per-show listeners
+
+#### 📊 Data Updates
+- **Catalog Updates**: Updated coin catalog data (1665+ changes)
+- **History Data**: Refreshed ownership history data (2982+ changes)
+- **Commemorative Coins**: Updated CC catalog with latest data
+- **Regular Coins**: Updated RE catalog with current information
+
+## �🚀 Quick Start
 
 ### Prerequisites
 - Python 3.12+
