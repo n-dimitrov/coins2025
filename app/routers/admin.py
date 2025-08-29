@@ -306,6 +306,17 @@ async def reset_history(recreate: bool = True):
         logger.error(f"Error resetting history: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error resetting history: {str(e)}")
 
+
+@router.post("/clear-cache")
+async def clear_service_cache():
+    """Clear the BigQuery service cache (admin utility to force fresh queries)."""
+    try:
+        bigquery_service.clear_cache()
+        return {"success": True, "message": "Cache cleared"}
+    except Exception as e:
+        logger.error(f"Error clearing cache: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error clearing cache: {str(e)}")
+
 @router.get("/coins/filter-options")
 async def get_coins_filter_options():
     """Get available filter options for coins (countries, etc)."""
@@ -419,36 +430,41 @@ async def import_history_entries(history_data: List[Dict[str, Any]]):
 
 
 @router.get("/history/export")
-async def export_history_csv():
-    """Export all history entries to CSV - using HistoryService."""
+async def export_history_csv(name: Optional[str] = None):
+    """Export ownership CSV. If `name` is provided, export only coins currently owned by that user.
+
+    CSV columns: name, id, date
+    """
     try:
-        # Use HistoryService for export
-        export_df = await history_service.export_to_csv_format()
-        
+        # Use HistoryService for export (filter by name if provided)
+        export_df = await history_service.export_to_csv_format(name=name)
+
         if len(export_df) == 0:
-            raise HTTPException(status_code=404, detail="No history entries found")
-        
+            raise HTTPException(status_code=404, detail="No ownership entries found for export")
+
         # Create CSV content
         output = io.StringIO()
+        # Ensure columns order
+        export_df = export_df[['name', 'id', 'date']]
         export_df.to_csv(output, index=False)
         output.seek(0)
-        
-        logger.info(f"Exporting {len(export_df)} history entries to CSV")
-        
+
+        logger.info(f"Exporting {len(export_df)} ownership entries to CSV (name={name})")
+
         def iter_csv():
             yield output.getvalue()
-        
+
         return StreamingResponse(
             iter_csv(),
             media_type="text/csv",
-            headers={"Content-Disposition": "attachment; filename=history_export.csv"}
+            headers={"Content-Disposition": "attachment; filename=ownership_export.csv"}
         )
-        
+
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error exporting history: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error exporting history: {str(e)}")
+        logger.error(f"Error exporting ownership CSV: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error exporting ownership CSV: {str(e)}")
 
 
 @router.post("/history/import-csv-direct")

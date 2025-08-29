@@ -183,7 +183,7 @@ async def get_user_ownership_history(
         JOIN `{bigquery_service.client.project}.{bigquery_service.dataset_id}.{bigquery_service.table_id}` c 
             ON h.coin_id = c.coin_id
         WHERE h.name = @name {group_where}
-        ORDER BY h.date DESC, h.created_at DESC
+        ORDER BY h.created_at DESC, h.date DESC
         """
         
         history = await bigquery_service._get_cached_or_query(query, params)

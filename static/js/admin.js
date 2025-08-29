@@ -1159,6 +1159,13 @@ async function loadCoinsFromDatabase() {
     const loadBtn = document.getElementById('loadCoinsBtn');
     
     try {
+        // Ensure server-side cache is cleared so this load returns fresh data
+        try {
+            await fetch('/api/admin/clear-cache', { method: 'POST' });
+        } catch (e) {
+            // Non-fatal: proceed even if cache clear fails
+            console.warn('Failed to clear cache before loading coins:', e);
+        }
         // Show loading state
         showCoinsViewLoading(true);
         loadBtn.disabled = true;
@@ -1627,6 +1634,7 @@ function displayHistoryUploadResults(result) {
             <td>${escapeHtml(entry.name)}</td>
             <td><code>${escapeHtml(entry.id)}</code></td>
             <td>${formatDate(entry.date)}</td>
+            <td>${entry.created_at ? formatDate(entry.created_at) : ''}</td>
         `;
         
         tableBody.appendChild(row);
@@ -1725,14 +1733,21 @@ async function exportHistoryCsv() {
     exportBtn.disabled = true;
 
     try {
-        const response = await fetch('/api/admin/history/export');
+        // We only export currently owned coins for a specific user to match requirements
+        const selectedName = document.getElementById('filterHistoryName').value;
+        if (!selectedName) {
+            showAlert('Please select a user from the Name filter before exporting.', 'warning');
+            return;
+        }
+
+        const response = await fetch(`/api/admin/history/export?name=${encodeURIComponent(selectedName)}`);
         
         if (response.ok) {
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'history.csv';
+            a.download = `${selectedName}_owned_coins.csv`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
@@ -1761,6 +1776,12 @@ async function loadHistoryData() {
     document.getElementById('historyViewEmpty').style.display = 'none';
 
     try {
+        // Clear server cache to ensure fresh history data
+        try {
+            await fetch('/api/admin/clear-cache', { method: 'POST' });
+        } catch (e) {
+            console.warn('Failed to clear cache before loading history:', e);
+        }
         // Load filter options first
         await loadHistoryFilterOptions();
         
@@ -1841,6 +1862,7 @@ function displayHistoryData(historyData) {
             <td>${escapeHtml(entry.name)}</td>
             <td><code>${escapeHtml(entry.id)}</code></td>
             <td>${formatDate(entry.date)}</td>
+            <td>${entry.created_at ? formatDate(entry.created_at) : ''}</td>
         `;
         tableBody.appendChild(row);
     });
