@@ -4,7 +4,7 @@ from datetime import datetime
 import logging
 
 from app.models.ownership import OwnershipAdd, OwnershipRemove, OwnershipRecord, OwnershipResponse
-from app.services.bigquery_service import BigQueryService
+from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 from app.services.group_service import GroupService
 from app.config import settings
 
@@ -12,9 +12,9 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/ownership", tags=["ownership"])
 
-# Dependency to get BigQuery service
+# Dependency to get BigQuery service (use cached provider)
 def get_bigquery_service() -> BigQueryService:
-    return BigQueryService()
+    return get_bq_provider()
 
 def get_group_service() -> GroupService:
     return GroupService()
@@ -102,7 +102,7 @@ async def remove_coin_ownership(
 @router.get("/user/{user_name}/coins")
 async def get_user_coins(
     user_name: str,
-    group_id: Optional[int] = None,
+    group_id: Optional[str] = None,
     bigquery_service: BigQueryService = Depends(get_bigquery_service)
 ):
     """Get all coins currently owned by a user."""
@@ -124,7 +124,7 @@ async def get_user_coins(
 @router.get("/coin/{coin_id}/owners")
 async def get_coin_owners(
     coin_id: str,
-    group_id: Optional[int] = None,
+    group_id: Optional[str] = None,
     bigquery_service: BigQueryService = Depends(get_bigquery_service)
 ):
     """Get current owners of a specific coin."""
@@ -150,7 +150,7 @@ async def get_coin_owners(
 @router.get("/user/{user_name}/history")
 async def get_user_ownership_history(
     user_name: str,
-    group_id: Optional[int] = None,
+    group_id: Optional[str] = None,
     bigquery_service: BigQueryService = Depends(get_bigquery_service)
 ):
     """Get complete ownership history for a user (including removed coins)."""
@@ -183,7 +183,7 @@ async def get_user_ownership_history(
         JOIN `{bigquery_service.client.project}.{bigquery_service.dataset_id}.{bigquery_service.table_id}` c 
             ON h.coin_id = c.coin_id
         WHERE h.name = @name {group_where}
-        ORDER BY h.date DESC, h.created_at DESC
+        ORDER BY h.created_at DESC, h.date DESC
         """
         
         history = await bigquery_service._get_cached_or_query(query, params)

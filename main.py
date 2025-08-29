@@ -19,6 +19,14 @@ logger.info(f"Python version: {os.sys.version}")
 logger.info(f"Environment: {os.getenv('APP_ENV', 'development')}")
 logger.info(f"Port: {os.getenv('PORT', '8000')}")
 
+# Initialize BigQueryService before importing routers so modules that lazily
+# request the service (via get_bigquery_service) will find it initialized.
+from app.services.bigquery_service import BigQueryService, init_bigquery_service
+
+# Create and initialize the service instance for the process
+_bq_instance = BigQueryService()
+init_bigquery_service(_bq_instance)
+
 # Import routers
 from app.routers import coins, health, pages, ownership, groups, admin
 

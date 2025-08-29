@@ -828,7 +828,7 @@ async function handleCsvExport() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'coins_export.csv';
+    a.download = 'catalog.csv';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -917,13 +917,26 @@ function populateCoinsPreviewTable(coins) {
     const tbody = document.getElementById('coinsPreviewTableBody');
     tbody.innerHTML = '';
 
-    coins.forEach((coin, index) => {
+    // Render conflicts first so they are highly visible to the admin
+    const orderedCoins = [
+        ...coins.filter(c => c.status === 'conflict'),
+        ...coins.filter(c => c.status !== 'conflict')
+    ];
+
+    orderedCoins.forEach((coin, index) => {
         const row = document.createElement('tr');
         
         // Add class based on status
-        if (coin.status === 'duplicate') {
+        if (coin.status === 'duplicate' || coin.status === 'conflict') {
             row.classList.add('table-warning');
         }
+
+        // For conflicts allow editing coin_id and show existing feature
+    const coinIdCell = coin.status === 'conflict'
+        ? `<div class="d-flex align-items-center">
+            <input type="text" class="form-control form-control-sm coin-id-input me-2" value="${escapeHtml(coin.coin_id)}" data-index="${index}" />
+           </div>`
+        : `<code style="font-size: 0.9em; white-space: nowrap;">${coin.coin_id}</code>`;
 
         row.innerHTML = `
             <td>
@@ -931,20 +944,18 @@ function populateCoinsPreviewTable(coins) {
                        class="coin-checkbox" 
                        data-index="${index}"
                        ${coin.selected_for_import ? 'checked' : ''}
-                       ${coin.status === 'duplicate' ? 'disabled' : ''} />
+                       ${coin.status !== 'new' ? 'disabled' : ''} />
             </td>
             <td>
-                ${coin.status === 'new' 
-                    ? '<span class="badge bg-success">New</span>' 
-                    : '<span class="badge bg-warning">Duplicate</span>'}
+                ${coin.status === 'new' ? '<span class="badge bg-success">New</span>' : (coin.status === 'conflict' ? '<span class="badge bg-danger">Conflict</span>' : '<span class="badge bg-warning">Duplicate</span>')}
             </td>
             <td>${coin.coin_type}</td>
             <td>${coin.year}</td>
             <td>${coin.country}</td>
             <td>${coin.series}</td>
             <td>${coin.value}€</td>
-            <td><code style="font-size: 0.9em; white-space: nowrap;">${coin.coin_id}</code></td>
-            <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis;" title="${coin.feature || ''}">${coin.feature || '-'}</td>
+            <td>${coinIdCell}</td>
+            <td class="${coin.status === 'conflict' ? 'conflict-feature' : ''}" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml((coin.feature || '') + (coin.status === 'conflict' && coin.existing_feature ? ' | existing: ' + coin.existing_feature : ''))}">${coin.feature || '-'}</td>
             <td>
                 ${coin.image_url ? 
                     `<div class="coin-image-preview">
@@ -971,6 +982,40 @@ function populateCoinsPreviewTable(coins) {
         checkbox.addEventListener('change', function() {
             const index = parseInt(this.dataset.index);
             uploadedCoinsData[index].selected_for_import = this.checked;
+            updateSelectedCount();
+        });
+    });
+
+    // Add event listeners for editable coin_id inputs (for conflicts)
+    const idInputs = tbody.querySelectorAll('.coin-id-input');
+    idInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            const index = parseInt(this.dataset.index);
+            const newId = this.value.trim();
+            // Update local model
+            uploadedCoinsData[index].coin_id = newId;
+
+            // Validate: ensure newId is not empty and not duplicated among uploaded data
+            const idCounts = {};
+            uploadedCoinsData.forEach((c, i) => {
+                const idv = (c.coin_id || '').trim();
+                if (!idv) return;
+                idCounts[idv] = (idCounts[idv] || 0) + 1;
+            });
+
+            const checkbox = document.querySelector(`input.coin-checkbox[data-index="${index}"]`);
+            // Enable selection only when id is non-empty and unique in uploaded set
+            if (newId && idCounts[newId] === 1) {
+                // allow selection; note: backend will still reject if ID exists in DB
+                uploadedCoinsData[index].selected_for_import = true;
+                if (checkbox) checkbox.disabled = false;
+                if (checkbox) checkbox.checked = true;
+            } else {
+                uploadedCoinsData[index].selected_for_import = false;
+                if (checkbox) checkbox.checked = false;
+                if (checkbox) checkbox.disabled = true;
+            }
+
             updateSelectedCount();
         });
     });
@@ -1048,11 +1093,14 @@ async function handleImportSelected() {
     }
 
     const importBtn = document.getElementById('importSelectedBtn');
-    
+    const originalText = importBtn ? importBtn.innerHTML : '<i class="fas fa-download me-1"></i>Import Selected';
+
     try {
-        // Show loading state
-        importBtn.disabled = true;
-        importBtn.innerHTML = '<i class="spinner-border spinner-border-sm me-1"></i>Importing...';
+        // Show loading state (preserve original text)
+        if (importBtn) {
+            importBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Importing...';
+            importBtn.disabled = true;
+        }
 
         const response = await fetch('/api/admin/coins/import', {
             method: 'POST',
@@ -1077,9 +1125,11 @@ async function handleImportSelected() {
         console.error('Import error:', error);
         showAlert(`Import failed: ${error.message}`, 'danger');
     } finally {
-        // Reset button state
-        importBtn.disabled = false;
-        importBtn.innerHTML = '<i class="fas fa-download me-1"></i>Import Selected';
+        // Restore button state
+        if (importBtn) {
+            importBtn.disabled = false;
+            importBtn.innerHTML = originalText;
+        }
     }
 }
 
@@ -1109,6 +1159,13 @@ async function loadCoinsFromDatabase() {
     const loadBtn = document.getElementById('loadCoinsBtn');
     
     try {
+        // Ensure server-side cache is cleared so this load returns fresh data
+        try {
+            await fetch('/api/admin/clear-cache', { method: 'POST' });
+        } catch (e) {
+            // Non-fatal: proceed even if cache clear fails
+            console.warn('Failed to clear cache before loading coins:', e);
+        }
         // Show loading state
         showCoinsViewLoading(true);
         loadBtn.disabled = true;
@@ -1577,6 +1634,7 @@ function displayHistoryUploadResults(result) {
             <td>${escapeHtml(entry.name)}</td>
             <td><code>${escapeHtml(entry.id)}</code></td>
             <td>${formatDate(entry.date)}</td>
+            <td>${entry.created_at ? formatDate(entry.created_at) : ''}</td>
         `;
         
         tableBody.appendChild(row);
@@ -1675,14 +1733,21 @@ async function exportHistoryCsv() {
     exportBtn.disabled = true;
 
     try {
-        const response = await fetch('/api/admin/history/export');
+        // We only export currently owned coins for a specific user to match requirements
+        const selectedName = document.getElementById('filterHistoryName').value;
+        if (!selectedName) {
+            showAlert('Please select a user from the Name filter before exporting.', 'warning');
+            return;
+        }
+
+        const response = await fetch(`/api/admin/history/export?name=${encodeURIComponent(selectedName)}`);
         
         if (response.ok) {
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'history_export.csv';
+            a.download = `${selectedName}_owned_coins.csv`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
@@ -1711,13 +1776,22 @@ async function loadHistoryData() {
     document.getElementById('historyViewEmpty').style.display = 'none';
 
     try {
+        // Clear server cache to ensure fresh history data
+        try {
+            await fetch('/api/admin/clear-cache', { method: 'POST' });
+        } catch (e) {
+            console.warn('Failed to clear cache before loading history:', e);
+        }
         // Load filter options first
         await loadHistoryFilterOptions();
         
         // Load history data
         await loadHistoryPage();
         
-        document.getElementById('historyFilters').style.display = 'flex';
+    document.getElementById('historyFilters').style.display = 'flex';
+    // Show the include-inactive checkbox row alongside filters
+    const includeRow = document.getElementById('historyIncludeInactiveRow');
+    if (includeRow) includeRow.style.display = 'block';
         document.getElementById('historyViewContainer').style.display = 'block';
     } catch (error) {
         console.error('Error loading history:', error);
@@ -1788,6 +1862,7 @@ function displayHistoryData(historyData) {
             <td>${escapeHtml(entry.name)}</td>
             <td><code>${escapeHtml(entry.id)}</code></td>
             <td>${formatDate(entry.date)}</td>
+            <td>${entry.created_at ? formatDate(entry.created_at) : ''}</td>
         `;
         tableBody.appendChild(row);
     });
@@ -1813,11 +1888,14 @@ async function applyHistoryFilters() {
     const search = document.getElementById('filterHistorySearch').value.trim();
     const name = document.getElementById('filterHistoryName').value;
     const dateFilter = document.getElementById('filterHistoryDate').value;
+    const includeInactiveCheckbox = document.getElementById('filterIncludeInactive');
+    const includeInactive = includeInactiveCheckbox && includeInactiveCheckbox.checked;
 
     currentHistoryFilters = {};
     if (search) currentHistoryFilters.search = search;
     if (name) currentHistoryFilters.name = name;
     if (dateFilter) currentHistoryFilters.date_filter = dateFilter;
+    if (includeInactive) currentHistoryFilters.include_inactive = true;
 
     currentHistoryPage = 0;
     await loadHistoryPage();
@@ -1830,6 +1908,8 @@ async function clearHistoryFilters() {
     document.getElementById('filterHistorySearch').value = '';
     document.getElementById('filterHistoryName').value = '';
     document.getElementById('filterHistoryDate').value = '';
+    const includeInactiveCheckbox = document.getElementById('filterIncludeInactive');
+    if (includeInactiveCheckbox) includeInactiveCheckbox.checked = false;
     
     currentHistoryFilters = {};
     currentHistoryPage = 0;

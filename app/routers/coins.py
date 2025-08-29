@@ -1,13 +1,13 @@
 from fastapi import APIRouter, HTTPException, Query
 from typing import Optional, List
-from app.services.bigquery_service import BigQueryService
+from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 from app.services.group_service import GroupService
 from app.models.coin import CoinResponse, CoinListResponse, StatsResponse, FilterOptions, Coin
 import logging
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/coins")
-bigquery_service = BigQueryService()
+bigquery_service = get_bq_provider()
 group_service = GroupService()
 
 @router.get("/", response_model=CoinListResponse)
@@ -136,6 +136,17 @@ async def get_group_coins(
             coin_dict = dict(coin_data)
             # Handle owners array (defensively coerce NULL aliases to a string)
             owners = []
+            # Build a set of canonical member names for defensive filtering
+            member_names = set()
+            if group_context and group_context.get('members'):
+                for m in group_context['members']:
+                    if isinstance(m, dict):
+                        candidate = m.get('user') or m.get('name')
+                    else:
+                        candidate = m
+                    if candidate:
+                        member_names.add(str(candidate).strip().lower())
+
             if 'owners' in coin_dict and coin_dict['owners']:
                 for owner in coin_dict['owners']:
                     if not owner:
@@ -147,7 +158,18 @@ async def get_group_coins(
                     # or an empty string to satisfy validation.
                     if owner_dict.get('alias') is None:
                         owner_dict['alias'] = owner_dict.get('owner') or owner_dict.get('name') or ''
-                    owners.append(owner_dict)
+
+                    # Defensive: only include owners that are actual members of the group
+                    owner_name = (owner_dict.get('owner') or owner_dict.get('name') or '')
+                    if member_names:
+                        if str(owner_name).strip().lower() in member_names:
+                            owners.append(owner_dict)
+                        else:
+                            # skip non-member owner
+                            continue
+                    else:
+                        # No member list available; include owner (backwards-compatible)
+                        owners.append(owner_dict)
 
             coin_dict['owners'] = owners
             coin_dict['is_owned'] = len(owners) > 0

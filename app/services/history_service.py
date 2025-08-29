@@ -10,7 +10,7 @@ import io
 from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
 from google.cloud import bigquery
-from app.services.bigquery_service import BigQueryService
+from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 from app.models.history import History, HistoryCreate
 from app.config import settings
 
@@ -20,7 +20,8 @@ class HistoryService:
     """Service for managing history operations with enhanced schema support."""
     
     def __init__(self):
-        self.bigquery_service = BigQueryService()
+        # Use cached provider to avoid repeated BigQuery client initializations
+        self.bigquery_service = get_bq_provider()
     
     def get_enhanced_history_schema(self) -> List[bigquery.SchemaField]:
         """Get the enhanced history schema - delegates to BigQueryService for consistency."""
@@ -169,30 +170,67 @@ class HistoryService:
             logger.error(f"Error importing from CSV: {str(e)}")
             raise
     
-    async def export_to_csv_format(self) -> pd.DataFrame:
+    async def export_to_csv_format(self, name: Optional[str] = None) -> pd.DataFrame:
         """
-        Export history to CSV format matching the original structure.
-        
+        Export ownership data to CSV format matching the original structure.
+
+        If `name` is provided, export only coins currently owned by that user
+        (based on the latest active flag). If no name is provided, export all
+        currently active ownerships across users.
+
         Returns:
             DataFrame in original CSV format (name, id, date)
         """
-        # Get all history
+        # If a specific user is requested, use optimized method
+        if name:
+            # get_user_owned_coins returns current owned coins for the user
+            owned = await self.bigquery_service.get_user_owned_coins(name)
+            if not owned:
+                return pd.DataFrame(columns=['name', 'id', 'date'])
+
+            # Build DataFrame with name, id (coin_id), date (acquired_date)
+            rows = []
+            for r in owned:
+                rows.append({
+                    'name': name,
+                    'id': r.get('coin_id') or r.get('coin_id'),
+                    'date': r.get('acquired_date') or r.get('date')
+                })
+
+            export_df = pd.DataFrame(rows)
+            # Format date
+            if not export_df.empty:
+                export_df['date'] = pd.to_datetime(export_df['date']).dt.strftime('%Y-%m-%d %H:%M:%S')
+
+            return export_df
+
+        # No specific user: export all currently active ownerships
+        # We'll query the history table to get latest active records per (name, coin_id)
         history_data = await self.bigquery_service.get_all_history()
-        
         if not history_data:
             return pd.DataFrame(columns=['name', 'id', 'date'])
-        
-        # Convert to DataFrame and format for CSV export
+
         df = pd.DataFrame(history_data)
-        
-        # Rename coin_id back to id for CSV compatibility
+        # Ensure coin_id exists
         if 'coin_id' in df.columns:
             df = df.rename(columns={'coin_id': 'id'})
-        
-        # Select only the original CSV columns
-        export_df = df[['name', 'id', 'date']].copy()
-        
-        # Format dates for CSV
+
+        # Keep only latest active records per name+id. get_all_history may return raw records,
+        # but the BigQueryService has other helpers — to keep this change minimal we
+        # will compute latest by created_at/date locally.
+        # Convert dates for proper sorting
+        df['created_at'] = pd.to_datetime(df.get('created_at'))
+        df['date'] = pd.to_datetime(df.get('date'))
+
+        # Sort and drop duplicates keeping the latest created_at per name+id
+        df = df.sort_values(['name', 'id', 'created_at', 'date'], ascending=[True, True, False, False])
+        df_latest = df.drop_duplicates(subset=['name', 'id'], keep='first')
+
+        # Filter by is_active == True
+        if 'is_active' in df_latest.columns:
+            df_latest = df_latest[df_latest['is_active'] == True]
+
+        export_df = df_latest[['name', 'id', 'date']].copy()
         export_df['date'] = pd.to_datetime(export_df['date']).dt.strftime('%Y-%m-%d %H:%M:%S')
-        
+
         return export_df

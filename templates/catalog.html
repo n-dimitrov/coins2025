@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}My EuroCoins | Catalog{% endblock %}
+{% block title %}{% endblock %}
 
 {% block description %}Browse the complete catalog of Euro coins with advanced filters. Search by country, year, type, and denomination. Interactive coin collection from all eurozone countries.{% endblock %}
 
@@ -9,7 +9,7 @@
 {% block main_class %}{% endblock %}
 
 {% block content %}
-<div class="container-fluid mt-4">
+<div class="container-fluid mt-4 catalog-page">
     <div class="row">
         <!-- Filters Sidebar -->
         <div class="col-lg-3">
@@ -92,7 +92,8 @@
                     <select class="form-select" id="owned-by-filter">
                         <option value="">All Members</option>
                         {% for member in group_context.members %}
-                        <option value="{{ member.user }}">{{ member.user }}</option>
+                        {% set member_value = member.user if member.user is defined else (member.name if member.name is defined else member) %}
+                        <option value="{{ member_value }}">{{ member_value }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -177,8 +178,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof CoinCatalog !== 'undefined') {
         // Pass group context to JavaScript
-        const groupContext = {% if group_context %}{{ group_context | tojson }}{% else %}null{% endif %};
-        window.coinCatalog = new CoinCatalog(groupContext);
+    const groupContext = {% if group_context %}{{ group_context | tojson }}{% else %}null{% endif %};
+    // selected_member may be provided by member-scoped routes
+    const selectedMember = {% if selected_member %}{{ selected_member | tojson }}{% else %}null{% endif %};
+    window.coinCatalog = new CoinCatalog(groupContext, selectedMember);
     }
 });
 

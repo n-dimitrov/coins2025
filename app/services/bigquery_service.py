@@ -6,6 +6,8 @@ import logging
 import asyncio
 from app.config import settings
 
+from functools import lru_cache
+
 logger = logging.getLogger(__name__)
 
 class BigQueryService:
@@ -25,6 +27,7 @@ class BigQueryService:
             logger.error(f"Failed to initialize BigQuery client: {str(e)}")
             # Re-raise the exception so the application doesn't start with a broken service
             raise
+
 
     def _get_cache_key(self, query: str, params: dict) -> str:
         """Generate cache key from query and parameters."""
@@ -223,17 +226,17 @@ class BigQueryService:
         WITH latest_ownership AS (
             SELECT 
                 h.name, h.coin_id, h.date, h.is_active,
-                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) as rn
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
             WHERE h.coin_id = @coin_id
         )
         SELECT 
-            lo.name as owner,
-            COALESCE(gu.alias, lo.name) as alias,
+            gu.name as owner,
+            COALESCE(gu.alias, gu.name) as alias,
             lo.date as acquired_date
         FROM latest_ownership lo
         JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu 
-            ON lo.name = gu.name AND gu.group_id = @group_id
+            ON LOWER(TRIM(lo.name)) = LOWER(TRIM(gu.name)) AND gu.group_id = @group_id
         WHERE lo.rn = 1 AND lo.is_active = true AND gu.is_active = true
         ORDER BY lo.date DESC
         """
@@ -266,14 +269,16 @@ class BigQueryService:
                 params['series'] = filters['series']
             
             if filters.get('owned_by'):
-                where_clauses.append("h.name = @owned_by")
+                # Use latest_ownership alias (lo) here - 'h' is not in scope inside coin_ownership
+                where_clauses.append("lo.name = @owned_by")
                 params['owned_by'] = filters['owned_by']
             
             if filters.get('ownership_status'):
+                # Apply ownership status against the latest_ownership alias (lo)
                 if filters['ownership_status'] == 'owned':
-                    where_clauses.append("h.coin_id IS NOT NULL")
+                    where_clauses.append("lo.coin_id IS NOT NULL")
                 elif filters['ownership_status'] == 'missing':
-                    where_clauses.append("h.coin_id IS NULL")
+                    where_clauses.append("lo.coin_id IS NULL")
 
         where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
         
@@ -281,20 +286,20 @@ class BigQueryService:
         WITH latest_ownership AS (
             SELECT 
                 h.name, h.coin_id, h.date, h.is_active,
-                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) as rn
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
         ),
         coin_ownership AS (
             SELECT 
                 c.*,
-                lo.name as owner,
+                gu.name as owner,
                 COALESCE(gu.alias, lo.name) as owner_alias,
                 lo.date as acquired_date
             FROM `{self.client.project}.{self.dataset_id}.{self.table_id}` c
             LEFT JOIN latest_ownership lo 
                 ON c.coin_id = lo.coin_id AND lo.rn = 1 AND lo.is_active = true
             LEFT JOIN `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu 
-                ON lo.name = gu.name AND gu.group_id = @group_id AND gu.is_active = true
+                ON LOWER(TRIM(lo.name)) = LOWER(TRIM(gu.name)) AND gu.group_id = @group_id AND gu.is_active = true
             WHERE {where_sql}
         )
         SELECT 
@@ -321,7 +326,7 @@ class BigQueryService:
         WITH latest_ownership AS (
             SELECT 
                 h.name, h.coin_id, h.is_active,
-                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) as rn
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
         )
         SELECT 
@@ -342,52 +347,108 @@ class BigQueryService:
         """Add a new coin ownership record."""
         import uuid
         from datetime import datetime as dt
-        
+
         record_id = str(uuid.uuid4())
         current_time = dt.now()
-        
-        # First check if user already owns this coin
-        existing = await self.get_current_coin_ownership(coin_id, name)
-        if existing:
-            raise ValueError(f"User {name} already owns coin {coin_id}")
-        
-        query = f"""
-        INSERT INTO `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}`
-        (id, name, coin_id, date, created_at, created_by, is_active)
-        VALUES (@id, @name, @coin_id, @date, @created_at, @created_by, true)
+
+        # Lightweight existence check: fetch the latest history row for this
+        # user+coin and interpret its is_active flag. This avoids false
+        # positives when an older active row exists but a newer removal
+        # record has been written.
+        check_query = f"""
+        SELECT h.is_active
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+        WHERE h.coin_id = @coin_id AND h.name = @name
+        ORDER BY h.created_at DESC, h.date DESC
+        LIMIT 1
         """
-        
-        params = {
+
+        start_check = datetime.now()
+        latest = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
+        check_duration = (datetime.now() - start_check).total_seconds()
+        logger.info(f"Lightweight ownership check took {check_duration:.3f}s for {name}/{coin_id}")
+
+        if latest:
+            # Normalize boolean which may arrive as a native bool or string
+            is_active = latest[0].get('is_active')
+            is_active_flag = False
+            if isinstance(is_active, str):
+                is_active_flag = is_active.lower() == 'true'
+            else:
+                is_active_flag = bool(is_active)
+
+            if is_active_flag:
+                raise ValueError(f"User {name} already owns coin {coin_id}")
+
+        # Prepare row for streaming insert
+        # Ensure datetime fields are JSON-serializable for streaming insert
+        row = {
             'id': record_id,
             'name': name,
             'coin_id': coin_id,
-            'date': date,
-            'created_at': current_time,
+            'date': date.isoformat() if hasattr(date, 'isoformat') else date,
+            'created_at': current_time.isoformat() if hasattr(current_time, 'isoformat') else current_time,
             'created_by': created_by or 'api',
+            'is_active': True
         }
-        
-        # Execute query in thread pool
-        def execute_insert():
-            job_config = bigquery.QueryJobConfig()
-            query_parameters = []
-            for k, v in params.items():
-                if k in ['date', 'created_at']:
-                    query_parameters.append(bigquery.ScalarQueryParameter(k, "TIMESTAMP", v))
-                elif k == 'is_active':
-                    query_parameters.append(bigquery.ScalarQueryParameter(k, "BOOL", v))
-                else:
-                    query_parameters.append(bigquery.ScalarQueryParameter(k, "STRING", str(v)))
-            job_config.query_parameters = query_parameters
-            
-            query_job = self.client.query(query, job_config=job_config)
-            query_job.result()
-            
-        loop = asyncio.get_event_loop()
-        await loop.run_in_executor(None, execute_insert)
-        
-        # Invalidate related cache
+
+        # Try streaming insert (fast) with safe fallback to query-based INSERT
+        start_insert = datetime.now()
+        try:
+            table_ref = f"{self.client.project}.{self.dataset_id}.{settings.bq_history_table}"
+            table = self.client.get_table(table_ref)
+            errors = self.client.insert_rows_json(table, [row])
+            if errors:
+                # If streaming errors, raise to trigger fallback
+                raise RuntimeError(f"Streaming insert errors: {errors}")
+            insert_duration = (datetime.now() - start_insert).total_seconds()
+            logger.info(f"Streaming insert succeeded in {insert_duration:.3f}s for {record_id}")
+        except Exception as e:
+            logger.warning(f"Streaming insert failed, falling back to query insert: {e}")
+            # Fallback to previous INSERT query job
+            query = f"""
+            INSERT INTO `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}`
+            (id, name, coin_id, date, created_at, created_by, is_active)
+            VALUES (@id, @name, @coin_id, @date, @created_at, @created_by, true)
+            """
+
+            params = {
+                'id': record_id,
+                'name': name,
+                'coin_id': coin_id,
+                'date': date,
+                'created_at': current_time,
+                'created_by': created_by or 'api',
+            }
+
+            def execute_insert():
+                job_config = bigquery.QueryJobConfig()
+                query_parameters = []
+                for k, v in params.items():
+                    if k in ['date', 'created_at']:
+                        query_parameters.append(bigquery.ScalarQueryParameter(k, "TIMESTAMP", v))
+                    else:
+                        query_parameters.append(bigquery.ScalarQueryParameter(k, "STRING", str(v)))
+                job_config.query_parameters = query_parameters
+
+                query_job = self.client.query(query, job_config=job_config)
+                query_job.result()
+
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, execute_insert)
+
+            insert_duration = (datetime.now() - start_insert).total_seconds()
+            logger.info(f"Query insert fallback completed in {insert_duration:.3f}s for {record_id}")
+
+        # Invalidate related cache (timed)
+        start_invalidate = datetime.now()
         await self._invalidate_ownership_cache(coin_id=coin_id, user_name=name)
-        
+        invalidate_duration = (datetime.now() - start_invalidate).total_seconds()
+        logger.info(f"Cache invalidation took {invalidate_duration:.3f}s for {name}/{coin_id}")
+
+        total_duration = (datetime.now() - start_check).total_seconds()
+        logger.info(f"Total add_coin_ownership duration: {total_duration:.3f}s for {name}/{coin_id}")
+
         return record_id
 
     async def remove_coin_ownership(self, name: str, coin_id: str, removal_date: datetime, created_by: str = None) -> str:
@@ -395,49 +456,104 @@ class BigQueryService:
         import uuid
         from datetime import datetime as dt
         
-        # Check if user currently owns this coin
-        current_ownership = await self.get_current_coin_ownership(coin_id, name)
-        if not current_ownership:
+        # Lightweight existence check: fetch the latest history row for this
+        # user+coin and confirm the latest is_active flag. This avoids
+        # failures when older active rows exist but a later removal cleared ownership.
+        check_query = f"""
+        SELECT h.is_active
+        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+        WHERE h.coin_id = @coin_id AND h.name = @name
+        ORDER BY h.created_at DESC, h.date DESC
+        LIMIT 1
+        """
+
+        start_check = datetime.now()
+        latest = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
+        check_duration = (datetime.now() - start_check).total_seconds()
+        logger.info(f"Lightweight ownership existence check took {check_duration:.3f}s for {name}/{coin_id}")
+
+        if not latest:
             raise ValueError(f"User {name} does not currently own coin {coin_id}")
-        
+
+        is_active = latest[0].get('is_active')
+        is_active_flag = False
+        if isinstance(is_active, str):
+            is_active_flag = is_active.lower() == 'true'
+        else:
+            is_active_flag = bool(is_active)
+
+        if not is_active_flag:
+            raise ValueError(f"User {name} does not currently own coin {coin_id}")
+
         record_id = str(uuid.uuid4())
         current_time = dt.now()
-        
-        query = f"""
-        INSERT INTO `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}`
-        (id, name, coin_id, date, created_at, created_by, is_active)
-        VALUES (@id, @name, @coin_id, @removal_date, @created_at, @created_by, false)
-        """
-        
-        params = {
+
+        # Ensure datetime fields are JSON-serializable for streaming insert
+        row = {
             'id': record_id,
             'name': name,
             'coin_id': coin_id,
-            'removal_date': removal_date,
-            'created_at': current_time,
+            'date': removal_date.isoformat() if hasattr(removal_date, 'isoformat') else removal_date,
+            'created_at': current_time.isoformat() if hasattr(current_time, 'isoformat') else current_time,
             'created_by': created_by or 'api',
+            'is_active': False
         }
-        
-        # Execute query in thread pool
-        def execute_insert():
-            job_config = bigquery.QueryJobConfig()
-            query_parameters = []
-            for k, v in params.items():
-                if k in ['removal_date', 'created_at']:
-                    query_parameters.append(bigquery.ScalarQueryParameter(k, "TIMESTAMP", v))
-                else:
-                    query_parameters.append(bigquery.ScalarQueryParameter(k, "STRING", str(v)))
-            job_config.query_parameters = query_parameters
-            
-            query_job = self.client.query(query, job_config=job_config)
-            query_job.result()
-            
-        loop = asyncio.get_event_loop()
-        await loop.run_in_executor(None, execute_insert)
-        
-        # Invalidate related cache
+
+        # Try streaming insert with fallback
+        start_insert = datetime.now()
+        try:
+            table_ref = f"{self.client.project}.{self.dataset_id}.{settings.bq_history_table}"
+            table = self.client.get_table(table_ref)
+            errors = self.client.insert_rows_json(table, [row])
+            if errors:
+                raise RuntimeError(f"Streaming insert errors: {errors}")
+            insert_duration = (datetime.now() - start_insert).total_seconds()
+            logger.info(f"Streaming removal insert succeeded in {insert_duration:.3f}s for {record_id}")
+        except Exception as e:
+            logger.warning(f"Streaming remove insert failed, falling back to query insert: {e}")
+            query = f"""
+            INSERT INTO `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}`
+            (id, name, coin_id, date, created_at, created_by, is_active)
+            VALUES (@id, @name, @coin_id, @removal_date, @created_at, @created_by, false)
+            """
+
+            params = {
+                'id': record_id,
+                'name': name,
+                'coin_id': coin_id,
+                'removal_date': removal_date,
+                'created_at': current_time,
+                'created_by': created_by or 'api',
+            }
+
+            def execute_insert():
+                job_config = bigquery.QueryJobConfig()
+                query_parameters = []
+                for k, v in params.items():
+                    if k in ['removal_date', 'created_at']:
+                        query_parameters.append(bigquery.ScalarQueryParameter(k, "TIMESTAMP", v))
+                    else:
+                        query_parameters.append(bigquery.ScalarQueryParameter(k, "STRING", str(v)))
+                job_config.query_parameters = query_parameters
+
+                query_job = self.client.query(query, job_config=job_config)
+                query_job.result()
+
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, execute_insert)
+
+            insert_duration = (datetime.now() - start_insert).total_seconds()
+            logger.info(f"Query-based removal insert completed in {insert_duration:.3f}s for {record_id}")
+
+        # Invalidate related cache (timed)
+        start_invalidate = datetime.now()
         await self._invalidate_ownership_cache(coin_id=coin_id, user_name=name)
-        
+        invalidate_duration = (datetime.now() - start_invalidate).total_seconds()
+        logger.info(f"Cache invalidation took {invalidate_duration:.3f}s for {name}/{coin_id}")
+
+        total_duration = (datetime.now() - start_check).total_seconds()
+        logger.info(f"Total remove_coin_ownership duration: {total_duration:.3f}s for {name}/{coin_id}")
+
         return record_id
 
     async def get_current_coin_ownership(self, coin_id: str, name: str = None) -> List[Dict[str, Any]]:
@@ -453,7 +569,7 @@ class BigQueryService:
         WITH latest_records AS (
             SELECT 
                 h.name, h.coin_id, h.date, h.is_active, h.created_at,
-                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) as rn
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
             {where_clause}
         )
@@ -479,7 +595,7 @@ class BigQueryService:
         WITH latest_records AS (
             SELECT 
                 h.name, h.coin_id, h.date, h.is_active, h.created_at,
-                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) as rn
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
             WHERE h.name = @name
         )
@@ -830,6 +946,31 @@ class BigQueryService:
         results = await self._get_cached_or_query(query, params)
         return [row['coin_id'] for row in results]
 
+    async def get_existing_coins_features(self, coin_ids: List[str]) -> Dict[str, Optional[str]]:
+        """Get existing coins' features for a list of coin_ids.
+
+        Returns a mapping coin_id -> feature (may be None).
+        """
+        if not coin_ids:
+            return {}
+
+        placeholders = ', '.join([f"@coin_id_{i}" for i in range(len(coin_ids))])
+        params = {f"coin_id_{i}": coin_id for i, coin_id in enumerate(coin_ids)}
+
+        query = f"""
+        SELECT DISTINCT coin_id, feature
+        FROM `{self.client.project}.{self.dataset_id}.{self.table_id}`
+        WHERE coin_id IN ({placeholders})
+        """
+
+        results = await self._get_cached_or_query(query, params)
+        # Build mapping
+        mapping: Dict[str, Optional[str]] = {}
+        for row in results:
+            # row['feature'] may be None
+            mapping[row['coin_id']] = row.get('feature')
+        return mapping
+
     async def import_coins(self, coins: List[Dict[str, Any]]) -> int:
         """Import coins to BigQuery table."""
         if not coins:
@@ -842,9 +983,9 @@ class BigQueryService:
                 
                 # Prepare rows for BigQuery
                 rows_to_insert = []
-                # Use timezone-aware UTC datetime objects for TIMESTAMP fields
-                # (BigQuery client will handle conversion)
+                # Use ISO-formatted UTC timestamp strings for TIMESTAMP fields
                 current_time = datetime.now(timezone.utc)
+                current_time_iso = current_time.isoformat()  # e.g. '2025-08-27T12:34:56.789012+00:00'
 
                 for coin in coins:
                     row = {
@@ -857,8 +998,9 @@ class BigQueryService:
                         'image_url': coin.get('image_url'),
                         'feature': coin.get('feature'),
                         'volume': coin.get('volume'),
-                        'created_at': current_time,
-                        'updated_at': current_time
+                        # insert_rows_json expects JSON-serializable values; use ISO strings for timestamps
+                        'created_at': current_time_iso,
+                        'updated_at': current_time_iso
                     }
                     rows_to_insert.append(row)
 
@@ -1091,9 +1233,10 @@ class BigQueryService:
         SELECT 
             h.name, 
             COALESCE(h.coin_id, h.id) as id,  -- Use coin_id if available, fallback to id for legacy data
-            h.date
+            h.date,
+            h.created_at
         FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
-        ORDER BY h.date DESC
+        ORDER BY h.created_at DESC
         """
         
         return await self._get_cached_or_query(query, {})
@@ -1168,36 +1311,85 @@ class BigQueryService:
                 where_clauses.append("FORMAT_DATE('%Y-%m', h.date) = @date_filter")
                 params['date_filter'] = filters['date_filter']
 
-        where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
-        
-        # Get total count
-        count_query = f"""
-        SELECT COUNT(*) as total
-        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
-        WHERE {where_sql}
-        """
-        
-        count_result = await self._get_cached_or_query(count_query, params)
-        total_count = count_result[0]['total'] if count_result else 0
+        # Determine whether to include inactive entries
+        include_inactive = bool(filters and filters.get('include_inactive'))
+
+        # Build base WHERE SQL (do NOT include is_active here so latest-record
+        # computations can consider both active and inactive rows).
+        where_sql_base = " AND ".join(where_clauses) if where_clauses else "1=1"
+
+        # Get total count. If including inactive, count raw rows. If not,
+        # count latest active records per (name, coin_id).
+        if include_inactive:
+            count_query = f"""
+            SELECT COUNT(*) as total
+            FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+            WHERE {where_sql_base}
+            """
+            count_result = await self._get_cached_or_query(count_query, params)
+            total_count = count_result[0]['total'] if count_result else 0
+        else:
+            # Count latest active records per (name, coin_id)
+            count_query = f"""
+            WITH latest_records AS (
+                SELECT
+                    h.name,
+                    COALESCE(h.coin_id, h.id) as id,
+                    ROW_NUMBER() OVER (PARTITION BY h.name, COALESCE(h.coin_id, h.id) ORDER BY h.created_at DESC, h.date DESC) as rn,
+                    h.is_active
+                FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+                WHERE {where_sql_base}
+            )
+            SELECT COUNT(*) as total
+            FROM latest_records
+            WHERE rn = 1 AND is_active = TRUE
+            """
+            count_result = await self._get_cached_or_query(count_query, params)
+            total_count = count_result[0]['total'] if count_result else 0
         
         # Get paginated data
-        data_query = f"""
-        SELECT 
-            h.name, 
-            COALESCE(h.coin_id, h.id) as id,  -- Use coin_id if available, fallback to id for legacy data
-            h.date
-        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
-        WHERE {where_sql}
-        ORDER BY h.date DESC
-        LIMIT @limit OFFSET @offset
-        """
-        
         params.update({
             'limit': limit,
             'offset': offset
         })
-        
-        data = await self._get_cached_or_query(data_query, params)
+
+        if not include_inactive:
+            # Return only latest record per (name, coin_id) where is_active = TRUE
+            data_query = f"""
+            WITH latest_records AS (
+                SELECT 
+                    h.name,
+                    COALESCE(h.coin_id, h.id) as id,
+                    h.date,
+                    h.created_at,
+                    h.is_active,
+                    ROW_NUMBER() OVER (PARTITION BY h.name, COALESCE(h.coin_id, h.id) ORDER BY h.created_at DESC, h.date DESC) as rn
+                FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+                WHERE {where_sql_base}
+            )
+            SELECT name, id, date, created_at
+            FROM latest_records
+            WHERE rn = 1 AND is_active = TRUE
+            ORDER BY date DESC
+            LIMIT @limit OFFSET @offset
+            """
+
+            data = await self._get_cached_or_query(data_query, params)
+        else:
+            # Include inactive: return raw history rows matching filters (existing behavior)
+            data_query = f"""
+            SELECT 
+                h.name, 
+                COALESCE(h.coin_id, h.id) as id,  -- Use coin_id if available, fallback to id for legacy data
+                h.date,
+                h.created_at
+            FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+            WHERE {where_sql_base}
+            ORDER BY h.date DESC
+            LIMIT @limit OFFSET @offset
+            """
+
+            data = await self._get_cached_or_query(data_query, params)
         
         total_pages = (total_count + limit - 1) // limit
         
@@ -1287,3 +1479,27 @@ class BigQueryService:
         # Clear caches
         self._cache.clear()
         return {'success': True, 'message': 'History table deleted and recreated'}
+
+
+# Process-global singleton holder + initializer. We prefer an explicit
+# startup-initialized instance rather than implicit per-import caching so the
+# application lifecycle is deterministic. Call `init_bigquery_service()` at
+# application startup with a BigQueryService instance. `get_bigquery_service()`
+# returns the initialized instance or raises if not initialized.
+_bq_singleton: Optional[BigQueryService] = None
+
+def init_bigquery_service(instance: BigQueryService) -> None:
+    """Initialize the module-level singleton. Call this once during app startup."""
+    global _bq_singleton
+    _bq_singleton = instance
+
+def get_bigquery_service() -> BigQueryService:
+    """Return the startup-initialized BigQueryService.
+
+    Raises RuntimeError if `init_bigquery_service` was not called.
+    """
+    if _bq_singleton is None:
+        raise RuntimeError(
+            "BigQueryService not initialized. Ensure app startup called init_bigquery_service()."
+        )
+    return _bq_singleton

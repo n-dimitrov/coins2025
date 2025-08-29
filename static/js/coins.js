@@ -1,6 +1,7 @@
 class CoinCatalog {
-    constructor(groupContext = null) {
+    constructor(groupContext = null, selectedMember = null) {
         this.groupContext = groupContext;
+        this.selectedMember = selectedMember;
         this.coins = [];
         this.filteredCoins = [];
         this.currentFilters = {
@@ -24,6 +25,9 @@ class CoinCatalog {
         // Cache for generated labels to avoid recalculation
         this.labelCache = new Map();
         
+    // selectedMember is used only for display (header/etc.).
+    // Do not preselect filters automatically when viewing as a member.
+
         this.init();
     }
 
@@ -127,12 +131,39 @@ class CoinCatalog {
         try {
             await this.loadFilterOptions();
             this.populateGroupMemberFilter(); // Populate group member filter if in group context
+            // Update page title according to group / selected member
+            this.updatePageTitle();
             await this.loadCoins();
             this.setupEventListeners();
             this.renderCoins();
         } catch (error) {
             console.error('Error initializing catalog:', error);
             this.showError('Failed to initialize catalog');
+        }
+    }
+
+    /**
+     * Update the browser page title according to rules:
+     * - no group: "My EuroCoins"
+     * - group mode: "My EuroCoins | <group>"
+     * - selected member: "My EuroCoins | <user>@<group>"
+     */
+    updatePageTitle() {
+        try {
+            const base = 'My EuroCoins';
+            if (this.groupContext) {
+                const groupName = this.groupContext.name || this.groupContext.group_key || '';
+                if (this.selectedMember) {
+                    document.title = `${base} | ${this.selectedMember}@${groupName}`;
+                } else {
+                    document.title = `${base} | ${groupName}`;
+                }
+            } else {
+                document.title = base;
+            }
+        } catch (err) {
+            // If anything fails, leave title as-is
+            console.warn('Failed to update page title', err);
         }
     }
 
@@ -268,10 +299,14 @@ class CoinCatalog {
         
         this.groupContext.members.forEach(member => {
             const option = document.createElement('option');
-            option.value = member.name;
-            option.textContent = member.name;
+            // Template uses member.user; fall back to member.name or string member
+            const memberLabel = member.user || member.name || (typeof member === 'string' ? member : '');
+            option.value = memberLabel;
+            option.textContent = memberLabel;
             select.appendChild(option);
         });
+
+    // Do not auto-select member in the filter dropdown when in user mode.
     }
 
     applyFilters() {
@@ -359,8 +394,9 @@ class CoinCatalog {
 
     createCoinCard(coin) {
         const flag = this.getCountryFlag(coin.country);
-        const typeClass = coin.coin_type === 'RE' ? 'bg-success' : 'bg-primary';
-        const typeName = coin.coin_type === 'RE' ? 'Regular' : 'Commemorative';
+    // Use semantic classes so we can style CC/RE independently of Bootstrap utility colors
+    const typeClass = coin.coin_type === 'RE' ? 'coin-type-re' : 'coin-type-cc';
+    const typeName = coin.coin_type === 'RE' ? 'Regular' : 'Commemorative';
         const imageUrl = coin.image_url || '/static/images/coin-placeholder.png';
         
         // Format value to always show 2 decimal places
@@ -400,19 +436,22 @@ class CoinCatalog {
             <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
                 <div class="card coin-card h-100 ${this.groupContext ? 'group-mode' : ''}">
                     <div class="position-relative">
-                        <img 
-                            src="${imageUrl}" 
-                            class="card-img-top coin-image" 
-                            alt="${coin.country} ${coin.value} Euro"
-                            loading="lazy"
-                            onerror="this.src='/static/images/coin-placeholder.png'"
-                        >
+                        <div class="coin-image-wrapper">
+                            <img 
+                                src="${imageUrl}" 
+                                class="card-img-top coin-image coin-image-clickable" 
+                                data-coin-id="${coin.coin_id}"
+                                alt="${coin.country} ${coin.value} Euro"
+                                loading="lazy"
+                                onerror="this.src='/static/images/coin-placeholder.png'"
+                            >
+                        </div>
                         <span class="badge ${typeClass} position-absolute top-0 start-0">
                             ${coin.coin_type}
                         </span>
                         ${ownershipBadgeHtml}
                     </div>
-                    <div class="card-body coin-card-clickable" data-coin-id="${coin.coin_id}" style="cursor: pointer;">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h6 class="card-title mb-0">
                                 <span class="country-flag me-2">${flag}</span>${coin.country}
@@ -521,7 +560,8 @@ class CoinCatalog {
 
     setupEventListeners() {
         // Search functionality
-        const searchInput = document.getElementById('searchInput');
+        // Template uses id="search-input" (kebab-case)
+        const searchInput = document.getElementById('search-input');
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
                 this.currentFilters.search = e.target.value;
@@ -587,16 +627,15 @@ class CoinCatalog {
             });
         }
 
-        // Coin card clicks (for coin detail modal)
+        // Coin image clicks (for coin detail modal)
         document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('coin-card-clickable') || 
-                e.target.closest('.coin-card-clickable')) {
-                
-                const coinElement = e.target.classList.contains('coin-card-clickable') 
-                    ? e.target 
-                    : e.target.closest('.coin-card-clickable');
-                
-                const coinId = coinElement.dataset.coinId;
+            if (e.target.classList.contains('coin-image-clickable') || 
+                e.target.closest('.coin-image-clickable')) {
+                const imgEl = e.target.classList.contains('coin-image-clickable')
+                    ? e.target
+                    : e.target.closest('.coin-image-clickable');
+
+                const coinId = imgEl.dataset.coinId;
                 const coin = this.coins.find(c => c.coin_id === coinId);
                 if (coin) {
                     this.showCoinDetailModal(coin);
@@ -620,7 +659,8 @@ class CoinCatalog {
         // Close owner info modal when clicking outside
         document.addEventListener('click', (e) => {
             const modal = document.getElementById('ownerInfoModal');
-            if (modal && modal.style.display === 'block' && 
+            // showOwnerInfo() sets display to 'flex', hideOwnerInfo() sets to 'none'
+            if (modal && modal.style.display && modal.style.display !== 'none' && 
                 !e.target.closest('.owner-info-content') && 
                 !e.target.classList.contains('ownership-badge')) {
                 this.hideOwnerInfo();
@@ -631,18 +671,32 @@ class CoinCatalog {
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 const modal = document.getElementById('ownerInfoModal');
-                if (modal && modal.style.display === 'block') {
+                if (modal && modal.style.display && modal.style.display !== 'none') {
                     this.hideOwnerInfo();
                 }
             }
         });
+
+        // Install a single persistent handler to remove card-pop when the
+        // coin detail modal is hidden. This avoids adding a new listener
+        // every time the modal is shown which would leak memory.
+        if (!this._coinModalHideHandlerInstalled) {
+            const coinModalEl = document.getElementById('coinDetailModal');
+            if (coinModalEl) {
+                // Use a bound instance method so `this` is always correct and
+                // so the handler reference can be removed later if needed.
+                this._boundClearAllCardPop = this.clearAllCardPop.bind(this);
+                coinModalEl.addEventListener('hidden.bs.modal', this._boundClearAllCardPop);
+                this._coinModalHideHandlerInstalled = true;
+            }
+        }
     }
 
     setupCoinCardClickHandlers() {
         document.addEventListener('click', (e) => {
-            const clickableArea = e.target.closest('.coin-card-clickable');
-            if (clickableArea) {
-                const coinId = clickableArea.dataset.coinId;
+            const imgEl = e.target.closest('.coin-image-clickable');
+            if (imgEl) {
+                const coinId = imgEl.dataset.coinId;
                 const coin = this.coins.find(c => c.coin_id === coinId);
                 if (coin) {
                     this.showCoinDetailModal(coin);
@@ -666,11 +720,21 @@ class CoinCatalog {
             
             // Populate modal content
             this.populateCoinModal(coinToDisplay);
-            
+
+            // Add a pop class to the corresponding card for a stronger 3D effect
+            this.clearAllCardPop();
+            const cardEl = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
+            if (cardEl) cardEl.classList.add('card-pop');
+
             // Show modal
-            const modal = new bootstrap.Modal(document.getElementById('coinDetailModal'));
+            const modalEl = document.getElementById('coinDetailModal');
+            const modal = new bootstrap.Modal(modalEl);
             modal.show();
-            
+
+            // The modal hide handler for removing the card-pop class is
+            // installed once in setupEventListeners to avoid adding
+            // a new listener on every show (prevents memory leaks).
+
             // Set up navigation handlers
             this.setupModalNavigation();
         } catch (error) {
@@ -678,29 +742,66 @@ class CoinCatalog {
             // Fallback to basic coin data
             this.currentCoinIndex = this.filteredCoins.findIndex(c => c.coin_id === coin.coin_id);
             this.populateCoinModal(coin);
-            const modal = new bootstrap.Modal(document.getElementById('coinDetailModal'));
+            const modalEl = document.getElementById('coinDetailModal');
+            const modal = new bootstrap.Modal(modalEl);
+            // Attempt to add pop class to the fallback coin card
+            this.clearAllCardPop();
+            const fallbackCard = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
+            if (fallbackCard) fallbackCard.classList.add('card-pop');
             modal.show();
+            // The modal hide handler is installed centrally; no per-show
+            // handler is needed here.
             this.setupModalNavigation();
         }
     }
 
     async fetchCoinDetails(coinId) {
         try {
-            const response = await fetch(this.getApiUrl(`/api/coins/${coinId}`));
-            if (response.ok) {
-                const data = await response.json();
-                return data.coin;
+            // Always fetch the canonical coin data
+            const coinResp = await fetch(this.getApiUrl(`/api/coins/${coinId}`));
+            let coin = null;
+            if (coinResp.ok) {
+                const data = await coinResp.json().catch(() => null);
+                coin = data ? data.coin : null;
             }
+
+            // If we're in a group context, also fetch ownership information for this coin
+            // and merge it into the returned coin object so callers (modal/card) see
+            // the most up-to-date ownership state.
+            if (this.groupContext && coin) {
+                try {
+                    const groupId = this.groupContext.id || this.groupContext.group_id || this.groupContext.groupKey || this.groupContext.group_key;
+                    // Prefer numeric/string id if available; omit param if not
+                    const ownersUrl = groupId ?
+                        this.getApiUrl(`/api/ownership/coin/${coinId}/owners?group_id=${encodeURIComponent(groupId)}`) :
+                        this.getApiUrl(`/api/ownership/coin/${coinId}/owners`);
+
+                    const ownersResp = await fetch(ownersUrl);
+                    if (ownersResp.ok) {
+                        const ownersData = await ownersResp.json().catch(() => null);
+                        if (ownersData && ownersData.owners !== undefined) {
+                            // Ensure owners is always an array for the UI code
+                            coin.owners = Array.isArray(ownersData.owners) ? ownersData.owners : [];
+                        }
+                    }
+                } catch (err) {
+                    // Non-fatal: if owners fetch fails, leave existing owners (if any)
+                    console.warn('Failed to fetch coin owners for group context', err);
+                }
+            }
+
+            return coin;
         } catch (error) {
             console.error('Error fetching coin details:', error);
+            return null;
         }
-        return null;
     }
 
     populateCoinModal(coin) {
         const flag = this.getCountryFlag(coin.country);
         const formattedValue = parseFloat(coin.value).toFixed(2);
-        const typeClass = coin.coin_type === 'RE' ? 'bg-success' : 'bg-primary';
+        // Use the same semantic classes as the coin cards so styling can be shared
+        const typeClass = coin.coin_type === 'RE' ? 'coin-type-re' : 'coin-type-cc';
         const typeName = coin.coin_type === 'RE' ? 'Regular' : 'Commemorative';
         
         // Use auto-generated series label
@@ -712,6 +813,17 @@ class CoinCatalog {
         // Generate ownership info for modal
         let ownershipModalHtml = '';
         if (this.groupContext && coin.owners !== undefined) {
+            // Prepare Add/Remove button HTML if a member is selected
+            let addRemoveButtonHtml = '';
+            if (this.selectedMember) {
+                const selectedName = (typeof this.selectedMember === 'string') ? this.selectedMember : (this.selectedMember.user || this.selectedMember.name || '');
+                const ownedBySelectedLocal = (coin.owners || []).some(o => ((o.owner || o) + '') === (selectedName + ''));
+                const pillLabelLocal = ownedBySelectedLocal ? 'Remove' : 'Add';
+                const pillOnclickLocal = ownedBySelectedLocal ? `window.coinCatalog.removeCoinFromSelectedUser('${coin.coin_id}')` : `window.coinCatalog.addCoinToSelectedUser('${coin.coin_id}')`;
+                const pillClassLocal = ownedBySelectedLocal ? 'btn-outline-danger' : 'btn-outline-primary';
+                addRemoveButtonHtml = `<button class="history-pill btn btn-sm ${pillClassLocal} ms-2" title="${pillLabelLocal} ${selectedName}" onclick="${pillOnclickLocal}">${pillLabelLocal}</button>`;
+            }
+
             if (coin.owners.length > 0) {
                 // Sort owners by date (oldest first)
                 const sortedOwners = [...coin.owners].sort((a, b) => {
@@ -720,25 +832,40 @@ class CoinCatalog {
                     return dateA - dateB;
                 });
 
-                const ownerBadges = sortedOwners.map(owner => 
-                    `<span class="badge bg-success me-1 mb-1" title="Owned by ${owner.owner}${owner.acquired_date ? ' (acquired: ' + new Date(owner.acquired_date).toLocaleDateString() + ')' : ''}">${owner.owner}</span>`
-                ).join('');
+                const ownerBadges = sortedOwners.map(owner => {
+                    const ownerName = owner.owner || '';
+                    // Determine if this owner matches the currently selected member
+                    let isSelected = false;
+                    if (this.selectedMember) {
+                        if (typeof this.selectedMember === 'string') {
+                            isSelected = this.selectedMember === ownerName;
+                        } else if (typeof this.selectedMember === 'object') {
+                            isSelected = (this.selectedMember.user === ownerName) || (this.selectedMember.name === ownerName);
+                        }
+                    }
+
+                    const badgeClass = isSelected ? 'badge bg-primary text-white' : 'badge bg-success';
+                    const titleSuffix = owner.acquired_date ? ' (acquired: ' + new Date(owner.acquired_date).toLocaleDateString() + ')' : '';
+                    return `<span class="${badgeClass} me-1 mb-1" title="Owned by ${ownerName}${titleSuffix}">${ownerName}</span>`;
+                }).join('');
                 
                 ownershipModalHtml = `
                     <div class="ownership-modal-section">
-                        <div class="ownership-modal-header">
-                            <i class="fas fa-users me-2"></i>Owned by:
+                        <div class="ownership-modal-header d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center"><i class="fas fa-users me-2"></i>Owned by:</div>
+                            <div class="ownership-modal-actions">${addRemoveButtonHtml}</div>
                         </div>
                         <div class="ownership-modal-badges">
                             ${ownerBadges}
                         </div>
                     </div>
                 `;
-            } else {
+                } else {
                 ownershipModalHtml = `
                     <div class="ownership-modal-section">
-                        <div class="ownership-modal-header">
-                            <i class="fas fa-users me-2"></i>Collection Status:
+                        <div class="ownership-modal-header d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center"><i class="fas fa-users me-2"></i>Owned by:</div>
+                            <div class="ownership-modal-actions">${addRemoveButtonHtml}</div>
                         </div>
                         <div class="ownership-modal-badges">
                             <span class="badge bg-outline-secondary">Not owned by group</span>
@@ -748,15 +875,64 @@ class CoinCatalog {
             }
         }
         
+        // Decide circle color class for coin image according to rules:
+        // - no group mode -> default (whiter)
+        // - group mode (no selected user) -> green if any group member owns coin, otherwise default
+        // - group user mode -> blue if selected user owns coin, else green if someone in group owns it, else default
+        const isGroupMode = !!this.groupContext;
+        const selected = this.selectedMember;
+
+        const ownerNames = (coin.owners || []).map(o => (o.owner || '').toString());
+
+        const matchesSelected = (ownerName) => {
+            if (!selected) return false;
+            if (typeof selected === 'string') return selected === ownerName;
+            if (typeof selected === 'object') return (selected.user === ownerName) || (selected.name === ownerName);
+            return false;
+        };
+
+        const ownedBySelected = ownerNames.some(n => matchesSelected(n));
+
+        // Determine if any owner belongs to the group members (match by member.user/member.name or owner string)
+        let ownedByGroup = false;
+        if (isGroupMode && this.groupContext && Array.isArray(this.groupContext.members)) {
+            const memberNames = new Set(this.groupContext.members.map(m => (m.user || m.name || m).toString()));
+            ownedByGroup = ownerNames.some(n => memberNames.has(n));
+        } else {
+            // fallback: if not in groupContext but owners exist, consider ownedByGroup true when owners exist
+            ownedByGroup = ownerNames.length > 0;
+        }
+
+        let imageClass = 'circle-default';
+        if (!isGroupMode) {
+            imageClass = 'circle-default';
+        } else if (isGroupMode && !selected) {
+            imageClass = ownedByGroup ? 'circle-green' : 'circle-default';
+        } else {
+            // group user mode
+            if (ownedBySelected) imageClass = 'circle-blue';
+            else if (ownedByGroup) imageClass = 'circle-green';
+            else imageClass = 'circle-default';
+        }
+
         const modalContent = `
             <div class="coin-detail-container">
                 <div class="coin-header">
-                    <div class="coin-title">
-                        <span class="country-flag">${flag}</span>
-                        ${coin.country}
-                        <span class="coin-value-badge">€${formattedValue}</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center flex-grow-1 me-2">
+                            <span class="country-flag modal-coin-flag">${flag}</span>
+                            <span class="ms-2 coin-country modal-coin-country text-truncate" title="${coin.country}">${coin.country}</span>
+                        </div>
+                        <div class="ms-2">
+                            <div class="modal-coin-value">€${formattedValue}</div>
+                        </div>
                     </div>
-                    <div class="coin-year">${coin.year}</div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <div class="coin-type-year text-muted">
+                            ${typeName} &bull; ${coin.year}
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="coin-navigation">
@@ -775,15 +951,10 @@ class CoinCatalog {
                     </button>
                 </div>
                 
-                <div class="coin-type-section">
-                    <span class="badge ${typeClass}">
-                        ${typeName}
-                    </span>
-                </div>
                 
                 <div class="coin-image-section">
                     <img src="${mainImage}" 
-                         class="coin-main-image" 
+                         class="coin-main-image ${imageClass}" 
                          id="coinMainImage"
                          alt="${coin.country} ${coin.value} Euro"
                          onerror="this.src='/static/images/coin-placeholder.png'">
@@ -803,6 +974,37 @@ class CoinCatalog {
         `;
         
         document.querySelector('#coinDetailModal .modal-body').innerHTML = modalContent;
+    }
+
+    // Refresh the coin card DOM for a single coin after its data changed
+    refreshCoinCard(coinId) {
+        try {
+            const coin = this.coins.find(c => c.coin_id === coinId);
+            if (!coin) return;
+
+            const imgEl = document.querySelector(`[data-coin-id="${coinId}"]`);
+            if (!imgEl) return;
+
+            // Preserve card-pop state if present
+            const oldCard = imgEl.closest('.coin-card');
+            const hadPop = oldCard ? oldCard.classList.contains('card-pop') : false;
+
+            // Outer column/container that wraps the card
+            const colEl = imgEl.closest('.col-md-6, .col-lg-4, .col-xl-3, .col');
+            if (!colEl) return;
+
+            // Replace the whole column with fresh HTML from createCoinCard
+            colEl.outerHTML = this.createCoinCard(coin);
+
+            // Re-apply card-pop if it was present
+            if (hadPop) {
+                const newImg = document.querySelector(`[data-coin-id="${coinId}"]`);
+                const newCard = newImg ? newImg.closest('.coin-card') : null;
+                if (newCard) newCard.classList.add('card-pop');
+            }
+        } catch (err) {
+            console.error('Failed to refresh coin card for', coinId, err);
+        }
     }
 
     setupModalNavigation() {
@@ -902,7 +1104,10 @@ class CoinCatalog {
                 const modalBody = document.querySelector('#coinDetailModal .modal-body');
                 modalBody.style.opacity = '0.5';
                 modalBody.style.transform = 'translateX(10px)';
-                
+                // Update card pop highlighting: remove previous, add to new
+                this.clearAllCardPop();
+                const newCard = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
+                if (newCard) newCard.classList.add('card-pop');
                 // Only fetch additional coin details if we're NOT in group context
                 // Group coins already have complete data including ownership
                 let coinToDisplay = coin;
@@ -925,6 +1130,10 @@ class CoinCatalog {
                 this.populateCoinModal(coin);
             }
         }
+    }
+
+    clearAllCardPop() {
+        document.querySelectorAll('.coin-card.card-pop').forEach(el => el.classList.remove('card-pop'));
     }
 
     shareCoin(coinId) {
@@ -997,9 +1206,22 @@ class CoinCatalog {
         // Generate owner list HTML
         const ownersHtml = sortedOwners.map(owner => {
             const formattedDate = this.formatAcquisitionDate(owner.acquired_date);
+            const ownerName = owner.owner || '';
+
+            let isSelected = false;
+            if (this.selectedMember) {
+                if (typeof this.selectedMember === 'string') {
+                    isSelected = this.selectedMember === ownerName;
+                } else if (typeof this.selectedMember === 'object') {
+                    isSelected = (this.selectedMember.user === ownerName) || (this.selectedMember.name === ownerName);
+                }
+            }
+
+            const itemClass = isSelected ? 'owner-item selected-owner' : 'owner-item';
+
             return `
-                <div class="owner-item">
-                    <div class="owner-name">${owner.owner}</div>
+                <div class="${itemClass}">
+                    <div class="owner-name">${ownerName}</div>
                     <div class="owner-date">${formattedDate}</div>
                 </div>
             `;
@@ -1034,7 +1256,7 @@ class CoinCatalog {
         };
         
         // Reset all form elements
-        const searchInput = document.getElementById('searchInput');
+    const searchInput = document.getElementById('search-input');
         if (searchInput) searchInput.value = '';
         
         const typeFilter = document.getElementById('type-filter');
@@ -1074,6 +1296,195 @@ class CoinCatalog {
             return date.toLocaleDateString('en-GB', options);
         } catch (error) {
             return 'Invalid date';
+        }
+    }
+
+    // Add coin to the currently selected user (with confirmation)
+    async addCoinToSelectedUser(coinId) {
+        if (!this.selectedMember) return;
+        const name = (typeof this.selectedMember === 'string') ? this.selectedMember : (this.selectedMember.user || this.selectedMember.name);
+        if (!name) return;
+        const confirmAdd = confirm(`Confirm add coin?`);
+        if (!confirmAdd) return;
+
+        // Find the pill in the modal (may be recreated after refresh)
+        const pill = document.querySelector('#coinDetailModal .history-pill');
+        // Prevent duplicate requests
+        if (pill && pill.dataset.loading === 'true') return;
+
+        // Show inline loading state on the pill
+        if (pill) {
+            pill.dataset.loading = 'true';
+            pill.disabled = true;
+            pill.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
+        }
+
+        let refreshed = false;
+        try {
+            const payload = {
+                name: name,
+                coin_id: coinId,
+                date: new Date().toISOString(),
+                created_by: 'web-ui'
+            };
+
+            const res = await fetch(this.getApiUrl('/api/ownership/add'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                // If server indicates user already owns the coin, refresh modal from server
+                if (res.status === 400 && err.detail && err.detail.toLowerCase().includes('already owns')) {
+                    this.showToast(err.detail || 'User already owns this coin');
+                    const detailed = await this.fetchCoinDetails(coinId);
+                    if (detailed) {
+                        const idx = this.coins.findIndex(c => c.coin_id === coinId);
+                        if (idx !== -1) this.coins[idx].owners = detailed.owners || this.coins[idx].owners;
+                        this.filteredCoins = this.filteredCoins.map(c => c.coin_id === coinId ? { ...c, owners: detailed.owners || c.owners } : c);
+                        this.populateCoinModal(detailed);
+                        // Refresh the card badge
+                        this.refreshCoinCard(coinId);
+                        refreshed = true;
+                    } else {
+                        // As a fallback, enable pill and show Remove (server considers user owner)
+                        if (pill) {
+                            pill.dataset.loading = 'false';
+                            pill.disabled = false;
+                            pill.textContent = 'Remove';
+                        }
+                        // Optimistically update the card too
+                        this.refreshCoinCard(coinId);
+                        refreshed = true;
+                    }
+                    // Stop further processing
+                    return;
+                }
+
+                throw new Error(err.detail || 'Failed to add ownership');
+            }
+
+            this.showToast('Added to history');
+
+            // Try to refresh the coin details from the server and update modal
+            const detailed = await this.fetchCoinDetails(coinId);
+            if (detailed) {
+                // Update local caches where possible
+                const idx = this.coins.findIndex(c => c.coin_id === coinId);
+                if (idx !== -1) this.coins[idx].owners = detailed.owners || this.coins[idx].owners;
+
+                // Also update filteredCoins reference used for navigation
+                this.filteredCoins = this.filteredCoins.map(c => c.coin_id === coinId ? { ...c, owners: detailed.owners || c.owners } : c);
+
+                this.populateCoinModal(detailed);
+                // Update the card badge after server-provided details
+                this.refreshCoinCard(coinId);
+                refreshed = true;
+            } else {
+                // If we couldn't fetch details, do an optimistic local update so the modal reflects the new ownership
+                const ownerEntry = { owner: name, acquired_date: new Date().toISOString() };
+
+                const idx = this.coins.findIndex(c => c.coin_id === coinId);
+                if (idx !== -1) {
+                    this.coins[idx].owners = this.coins[idx].owners || [];
+                    // Avoid duplicate
+                    if (!this.coins[idx].owners.some(o => (o.owner || o) === name)) {
+                        this.coins[idx].owners.unshift(ownerEntry);
+                    }
+                }
+
+                this.filteredCoins = this.filteredCoins.map(c => {
+                    if (c.coin_id === coinId) {
+                        c.owners = c.owners || [];
+                        if (!c.owners.some(o => (o.owner || o) === name)) c.owners.unshift(ownerEntry);
+                    }
+                    return c;
+                });
+
+                // Re-render modal using the local optimistic state
+                const coin = this.coins.find(c => c.coin_id === coinId) || { coin_id: coinId, owners: [ownerEntry] };
+                this.populateCoinModal(coin);
+                // Optimistically refresh card badge
+                this.refreshCoinCard(coinId);
+                refreshed = true;
+            }
+        } catch (error) {
+            console.error('Add ownership error:', error);
+            this.showToast('Failed to add ownership');
+        } finally {
+            // If modal wasn't refreshed (e.g. fetch failed), restore pill state
+            if (pill && !refreshed) {
+                // If we didn't refresh but the server call likely succeeded, ensure pill is enabled and shows state consistent with ownership
+                pill.dataset.loading = 'false';
+                pill.disabled = false;
+                // If add succeeded but fetch failed, assume ownership and show 'Remove'
+                pill.textContent = 'Remove';
+            }
+        }
+    }
+
+    // Remove coin from the currently selected user (with confirmation)
+    async removeCoinFromSelectedUser(coinId) {
+        if (!this.selectedMember) return;
+        const name = (typeof this.selectedMember === 'string') ? this.selectedMember : (this.selectedMember.user || this.selectedMember.name);
+        if (!name) return;
+        const confirmRemove = confirm(`Confirm remove coin?`);
+        if (!confirmRemove) return;
+
+        const pill = document.querySelector('#coinDetailModal .history-pill');
+        if (pill && pill.dataset.loading === 'true') return;
+
+        if (pill) {
+            pill.dataset.loading = 'true';
+            pill.disabled = true;
+            pill.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Removing...';
+        }
+
+        let refreshed = false;
+        try {
+            const payload = {
+                name: name,
+                coin_id: coinId,
+                removal_date: new Date().toISOString(),
+                created_by: 'web-ui'
+            };
+
+            const res = await fetch(this.getApiUrl('/api/ownership/remove'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.detail || 'Failed to remove ownership');
+            }
+
+            this.showToast('Removed from history');
+
+            const detailed = await this.fetchCoinDetails(coinId);
+            if (detailed) {
+                const idx = this.coins.findIndex(c => c.coin_id === coinId);
+                if (idx !== -1) this.coins[idx].owners = detailed.owners || this.coins[idx].owners;
+
+                this.filteredCoins = this.filteredCoins.map(c => c.coin_id === coinId ? { ...c, owners: detailed.owners || c.owners } : c);
+
+                this.populateCoinModal(detailed);
+                // Refresh the card badge to reflect removal
+                this.refreshCoinCard(coinId);
+                refreshed = true;
+            }
+        } catch (error) {
+            console.error('Remove ownership error:', error);
+            this.showToast('Failed to remove ownership');
+        } finally {
+            if (pill && !refreshed) {
+                pill.dataset.loading = 'false';
+                pill.disabled = false;
+                pill.textContent = 'Remove';
+            }
         }
     }
 

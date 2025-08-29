@@ -75,6 +75,85 @@
     animation: coin-spin 3s infinite ease-in-out;
 }
 
+/* Group badge in header (slightly larger for visibility in user-mode) */
+.group-badge {
+    font-size: 1.125rem; /* slightly larger for better click target */
+    padding: 0.5rem 0.95rem;
+    border-radius: 12px;
+    line-height: 1; /* keep compact */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer; /* indicate clickable */
+    transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+}
+
+.group-badge .fa-users {
+    font-size: 1.1rem;
+}
+
+.group-badge small {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* If group-badge is used as an anchor, remove default anchor styles but keep accessibility */
+.group-badge[href] {
+    color: inherit;
+    text-decoration: none;
+}
+
+.group-badge[href]:hover,
+.group-badge[href]:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    opacity: 0.98;
+}
+
+.group-badge[href]:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Make the group badge a solid primary pill for clear contrast on white navbar */
+.group-badge.bg-primary,
+.group-badge.bg-primary[href],
+.group-badge {
+    background-color: var(--primary-color) !important; /* primary blue */
+    color: #ffffff !important; /* white text for contrast */
+    border: none !important;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+}
+
+.group-badge .fa-users,
+.group-badge .fw-semibold,
+.group-badge small {
+    color: inherit; /* icon and text stay white */
+}
+
+.group-badge small {
+    opacity: 0.9;
+}
+
+/* Hover/focus: slightly darker primary to indicate interactivity */
+.group-badge[href]:hover,
+.group-badge[href]:focus {
+    background-color: #005bb5 !important; /* darker blue */
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(2,6,23,0.08);
+}
+
+.group-badge[href]:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 12px rgba(2,6,23,0.06);
+}
+
+/* Focus ring for keyboard users */
+.group-badge[href]:focus {
+    outline: 3px solid rgba(59,130,246,0.16);
+    outline-offset: 2px;
+}
+
 /* Hero section coin logo */
 .coin-logo {
     animation: coin-spin 3s infinite ease-in-out;
@@ -158,8 +237,227 @@
     transition: transform 0.3s ease;
 }
 
+/* Indicate the coin image is interactive when it opens the detail modal */
+.coin-image-clickable {
+    cursor: pointer;
+}
+
 .coin-card:hover .coin-image {
     transform: scale(1.05);
+}
+
+/* Catalog page: reuse hero background and hero coin card visuals */
+.catalog-page {
+    /* same as .hero-section for consistent look */
+    background: linear-gradient(135deg, var(--primary-color) 0%, #004499 100%);
+    min-height: 500px; /* keep hero-like height tone */
+    padding-bottom: 60px;
+}
+
+/* Catalog header and results count should be white on hero-like background */
+.catalog-page h2,
+.catalog-page h1,
+.catalog-page .results-header,
+.catalog-page #results-count {
+    color: white !important;
+}
+
+/* Slightly dim the results-count to match hero micro-copy */
+.catalog-page #results-count {
+    color: rgba(255,255,255,0.85) !important;
+    font-weight: 500;
+}
+
+.catalog-page #coins-grid {
+    perspective: 1000px; /* enable 3D perspective for children */
+}
+
+/* Make catalog coin cards use the hero coin visual language */
+.catalog-page .coin-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04);
+    transform-style: preserve-3d;
+    transition: transform 0.35s cubic-bezier(.2,.9,.2,1), box-shadow 0.35s ease;
+}
+
+.catalog-page .coin-card .card-body { background: transparent; }
+
+/* subtle pop on hover, matching hero card feel */
+.catalog-page .coin-card:hover {
+    transform: translateY(-6px) rotateX(3deg) scale(1.02);
+    box-shadow: 0 18px 30px rgba(0,0,0,0.22), inset 0 2px 0 rgba(255,255,255,0.06);
+}
+
+/* Reuse hero pop style for opened card: map .card-pop to the hero-card-pop look */
+.catalog-page .coin-card.card-pop,
+.coin-card.hero-card-pop,
+.hero-card-pop {
+    transform: translateY(-6px) rotateX(3deg) scale(1.02);
+    box-shadow: 0 18px 30px rgba(0,0,0,0.22), inset 0 2px 0 rgba(255,255,255,0.06);
+}
+
+/* Slightly enlarge image when popped */
+.catalog-page .coin-card.card-pop .coin-image {
+    transform: scale(1.08);
+}
+
+/* Colors inside coin card to match hero coin card */
+.catalog-page .coin-card,
+.catalog-page .coin-card .card-body,
+.catalog-page .coin-card .card-title,
+.catalog-page .coin-card .card-text,
+.catalog-page .coin-card .h5 {
+    color: rgba(255,255,255,0.95);
+}
+
+.catalog-page .coin-card .card-title {
+    font-weight: 700;
+}
+
+/* Type badge (top-left) - lighter translucent pill like hero */
+.catalog-page .coin-card .badge.position-absolute.start-0 {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border-radius: 12px;
+    padding: 0.35rem 0.6rem;
+    font-weight: 700;
+}
+
+/* Ownership badge contrast on dark hero background */
+.catalog-page .coin-card .ownership-badge {
+    /* Match RE badge visual: green circular gradient */
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(145deg,#28a745,#1e7e34) !important;
+    color: white !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 2px solid rgba(255,255,255,0.12) !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.22) !important;
+    z-index: 15 !important;
+    cursor: pointer !important;
+}
+
+/* Value on card: make it white and bolder, similar to hero */
+.catalog-page .coin-card .h5 {
+    color: white !important;
+    font-weight: 800;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+/* Coin image: add subtle white border and glow like hero */
+.catalog-page .coin-card .coin-image {
+    background: rgba(255,255,255,0.02);
+    border: 3px solid rgba(255,255,255,0.06);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.catalog-page .coin-card:hover .coin-image {
+    transform: scale(1.06);
+}
+
+/* White circular plate behind coin image like hero */
+.catalog-page .coin-image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2rem; /* even tighter padding so coin fills plate more */
+    background: #ffffff;
+    border-radius: 50%;
+    width: 160px; /* plate size retained */
+    height: 160px;
+    margin: 10px auto 0 auto;
+    box-shadow: 0 12px 26px rgba(0,0,0,0.20);
+}
+
+.catalog-page .coin-image-wrapper .coin-image {
+    width: 150px; /* slightly larger coin image to occupy more plate */
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.08);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+    background: #ffffff;
+}
+
+/* Option 1: High-contrast solid circular badge for CC / RE
+   Note: background color removed here so individual coin-type classes
+   control the badge color and avoid clashing with ownership badge. */
+.catalog-page .coin-card .badge.position-absolute.start-0 {
+    color: #fff;
+    font-weight: 800;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255,255,255,0.06);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+    z-index: 12;
+    padding: 0; /* enforce circular geometry */
+    /* Default to blue for type badge unless overridden by .coin-type-re */
+    background: linear-gradient(145deg,#e6f4ff,#cfeaff) !important;
+    color: #03406a !important;
+}
+
+/* Blue variant for CC */
+.catalog-page .coin-card .badge.bg-primary.position-absolute.start-0 {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    display:inline-flex; align-items:center; justify-content:center;
+    background: linear-gradient(145deg,#e6f4ff,#cfeaff); /* light-blue fill */
+    color: #03406a; /* darker blue text for contrast */
+    border: 1px solid rgba(3,64,106,0.08);
+    box-shadow: 0 6px 16px rgba(3,64,106,0.08);
+    padding: 0;
+}
+
+/* Green variant for RE removed to avoid conflict with ownership badge; use .coin-type-re instead */
+.catalog-page .coin-card .badge.bg-success.position-absolute.start-0 {
+    /* intentionally left as no-op to avoid empty ruleset; coin color is controlled by .coin-type-re */
+    --_noop: 0;
+}
+
+/* Value badge style (if shown inside card) */
+.catalog-page .coin-value-badge,
+.catalog-page .coin-card .coin-value-badge {
+    background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+    color: white;
+    padding: 0.25rem 0.6rem;
+    border-radius: 14px;
+    font-weight: 700;
+}
+
+/* Small texts lighter */
+.catalog-page .coin-card .card-text.small,
+.catalog-page .coin-card .card-text.text-muted {
+    color: rgba(255,255,255,0.85) !important;
+}
+
+/* Make the type/series line (e.g. "Commemorative • 2024") match hero white */
+.catalog-page .coin-card .card-text.text-muted.small {
+    /* match hero's text-white-50: muted white */
+    color: rgba(255,255,255,0.5) !important;
+}
+
+/* Make the feature text match hero styling (slightly lighter white) */
+.catalog-page .coin-card .card-text.small.text-truncate {
+    /* match the muted hero tone used for type/series */
+    color: rgba(255,255,255,0.5) !important;
 }
 
 /* Filters Sidebar */
@@ -381,14 +679,25 @@
     display: flex;
     flex-direction: column;
     padding: 1.5rem;
-    max-height: 80vh;
-    overflow-y: auto;
+    /* Allow the modal body to control scrolling. Removing max-height/overflow
+       from the inner container avoids nested scrollbars in the modal. */
+    max-height: none;
+    overflow: visible;
 }
 
 .coin-image-section {
     display: flex;
     justify-content: center;
     margin: 1rem 0;
+}
+
+/* Small pill button used to add/remove coin for selected user */
+.history-pill {
+    position: relative;
+    left: 0;
+    top: 0;
+    z-index: 20;
+    align-self: center;
 }
 
 .coin-main-image {
@@ -403,6 +712,22 @@
 
 .coin-main-image:hover {
     transform: scale(1.05);
+}
+
+/* Circle color variants for coin detail image */
+.coin-main-image.circle-default {
+    border-color: rgba(255,255,255,0.85);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+.coin-main-image.circle-green {
+    border-color: var(--secondary-color, #28a745);
+    box-shadow: 0 15px 35px rgba(40,167,69,0.18);
+}
+
+.coin-main-image.circle-blue {
+    border-color: var(--primary-color);
+    box-shadow: 0 15px 35px rgba(0,102,204,0.28);
 }
 
 .coin-thumbnail-gallery {
@@ -441,6 +766,106 @@
     margin-bottom: 1rem;
     padding-bottom: 1rem;
     border-bottom: 2px solid #e9ecef;
+}
+
+/* Modal-specific header overrides: align left and ensure country name truncates */
+#coinDetailModal .coin-header {
+    text-align: left;
+}
+
+#coinDetailModal .coin-country {
+    max-width: 220px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+#coinDetailModal .coin-value-badge {
+    /* keep the same visual style but ensure it doesn't wrap */
+    white-space: nowrap;
+}
+
+/* Modal-specific visual adjustments */
+#coinDetailModal .modal-coin-flag {
+    font-size: 2.2rem; /* larger flag */
+    line-height: 1;
+}
+
+#coinDetailModal .modal-coin-country {
+    font-size: 1.25rem; /* larger country text */
+    font-weight: 700;
+    color: rgba(255,255,255,0.95);
+}
+
+#coinDetailModal .modal-coin-value {
+    font-size: 1.6rem; /* larger value */
+    font-weight: 800;
+    color: white;
+.ownership-modal-badges .badge.bg-primary,
+.badge.bg-primary {
+    background: var(--primary-color) !important;
+    color: #fff !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* Owner info modal: selected owner row */
+.owner-item.selected-owner {
+    background: rgba(0, 102, 204, 0.08);
+    border-left: 4px solid var(--primary-color);
+    padding-left: 0.5rem;
+    border-radius: 6px;
+}
+
+.owner-item .owner-name {
+    font-weight: 600;
+}
+    text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+#coinDetailModal .coin-type-year {
+    /* match card small muted text: smaller, muted white */
+    font-size: 0.875rem; /* small */
+    color: rgba(255,255,255,0.5) !important;
+    font-weight: 500;
+}
+
+/* Remove the pill background for the value in the modal */
+#coinDetailModal .modal-coin-value {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Make the modal header sticky so it remains visible while scrolling */
+#coinDetailModal .coin-header {
+    position: sticky;
+    top: 0;
+    /* layered background: translucent overlay on top of the hero gradient so the
+       header matches the card look even inside the white modal shell */
+    background-image: 
+        linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+        linear-gradient(135deg, var(--primary-color) 0%, #004499 100%);
+    z-index: 10;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    /* offset text from edges */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    /* rounded top corners to match modal content */
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    /* ensure background respects rounded corners */
+    background-clip: padding-box;
+    color: rgba(255,255,255,0.95);
+    /* subtle inner separation */
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.03);
+}
+
+#coinDetailModal .modal-body {
+    max-height: calc(100vh - 120px);
+    overflow: auto;
 }
 
 .coin-title {
@@ -655,6 +1080,8 @@
         gap: 1.5rem;
         margin-bottom: 1rem;
     }
+
+    /* other responsive modal rules */
     
     .simple-detail {
         min-width: 70px;
@@ -675,8 +1102,16 @@
     }
     
     .feature-description {
-        /* placeholder for any feature description styling */
+        font-size: 0.95rem;
+        color: #6c757d;
+        line-height: 1.3;
     }
+}
+
+/* Highlight feature cell when there is a conflict (same id but different feature) */
+.conflict-feature {
+    background: linear-gradient(90deg, rgba(255,245,230,0.9), rgba(255,250,240,0.9));
+    border-left: 4px solid rgba(255,193,7,0.6);
 }
 
 /* Responsive adjustments for simplified modal */
@@ -751,6 +1186,36 @@
     background-color: transparent;
 }
 
+/* Semantic coin type badges (Option A) - avoid using bg-success for RE to keep ownership badge distinct */
+.catalog-page .coin-card .badge.coin-type-cc,
+.catalog-page .coin-card .coin-type-cc {
+    background: linear-gradient(145deg, #3b82f6, #1e40af) !important;
+    color: #fff !important;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    font-weight: 600;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 6px rgba(14,165,233,0.08);
+}
+.catalog-page .coin-card .badge.coin-type-re,
+.catalog-page .coin-card .coin-type-re {
+    background: linear-gradient(145deg, #6c757d, #495057) !important;
+    color: #fff !important;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.45rem;
+    font-weight: 600;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Extra-specific rules (matching the badge position classes) to guarantee override */
+.catalog-page .coin-card .badge.position-absolute.start-0.coin-type-cc {
+    background: linear-gradient(145deg, #3b82f6, #1e40af) !important;
+    color: #fff !important;
+}
+.catalog-page .coin-card .badge.position-absolute.start-0.coin-type-re {
+    background: linear-gradient(145deg, #6c757d, #495057) !important;
+    color: #fff !important;
+}
+
 /* Ownership badge in upper right corner - Override all Bootstrap styles */
 .ownership-badge {
     font-size: 0.75rem !important;
@@ -779,17 +1244,26 @@
     line-height: 1 !important;
 }
 
-.ownership-badge::after {
-    content: "▼";
-    position: absolute;
-    bottom: -3px;
-    right: -1px;
-    font-size: 8px;
-    color: rgba(255,255,255,0.8);
-    text-shadow: 0 1px 1px rgba(0,0,0,0.3);
-    animation: pulse 2s infinite;
-    z-index: 1;
+/* Coin detail modal: reuse coin-type styles from catalog cards */
+.coin-type-section .badge.coin-type-cc,
+.coin-type-section .coin-type-cc {
+    background: linear-gradient(145deg, #3b82f6, #1e40af) !important;
+    color: #fff !important;
+    border-radius: 0.5rem;
+    padding: 0.35rem 0.7rem;
+    font-weight: 700;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 6px 18px rgba(14,165,233,0.06);
 }
+.coin-type-section .badge.coin-type-re,
+.coin-type-section .coin-type-re {
+    background: linear-gradient(145deg, #6c757d, #495057) !important;
+    color: #fff !important;
+    border-radius: 0.5rem;
+    padding: 0.35rem 0.7rem;
+    font-weight: 700;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 6px 18px rgba(0,0,0,0.06);
+}
+
 
 /* Hero latest coin small card */
 #hero-latest-coin {
@@ -850,19 +1324,33 @@
         color: rgba(255,255,255,0.95) !important;
     }
 }
-/* Ensure arrow appears on all ownership badge types */
-.ownership-badge.ownership-full::after,
-.ownership-badge.ownership-partial::after {
-    content: "▼";
-    position: absolute;
-    bottom: -3px;
-    right: -1px;
-    font-size: 8px;
-    color: rgba(255,255,255,0.9);
-    text-shadow: 0 1px 1px rgba(0,0,0,0.4);
-    animation: pulse 2s infinite;
-    z-index: 1;
+
+/* Compact footer adjustments to reduce offsets from edges and vertical padding */
+.bg-dark.py-2.mt-auto {
+    padding-top: 0.45rem !important;
+    padding-bottom: 0.45rem !important;
 }
+
+.footer-coin-text {
+    font-size: 0.85rem;
+}
+
+.footer .row > div {
+    padding-top: 0.15rem;
+    padding-bottom: 0.15rem;
+}
+
+@media (max-width: 768px) {
+    .footer .row {
+        text-align: center;
+    }
+    .footer .col.text-end {
+        text-align: center !important;
+        margin-top: 0.25rem;
+    }
+}
+/* Ensure arrow appears on all ownership badge types */
+/* Removed ::after arrow from ownership badges to prevent the small ▼ pointer from appearing */
 
 @keyframes pulse {
     0%, 100% {
@@ -1095,7 +1583,8 @@
         text-align: center;
     }
     
-    .navbar .container {
+    .navbar .container,
+    .navbar .container-fluid {
         flex-direction: column;
         align-items: center;
     }
@@ -1132,6 +1621,36 @@
         font-size: 0.8rem;
         color: #868e96;
     }
+}
+
+/* Compact navbar: reduce horizontal padding and align items closer to edges */
+.navbar {
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+}
+
+.navbar .container-fluid.px-3,
+.navbar .container.px-3 {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+}
+
+/* Make brand slightly more compact */
+.navbar-brand {
+    gap: 0.5rem;
+    padding-right: 0.25rem;
+}
+
+/* Reduce space between nav links and edges */
+.navbar-nav .nav-link {
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
+}
+
+/* Ensure group badge sits flush to the right with small left margin */
+.navbar-nav .nav-item .badge {
+    margin-left: 0.25rem;
+    margin-right: 0; /* remove extra margin */
 }
 
 /* Admin Panel Styles */

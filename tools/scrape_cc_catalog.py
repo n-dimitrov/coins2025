@@ -5,19 +5,27 @@ from selenium.common.exceptions import NoSuchElementException
 import time
 import os
 import json
+import pandas as pd
+import argparse
 
 options = Options()
 options.add_argument("Accept=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
 options.add_argument("User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
 
+# CLI
+parser = argparse.ArgumentParser(description='Scrape ECB commemorative coins page and generate JSON/CSV outputs')
+parser.add_argument('-y', '--year', default='2025', help='Year to scrape (default: 2025)')
+parser.add_argument('-o', '--outdir', default='tmp', help='Output directory (default: tmp)')
+parser.add_argument('--no-csv', action='store_true', help='Do not generate CSV, only JSON')
+parser.add_argument('--skip-placeholder', dest='skip_placeholder', action='store_true', help='Skip placeholder images (default)')
+parser.add_argument('--no-skip-placeholder', dest='skip_placeholder', action='store_false', help='Do not skip placeholder images')
+parser.set_defaults(skip_placeholder=True)
+args = parser.parse_args()
+
+year = args.year
+outdir = args.outdir
+
 driver = webdriver.Chrome(options=options)
-
-urls = [
-    "https://www.ecb.europa.eu/euro/coins/comm/html/comm_2004.en.html",
-]
-
-# https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024.en.html
-year = "2024"
 url = "https://www.ecb.europa.eu/euro/coins/comm/html/comm_" + year + ".en.html"
 
 print("Year: ", year , "Loading URL: ", url)
@@ -127,11 +135,10 @@ for coin in coins:
 
 driver.quit()
 
-dir = "tmp"
-if not os.path.exists(dir):
-    os.makedirs(dir)
+if not os.path.exists(outdir):
+    os.makedirs(outdir, exist_ok=True)
 
-filename = f"{dir}/cc_catalog.json"
+filename = f"{outdir}/cc_catalog.json"
 
 if os.path.exists(filename):
     with open(filename, 'r') as f:
@@ -145,3 +152,146 @@ with open(filename, 'w') as f:
     f.write(json.dumps(data, indent=4))
 
 print(f'Saved {filename}')
+
+# --- generate CSV (same output path used by previous generate_cc_csv.py) ---
+output_csv = f"{outdir}/cc.csv"
+
+three_letters = {
+    "Andorra": "AND",
+    "Austria": "AUT",
+    "Belgium": "BEL",
+    "Croatia": "HRV",
+    "Cyprus": "CYP",
+    "Estonia": "EST",
+    "Euro area countries": "Euro area countries",
+    "Finland": "FIN",
+    "France": "FRA",
+    "Germany": "DEU",
+    "Greece": "GRC",
+    "Ireland": "IRL",
+    "Italy": "ITA",
+    "Latvia": "LVA",
+    "Lithuania": "LTU",
+    "Luxembourg": "LUX",
+    "Malta": "MLT",
+    "Monaco": "MCO",
+    "Netherlands": "NLD",
+    "Portugal": "PRT",
+    "San Marino": "SMR",
+    "Slovakia": "SVK",
+    "Slovenia": "SVN",
+    "Spain": "ESP",
+    "Vatican City": "VAT"
+}
+
+if not args.no_csv:
+    print("Generating CSV from", filename)
+    with open(filename) as f:
+        ccdata = json.load(f)
+
+newrows = []
+skipped_coins = []  # collect coins skipped because of placeholder images
+for y in ccdata:
+    for country in ccdata[y]:
+        if country == "Euro area countries":
+            for coin in ccdata[y][country]:
+                feature = coin.get('feature', '')
+                image_main = coin.get('image', '')
+                volume = coin.get('volume', '')
+                series = coin.get('series', '')
+                coinidex = series.split('-')[-1]
+                images = coin.get('images', []) or [image_main]
+
+                # optionally skip the entire coin if any placeholder images are present
+                if args.skip_placeholder:
+                    placeholder_images = [img for img in images if 'placeholder_coming_soon' in img.lower()]
+                    if placeholder_images:
+                        skipped_coins.append({
+                            "year": y,
+                            "country": country,
+                            "series": series,
+                            "feature": feature,
+                            "skipped_images": placeholder_images
+                        })
+                        # skip this coin entirely
+                        continue
+
+                for image in images:
+                    # try to extract country code from filename; fallback to XXX
+                    try:
+                        c = image.split('_')[-1].split('.jpg')[0]
+                    except Exception:
+                        c = image
+                    ccode = "XXX"
+                    if three_letters.get(c) is not None:
+                        ccode = three_letters[c]
+                    _id = "CC" + y + ccode + "-A-" + coinidex + "-200"
+
+                    row = {
+                        "type": "CC",
+                        "year": y,
+                        "country": c,
+                        "value": 2.00,
+                        "series": series,
+                        "id": _id,
+                        "feature": feature,
+                        "image": image,
+                        "volume": volume if volume is not None else ""
+                    }
+                    newrows.append(row)
+        else:
+            index = 0
+            for coin in ccdata[y][country]:
+                feature = coin.get('feature', '')
+                image = coin.get('image', '')
+
+                # skip single-image coins whose image is a placeholder (if requested)
+                if args.skip_placeholder and isinstance(image, str) and 'placeholder_coming_soon' in image.lower():
+                    skipped_coins.append({
+                        "year": y,
+                        "country": country,
+                        "series": coin.get('series', ''),
+                        "feature": feature,
+                        "skipped_image": image
+                    })
+                    continue
+
+                volume = coin.get('volume', '')
+                series = coin.get('series', '')
+                ccode = three_letters.get(country, 'XXX')
+                index += 1
+                coinidex = "CC" + str(index)
+                _id = "CC" + y + ccode + "-A-" + coinidex + "-200"
+
+                row = {
+                    "type": "CC",
+                    "year": y,
+                    "country": country,
+                    "value": 2.00,
+                    "series": series,
+                    "id": _id,
+                    "feature": feature,
+                    "image": image,
+                    "volume": volume if volume is not None else ""
+                }
+                newrows.append(row)
+
+    df = pd.DataFrame(newrows)
+    if not df.empty:
+        df = df[["type", "year", "country", "series", "value", "id", "image", "feature", "volume"]]
+        df.to_csv(output_csv, index=False)
+        print(f"Data saved to {output_csv}")
+    else:
+        print("No rows to save to CSV")
+    # report skipped placeholder coins
+    if skipped_coins:
+        print(f"Skipped {len(skipped_coins)} coin(s) because of placeholder images. Writing details to {outdir}/skipped_cc.json")
+        try:
+            with open(f"{outdir}/skipped_cc.json", 'w') as sf:
+                json.dump(skipped_coins, sf, indent=2)
+        except Exception as e:
+            print("Failed to write skipped coins file:", e)
+    else:
+        print("No placeholder-skipped coins detected.")
+else:
+    print('CSV generation skipped by --no-csv')
