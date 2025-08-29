@@ -348,21 +348,34 @@ class BigQueryService:
         record_id = str(uuid.uuid4())
         current_time = dt.now()
 
-        # Lightweight existence check (cheaper than windowed query)
+        # Lightweight existence check: fetch the latest history row for this
+        # user+coin and interpret its is_active flag. This avoids false
+        # positives when an older active row exists but a newer removal
+        # record has been written.
         check_query = f"""
-        SELECT 1 as exists_flag
+        SELECT h.is_active
         FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
-        WHERE h.coin_id = @coin_id AND h.name = @name AND h.is_active = true
+        WHERE h.coin_id = @coin_id AND h.name = @name
+        ORDER BY h.created_at DESC, h.date DESC
         LIMIT 1
         """
 
         start_check = datetime.now()
-        existing = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
+        latest = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
         check_duration = (datetime.now() - start_check).total_seconds()
         logger.info(f"Lightweight ownership check took {check_duration:.3f}s for {name}/{coin_id}")
 
-        if existing:
-            raise ValueError(f"User {name} already owns coin {coin_id}")
+        if latest:
+            # Normalize boolean which may arrive as a native bool or string
+            is_active = latest[0].get('is_active')
+            is_active_flag = False
+            if isinstance(is_active, str):
+                is_active_flag = is_active.lower() == 'true'
+            else:
+                is_active_flag = bool(is_active)
+
+            if is_active_flag:
+                raise ValueError(f"User {name} already owns coin {coin_id}")
 
         # Prepare row for streaming insert
         # Ensure datetime fields are JSON-serializable for streaming insert
@@ -440,20 +453,33 @@ class BigQueryService:
         import uuid
         from datetime import datetime as dt
         
-        # Lightweight existence check to confirm current ownership
+        # Lightweight existence check: fetch the latest history row for this
+        # user+coin and confirm the latest is_active flag. This avoids
+        # failures when older active rows exist but a later removal cleared ownership.
         check_query = f"""
-        SELECT 1 as exists_flag
+        SELECT h.is_active
         FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
-        WHERE h.coin_id = @coin_id AND h.name = @name AND h.is_active = true
+        WHERE h.coin_id = @coin_id AND h.name = @name
+        ORDER BY h.created_at DESC, h.date DESC
         LIMIT 1
         """
 
         start_check = datetime.now()
-        current_ownership = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
+        latest = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
         check_duration = (datetime.now() - start_check).total_seconds()
         logger.info(f"Lightweight ownership existence check took {check_duration:.3f}s for {name}/{coin_id}")
 
-        if not current_ownership:
+        if not latest:
+            raise ValueError(f"User {name} does not currently own coin {coin_id}")
+
+        is_active = latest[0].get('is_active')
+        is_active_flag = False
+        if isinstance(is_active, str):
+            is_active_flag = is_active.lower() == 'true'
+        else:
+            is_active_flag = bool(is_active)
+
+        if not is_active_flag:
             raise ValueError(f"User {name} does not currently own coin {coin_id}")
 
         record_id = str(uuid.uuid4())

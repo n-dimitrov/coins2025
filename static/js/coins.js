@@ -947,6 +947,37 @@ class CoinCatalog {
         document.querySelector('#coinDetailModal .modal-body').innerHTML = modalContent;
     }
 
+    // Refresh the coin card DOM for a single coin after its data changed
+    refreshCoinCard(coinId) {
+        try {
+            const coin = this.coins.find(c => c.coin_id === coinId);
+            if (!coin) return;
+
+            const imgEl = document.querySelector(`[data-coin-id="${coinId}"]`);
+            if (!imgEl) return;
+
+            // Preserve card-pop state if present
+            const oldCard = imgEl.closest('.coin-card');
+            const hadPop = oldCard ? oldCard.classList.contains('card-pop') : false;
+
+            // Outer column/container that wraps the card
+            const colEl = imgEl.closest('.col-md-6, .col-lg-4, .col-xl-3, .col');
+            if (!colEl) return;
+
+            // Replace the whole column with fresh HTML from createCoinCard
+            colEl.outerHTML = this.createCoinCard(coin);
+
+            // Re-apply card-pop if it was present
+            if (hadPop) {
+                const newImg = document.querySelector(`[data-coin-id="${coinId}"]`);
+                const newCard = newImg ? newImg.closest('.coin-card') : null;
+                if (newCard) newCard.classList.add('card-pop');
+            }
+        } catch (err) {
+            console.error('Failed to refresh coin card for', coinId, err);
+        }
+    }
+
     setupModalNavigation() {
         const modal = document.getElementById('coinDetailModal');
         const modalBody = modal.querySelector('.modal-body');
@@ -1285,6 +1316,8 @@ class CoinCatalog {
                         if (idx !== -1) this.coins[idx].owners = detailed.owners || this.coins[idx].owners;
                         this.filteredCoins = this.filteredCoins.map(c => c.coin_id === coinId ? { ...c, owners: detailed.owners || c.owners } : c);
                         this.populateCoinModal(detailed);
+                        // Refresh the card badge
+                        this.refreshCoinCard(coinId);
                         refreshed = true;
                     } else {
                         // As a fallback, enable pill and show Remove (server considers user owner)
@@ -1293,6 +1326,8 @@ class CoinCatalog {
                             pill.disabled = false;
                             pill.textContent = 'Remove';
                         }
+                        // Optimistically update the card too
+                        this.refreshCoinCard(coinId);
                         refreshed = true;
                     }
                     // Stop further processing
@@ -1315,6 +1350,8 @@ class CoinCatalog {
                 this.filteredCoins = this.filteredCoins.map(c => c.coin_id === coinId ? { ...c, owners: detailed.owners || c.owners } : c);
 
                 this.populateCoinModal(detailed);
+                // Update the card badge after server-provided details
+                this.refreshCoinCard(coinId);
                 refreshed = true;
             } else {
                 // If we couldn't fetch details, do an optimistic local update so the modal reflects the new ownership
@@ -1340,6 +1377,8 @@ class CoinCatalog {
                 // Re-render modal using the local optimistic state
                 const coin = this.coins.find(c => c.coin_id === coinId) || { coin_id: coinId, owners: [ownerEntry] };
                 this.populateCoinModal(coin);
+                // Optimistically refresh card badge
+                this.refreshCoinCard(coinId);
                 refreshed = true;
             }
         } catch (error) {
@@ -1404,6 +1443,8 @@ class CoinCatalog {
                 this.filteredCoins = this.filteredCoins.map(c => c.coin_id === coinId ? { ...c, owners: detailed.owners || c.owners } : c);
 
                 this.populateCoinModal(detailed);
+                // Refresh the card badge to reflect removal
+                this.refreshCoinCard(coinId);
                 refreshed = true;
             }
         } catch (error) {
