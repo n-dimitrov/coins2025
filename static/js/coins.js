@@ -1304,7 +1304,7 @@ class CoinCatalog {
         if (!this.selectedMember) return;
         const name = (typeof this.selectedMember === 'string') ? this.selectedMember : (this.selectedMember.user || this.selectedMember.name);
         if (!name) return;
-        const confirmAdd = confirm(`Add ${name} to coin ${coinId}?`);
+        const confirmAdd = confirm(`Confirm add coin?`);
         if (!confirmAdd) return;
 
         // Find the pill in the modal (may be recreated after refresh)
@@ -1430,7 +1430,7 @@ class CoinCatalog {
         if (!this.selectedMember) return;
         const name = (typeof this.selectedMember === 'string') ? this.selectedMember : (this.selectedMember.user || this.selectedMember.name);
         if (!name) return;
-        const confirmRemove = confirm(`Remove ${name} from coin ${coinId}?`);
+        const confirmRemove = confirm(`Confirm remove coin?`);
         if (!confirmRemove) return;
 
         const pill = document.querySelector('#coinDetailModal .history-pill');
