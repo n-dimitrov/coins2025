@@ -757,15 +757,44 @@ class CoinCatalog {
 
     async fetchCoinDetails(coinId) {
         try {
-            const response = await fetch(this.getApiUrl(`/api/coins/${coinId}`));
-            if (response.ok) {
-                const data = await response.json();
-                return data.coin;
+            // Always fetch the canonical coin data
+            const coinResp = await fetch(this.getApiUrl(`/api/coins/${coinId}`));
+            let coin = null;
+            if (coinResp.ok) {
+                const data = await coinResp.json().catch(() => null);
+                coin = data ? data.coin : null;
             }
+
+            // If we're in a group context, also fetch ownership information for this coin
+            // and merge it into the returned coin object so callers (modal/card) see
+            // the most up-to-date ownership state.
+            if (this.groupContext && coin) {
+                try {
+                    const groupId = this.groupContext.id || this.groupContext.group_id || this.groupContext.groupKey || this.groupContext.group_key;
+                    // Prefer numeric/string id if available; omit param if not
+                    const ownersUrl = groupId ?
+                        this.getApiUrl(`/api/ownership/coin/${coinId}/owners?group_id=${encodeURIComponent(groupId)}`) :
+                        this.getApiUrl(`/api/ownership/coin/${coinId}/owners`);
+
+                    const ownersResp = await fetch(ownersUrl);
+                    if (ownersResp.ok) {
+                        const ownersData = await ownersResp.json().catch(() => null);
+                        if (ownersData && ownersData.owners !== undefined) {
+                            // Ensure owners is always an array for the UI code
+                            coin.owners = Array.isArray(ownersData.owners) ? ownersData.owners : [];
+                        }
+                    }
+                } catch (err) {
+                    // Non-fatal: if owners fetch fails, leave existing owners (if any)
+                    console.warn('Failed to fetch coin owners for group context', err);
+                }
+            }
+
+            return coin;
         } catch (error) {
             console.error('Error fetching coin details:', error);
+            return null;
         }
-        return null;
     }
 
     populateCoinModal(coin) {

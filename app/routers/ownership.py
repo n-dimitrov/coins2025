@@ -102,7 +102,7 @@ async def remove_coin_ownership(
 @router.get("/user/{user_name}/coins")
 async def get_user_coins(
     user_name: str,
-    group_id: Optional[int] = None,
+    group_id: Optional[str] = None,
     bigquery_service: BigQueryService = Depends(get_bigquery_service)
 ):
     """Get all coins currently owned by a user."""
@@ -124,7 +124,7 @@ async def get_user_coins(
 @router.get("/coin/{coin_id}/owners")
 async def get_coin_owners(
     coin_id: str,
-    group_id: Optional[int] = None,
+    group_id: Optional[str] = None,
     bigquery_service: BigQueryService = Depends(get_bigquery_service)
 ):
     """Get current owners of a specific coin."""
@@ -150,7 +150,7 @@ async def get_coin_owners(
 @router.get("/user/{user_name}/history")
 async def get_user_ownership_history(
     user_name: str,
-    group_id: Optional[int] = None,
+    group_id: Optional[str] = None,
     bigquery_service: BigQueryService = Depends(get_bigquery_service)
 ):
     """Get complete ownership history for a user (including removed coins)."""
