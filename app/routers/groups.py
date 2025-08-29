@@ -7,15 +7,15 @@ from app.models.group import (
     GroupUserAdd, GroupUserUpdate, GroupUserResponse,
     GroupListResponse, GroupUsersListResponse, ApiResponse
 )
-from app.services.bigquery_service import BigQueryService
+from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/groups", tags=["groups"])
 
-# Dependency to get BigQuery service
+# Dependency to get BigQuery service (cached provider)
 def get_bigquery_service() -> BigQueryService:
-    return BigQueryService()
+    return get_bq_provider()
 
 # Group management endpoints
 @router.post("/", response_model=ApiResponse, status_code=status.HTTP_201_CREATED)

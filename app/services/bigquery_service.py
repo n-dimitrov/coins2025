@@ -6,6 +6,8 @@ import logging
 import asyncio
 from app.config import settings
 
+from functools import lru_cache
+
 logger = logging.getLogger(__name__)
 
 class BigQueryService:
@@ -25,6 +27,7 @@ class BigQueryService:
             logger.error(f"Failed to initialize BigQuery client: {str(e)}")
             # Re-raise the exception so the application doesn't start with a broken service
             raise
+
 
     def _get_cache_key(self, query: str, params: dict) -> str:
         """Generate cache key from query and parameters."""
@@ -1476,3 +1479,27 @@ class BigQueryService:
         # Clear caches
         self._cache.clear()
         return {'success': True, 'message': 'History table deleted and recreated'}
+
+
+# Process-global singleton holder + initializer. We prefer an explicit
+# startup-initialized instance rather than implicit per-import caching so the
+# application lifecycle is deterministic. Call `init_bigquery_service()` at
+# application startup with a BigQueryService instance. `get_bigquery_service()`
+# returns the initialized instance or raises if not initialized.
+_bq_singleton: Optional[BigQueryService] = None
+
+def init_bigquery_service(instance: BigQueryService) -> None:
+    """Initialize the module-level singleton. Call this once during app startup."""
+    global _bq_singleton
+    _bq_singleton = instance
+
+def get_bigquery_service() -> BigQueryService:
+    """Return the startup-initialized BigQueryService.
+
+    Raises RuntimeError if `init_bigquery_service` was not called.
+    """
+    if _bq_singleton is None:
+        raise RuntimeError(
+            "BigQueryService not initialized. Ensure app startup called init_bigquery_service()."
+        )
+    return _bq_singleton

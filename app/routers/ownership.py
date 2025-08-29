@@ -4,7 +4,7 @@ from datetime import datetime
 import logging
 
 from app.models.ownership import OwnershipAdd, OwnershipRemove, OwnershipRecord, OwnershipResponse
-from app.services.bigquery_service import BigQueryService
+from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 from app.services.group_service import GroupService
 from app.config import settings
 
@@ -12,9 +12,9 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/ownership", tags=["ownership"])
 
-# Dependency to get BigQuery service
+# Dependency to get BigQuery service (use cached provider)
 def get_bigquery_service() -> BigQueryService:
-    return BigQueryService()
+    return get_bq_provider()
 
 def get_group_service() -> GroupService:
     return GroupService()
