@@ -13,7 +13,7 @@ A comprehensive, interactive web application for exploring and cataloging Euro c
 
 ## � Changelog
 
-### [Unreleased] - 2025-08-XX
+### [1.1.0] - 2025-08-29
 
 #### ✨ New Features
 - **BigQuery Service Initialization**: Initialize BigQueryService at startup and remove runtime fallback in GroupService
@@ -296,32 +296,172 @@ coins2025/
 
 ## 🔧 API Endpoints
 
-### Public Endpoints
+### Health Check Endpoints
+```
+GET  /api/health                # Basic health check
+GET  /api/ready                 # Readiness check
+GET  /api/health/bigquery       # BigQuery connectivity check
+```
+
+### Coin Catalog Endpoints
+```
+GET  /api/coins                 # List coins with filters
+GET  /api/coins/{coin_id}       # Get specific coin details
+GET  /api/coins/stats           # Get collection statistics
+GET  /api/coins/filters         # Get available filter options
+GET  /api/coins/group/{group_name} # List coins with group ownership
+```
+
+### Ownership Management Endpoints
+```
+POST /api/ownership/add         # Add coin to user's collection
+POST /api/ownership/remove      # Remove coin from user's collection
+GET  /api/ownership/user/{user_name}/coins      # Get user's owned coins
+GET  /api/ownership/coin/{coin_id}/owners       # Get coin's current owners
+GET  /api/ownership/user/{user_name}/history    # Get user's ownership history
+```
+
+### Group Management Endpoints
+```
+POST /groups/                   # Create new group
+GET  /groups/                   # List all groups
+GET  /groups/{group_key}        # Get group details
+PUT  /groups/{group_key}        # Update group
+DELETE /groups/{group_key}      # Delete group
+
+POST /groups/{group_key}/users  # Add user to group
+GET  /groups/{group_key}/users  # List group members
+PUT  /groups/{group_key}/users/{user_name}   # Update group member
+DELETE /groups/{group_key}/users/{user_name} # Remove user from group
+```
+
+### Admin Endpoints
+#### Coin Management
+```
+POST /api/admin/coins/upload    # Upload coin CSV file
+POST /api/admin/coins/import    # Import coins to BigQuery
+GET  /api/admin/coins/export    # Export coins as CSV
+GET  /api/admin/coins/view      # View coins in admin interface
+POST /api/admin/coins/reset     # Reset coin catalog
+GET  /api/admin/coins/filter-options # Get coin filter options
+```
+
+#### History Management
+```
+POST /api/admin/history/upload  # Upload history CSV file
+POST /api/admin/history/import  # Import history to BigQuery
+GET  /api/admin/history/export  # Export history as CSV
+POST /api/admin/history/import-csv-direct # Direct CSV import
+GET  /api/admin/history/view    # View history in admin interface
+POST /api/admin/history/reset   # Reset ownership history
+GET  /api/admin/history/filter-options # Get history filter options
+```
+
+#### System Management
+```
+POST /api/admin/clear-cache     # Clear application cache
+```
+
+### Page Endpoints (HTML Responses)
 ```
 GET  /                          # Homepage
-GET  /catalog                   # Catalog page
-GET  /catalog/group/{group_name} # Group catalog page
-GET  /coin/{coin_id}            # Individual coin details
+GET  /catalog                   # Coin catalog page
+GET  /coin/{coin_id}            # Individual coin details page
+GET  /Admin                     # Admin panel page
+GET  /favicon.ico               # Favicon
 
-GET  /api/health                # Health check
-GET  /api/coins                 # List coins with filters
-GET  /api/coins/{coin_id}       # Get specific coin
-GET  /api/coins/group/{group_name} # List coins with group ownership
-GET  /api/coins/stats           # Get collection statistics
-GET  /api/coins/filters         # Get filter options
+GET  /{group_name}/catalog      # Group catalog page
+GET  /{group_name}/coin/{coin_id} # Group coin details page
+GET  /{group_name}              # Group homepage
+GET  /{group_name}/{member_name}/catalog  # Member catalog page
+GET  /{group_name}/{member_name} # Member homepage
 ```
 
 ### Query Parameters
+
+#### Coin Filtering
 ```
-?coin_type=RE|CC               # Filter by type
+?coin_type=RE|CC               # Filter by coin type (Regular/Commemorative)
+?value=0.01|0.02|0.05|0.10|0.20|0.50|1.00|2.00 # Filter by denomination
 ?country=Germany               # Filter by country
 ?commemorative=CC-2024         # Filter by commemorative series
-?search=europa                 # Text search
-?ownership_status=owned|missing # Group ownership filter
+?search=europa                 # Text search across country/feature
+?limit=20                      # Results per page (max 2000)
+?offset=0                      # Pagination offset
+```
+
+#### Group Coin Filtering
+```
+?coin_type=RE|CC               # Filter by coin type
+?value=0.01-2.00               # Filter by denomination
+?country=Germany               # Filter by country
+?commemorative=CC-2024         # Filter by commemorative series
 ?owned_by=username             # Filter by specific group member
+?ownership_status=owned|missing # Filter by ownership status
+?search=europa                 # Text search
 ?limit=20                      # Results per page
 ?offset=0                      # Pagination offset
 ```
+
+#### Ownership History Filtering
+```
+?group_id=uuid                 # Filter by group ID
+```
+
+### Request/Response Examples
+
+#### Add Ownership
+```json
+POST /api/ownership/add
+{
+  "name": "john_doe",
+  "coin_id": "DEU-01-2002",
+  "date": "2024-01-15",
+  "created_by": "admin"
+}
+```
+
+#### Create Group
+```json
+POST /groups/
+{
+  "name": "Family Collectors",
+  "description": "Family coin collection group"
+}
+```
+
+#### Add Group Member
+```json
+POST /groups/family-collectors/users
+{
+  "user": "john_doe",
+  "alias": "John"
+}
+```
+
+### Authentication & Authorization
+- **Admin endpoints**: Require administrative access
+- **Group management**: Users can manage their own groups
+- **Ownership**: Users can manage their own coin ownership
+- **Public access**: Catalog browsing and statistics are publicly accessible
+
+### Rate Limiting
+- API endpoints include rate limiting to prevent abuse
+- Admin endpoints have stricter limits
+- Health check endpoints are unlimited for monitoring
+
+### Error Responses
+```json
+{
+  "detail": "Error description",
+  "status_code": 400
+}
+```
+
+### Interactive API Documentation
+- **Swagger UI**: `/api/docs`
+- **ReDoc**: `/api/redoc`
+- Full OpenAPI specification available at runtime
 
 ## 🤝 Contributing
 
