@@ -5,7 +5,7 @@ import csv
 import io
 import logging
 from datetime import datetime
-from app.services.bigquery_service import BigQueryService
+from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 from app.services.history_service import HistoryService
 from app.models.coin import Coin
 from app.models.history import History, HistoryCreate
@@ -17,7 +17,7 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/admin")
-bigquery_service = BigQueryService()
+bigquery_service = get_bq_provider()
 history_service = HistoryService()
 
 @router.post("/coins/upload")

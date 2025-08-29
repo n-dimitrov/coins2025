@@ -1,12 +1,22 @@
 from typing import Optional, Dict, Any, List
 import logging
-from app.services.bigquery_service import BigQueryService
+from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 
 logger = logging.getLogger(__name__)
 
 class GroupService:
     def __init__(self):
-        self.bigquery_service = BigQueryService()
+        # Use cached provider to avoid repeated BigQuery client initializations
+        # Don't obtain the BigQueryService at import time. Resolve it lazily
+        # on first use so the service can be initialized at FastAPI startup.
+        self.bigquery_service = None
+
+    @property
+    def bq(self) -> BigQueryService:
+        """Lazily return the initialized BigQueryService instance."""
+        if self.bigquery_service is None:
+            self.bigquery_service = get_bq_provider()
+        return self.bigquery_service
     
     async def validate_group(self, group_key: str) -> Optional[Dict[str, Any]]:
         """Validate if group exists by group_key and return raw group data.
@@ -16,7 +26,7 @@ class GroupService:
         name to 'group_key' to be explicit.
         """
         try:
-            group = await self.bigquery_service.get_group_by_key(group_key)
+            group = await self.bq.get_group_by_key(group_key)
             return group
         except Exception as e:
             logger.error(f"Error validating group {group_key}: {str(e)}")
@@ -37,10 +47,10 @@ class GroupService:
             logger.debug(f"Group found: {group}")
 
             # Get group members
-            members = await self.bigquery_service.get_group_users(group['id'])
+            members = await self.bq.get_group_users(group['id'])
 
             # Get group stats
-            stats = await self.bigquery_service.get_group_stats(group['id'])
+            stats = await self.bq.get_group_stats(group['id'])
 
             # Normalize to canonical keys
             canonical_group_key = group.get('group_key') or group.get('group') or group_key
@@ -66,7 +76,7 @@ class GroupService:
             
             for coin in coins:
                 # Get ownership info for this coin
-                ownership = await self.bigquery_service.get_coin_ownership_by_group(
+                ownership = await self.bq.get_coin_ownership_by_group(
                     coin['coin_id'], group_id
                 )
                 
@@ -86,7 +96,7 @@ class GroupService:
     async def get_group_coins(self, group_id: str, filters: dict = None, limit: int = 100, offset: int = 0) -> List[Dict[str, Any]]:
         """Get coins with ownership information for a group."""
         try:
-            return await self.bigquery_service.get_coins_with_ownership(
+            return await self.bq.get_coins_with_ownership(
                 group_id, filters, limit, offset
             )
         except Exception as e:

@@ -1,13 +1,13 @@
 from fastapi import APIRouter, HTTPException, Query
 from typing import Optional, List
-from app.services.bigquery_service import BigQueryService
+from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 from app.services.group_service import GroupService
 from app.models.coin import CoinResponse, CoinListResponse, StatsResponse, FilterOptions, Coin
 import logging
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/coins")
-bigquery_service = BigQueryService()
+bigquery_service = get_bq_provider()
 group_service = GroupService()
 
 @router.get("/", response_model=CoinListResponse)

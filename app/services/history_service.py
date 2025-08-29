@@ -10,7 +10,7 @@ import io
 from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
 from google.cloud import bigquery
-from app.services.bigquery_service import BigQueryService
+from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 from app.models.history import History, HistoryCreate
 from app.config import settings
 
@@ -20,7 +20,8 @@ class HistoryService:
     """Service for managing history operations with enhanced schema support."""
     
     def __init__(self):
-        self.bigquery_service = BigQueryService()
+        # Use cached provider to avoid repeated BigQuery client initializations
+        self.bigquery_service = get_bq_provider()
     
     def get_enhanced_history_schema(self) -> List[bigquery.SchemaField]:
         """Get the enhanced history schema - delegates to BigQueryService for consistency."""

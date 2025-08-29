@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.services.bigquery_service import BigQueryService
+from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 import logging
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ async def readiness_check():
 async def bigquery_health():
     """Check BigQuery connection."""
     try:
-        service = BigQueryService()
+        service = get_bq_provider()
         stats = await service.get_stats()
         return {
             "status": "healthy",

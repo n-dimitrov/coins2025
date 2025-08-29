@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, FileResponse
-from app.services.bigquery_service import BigQueryService
+from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 from app.services.group_service import GroupService
 import logging
 from datetime import datetime
@@ -10,7 +10,7 @@ import random
 logger = logging.getLogger(__name__)
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
-bigquery_service = BigQueryService()
+bigquery_service = get_bq_provider()
 group_service = GroupService()
 
 @router.get("/", response_class=HTMLResponse)
