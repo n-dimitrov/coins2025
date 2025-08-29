@@ -757,15 +757,44 @@ class CoinCatalog {
 
     async fetchCoinDetails(coinId) {
         try {
-            const response = await fetch(this.getApiUrl(`/api/coins/${coinId}`));
-            if (response.ok) {
-                const data = await response.json();
-                return data.coin;
+            // Always fetch the canonical coin data
+            const coinResp = await fetch(this.getApiUrl(`/api/coins/${coinId}`));
+            let coin = null;
+            if (coinResp.ok) {
+                const data = await coinResp.json().catch(() => null);
+                coin = data ? data.coin : null;
             }
+
+            // If we're in a group context, also fetch ownership information for this coin
+            // and merge it into the returned coin object so callers (modal/card) see
+            // the most up-to-date ownership state.
+            if (this.groupContext && coin) {
+                try {
+                    const groupId = this.groupContext.id || this.groupContext.group_id || this.groupContext.groupKey || this.groupContext.group_key;
+                    // Prefer numeric/string id if available; omit param if not
+                    const ownersUrl = groupId ?
+                        this.getApiUrl(`/api/ownership/coin/${coinId}/owners?group_id=${encodeURIComponent(groupId)}`) :
+                        this.getApiUrl(`/api/ownership/coin/${coinId}/owners`);
+
+                    const ownersResp = await fetch(ownersUrl);
+                    if (ownersResp.ok) {
+                        const ownersData = await ownersResp.json().catch(() => null);
+                        if (ownersData && ownersData.owners !== undefined) {
+                            // Ensure owners is always an array for the UI code
+                            coin.owners = Array.isArray(ownersData.owners) ? ownersData.owners : [];
+                        }
+                    }
+                } catch (err) {
+                    // Non-fatal: if owners fetch fails, leave existing owners (if any)
+                    console.warn('Failed to fetch coin owners for group context', err);
+                }
+            }
+
+            return coin;
         } catch (error) {
             console.error('Error fetching coin details:', error);
+            return null;
         }
-        return null;
     }
 
     populateCoinModal(coin) {
@@ -945,6 +974,37 @@ class CoinCatalog {
         `;
         
         document.querySelector('#coinDetailModal .modal-body').innerHTML = modalContent;
+    }
+
+    // Refresh the coin card DOM for a single coin after its data changed
+    refreshCoinCard(coinId) {
+        try {
+            const coin = this.coins.find(c => c.coin_id === coinId);
+            if (!coin) return;
+
+            const imgEl = document.querySelector(`[data-coin-id="${coinId}"]`);
+            if (!imgEl) return;
+
+            // Preserve card-pop state if present
+            const oldCard = imgEl.closest('.coin-card');
+            const hadPop = oldCard ? oldCard.classList.contains('card-pop') : false;
+
+            // Outer column/container that wraps the card
+            const colEl = imgEl.closest('.col-md-6, .col-lg-4, .col-xl-3, .col');
+            if (!colEl) return;
+
+            // Replace the whole column with fresh HTML from createCoinCard
+            colEl.outerHTML = this.createCoinCard(coin);
+
+            // Re-apply card-pop if it was present
+            if (hadPop) {
+                const newImg = document.querySelector(`[data-coin-id="${coinId}"]`);
+                const newCard = newImg ? newImg.closest('.coin-card') : null;
+                if (newCard) newCard.classList.add('card-pop');
+            }
+        } catch (err) {
+            console.error('Failed to refresh coin card for', coinId, err);
+        }
     }
 
     setupModalNavigation() {
@@ -1244,7 +1304,7 @@ class CoinCatalog {
         if (!this.selectedMember) return;
         const name = (typeof this.selectedMember === 'string') ? this.selectedMember : (this.selectedMember.user || this.selectedMember.name);
         if (!name) return;
-        const confirmAdd = confirm(`Add ${name} to coin ${coinId}?`);
+        const confirmAdd = confirm(`Confirm add coin?`);
         if (!confirmAdd) return;
 
         // Find the pill in the modal (may be recreated after refresh)
@@ -1285,6 +1345,8 @@ class CoinCatalog {
                         if (idx !== -1) this.coins[idx].owners = detailed.owners || this.coins[idx].owners;
                         this.filteredCoins = this.filteredCoins.map(c => c.coin_id === coinId ? { ...c, owners: detailed.owners || c.owners } : c);
                         this.populateCoinModal(detailed);
+                        // Refresh the card badge
+                        this.refreshCoinCard(coinId);
                         refreshed = true;
                     } else {
                         // As a fallback, enable pill and show Remove (server considers user owner)
@@ -1293,6 +1355,8 @@ class CoinCatalog {
                             pill.disabled = false;
                             pill.textContent = 'Remove';
                         }
+                        // Optimistically update the card too
+                        this.refreshCoinCard(coinId);
                         refreshed = true;
                     }
                     // Stop further processing
@@ -1315,6 +1379,8 @@ class CoinCatalog {
                 this.filteredCoins = this.filteredCoins.map(c => c.coin_id === coinId ? { ...c, owners: detailed.owners || c.owners } : c);
 
                 this.populateCoinModal(detailed);
+                // Update the card badge after server-provided details
+                this.refreshCoinCard(coinId);
                 refreshed = true;
             } else {
                 // If we couldn't fetch details, do an optimistic local update so the modal reflects the new ownership
@@ -1340,6 +1406,8 @@ class CoinCatalog {
                 // Re-render modal using the local optimistic state
                 const coin = this.coins.find(c => c.coin_id === coinId) || { coin_id: coinId, owners: [ownerEntry] };
                 this.populateCoinModal(coin);
+                // Optimistically refresh card badge
+                this.refreshCoinCard(coinId);
                 refreshed = true;
             }
         } catch (error) {
@@ -1362,7 +1430,7 @@ class CoinCatalog {
         if (!this.selectedMember) return;
         const name = (typeof this.selectedMember === 'string') ? this.selectedMember : (this.selectedMember.user || this.selectedMember.name);
         if (!name) return;
-        const confirmRemove = confirm(`Remove ${name} from coin ${coinId}?`);
+        const confirmRemove = confirm(`Confirm remove coin?`);
         if (!confirmRemove) return;
 
         const pill = document.querySelector('#coinDetailModal .history-pill');
@@ -1404,6 +1472,8 @@ class CoinCatalog {
                 this.filteredCoins = this.filteredCoins.map(c => c.coin_id === coinId ? { ...c, owners: detailed.owners || c.owners } : c);
 
                 this.populateCoinModal(detailed);
+                // Refresh the card badge to reflect removal
+                this.refreshCoinCard(coinId);
                 refreshed = true;
             }
         } catch (error) {

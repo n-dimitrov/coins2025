@@ -223,7 +223,7 @@ class BigQueryService:
         WITH latest_ownership AS (
             SELECT 
                 h.name, h.coin_id, h.date, h.is_active,
-                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) as rn
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
             WHERE h.coin_id = @coin_id
         )
@@ -283,7 +283,7 @@ class BigQueryService:
         WITH latest_ownership AS (
             SELECT 
                 h.name, h.coin_id, h.date, h.is_active,
-                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) as rn
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
         ),
         coin_ownership AS (
@@ -323,7 +323,7 @@ class BigQueryService:
         WITH latest_ownership AS (
             SELECT 
                 h.name, h.coin_id, h.is_active,
-                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) as rn
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
         )
         SELECT 
@@ -348,21 +348,34 @@ class BigQueryService:
         record_id = str(uuid.uuid4())
         current_time = dt.now()
 
-        # Lightweight existence check (cheaper than windowed query)
+        # Lightweight existence check: fetch the latest history row for this
+        # user+coin and interpret its is_active flag. This avoids false
+        # positives when an older active row exists but a newer removal
+        # record has been written.
         check_query = f"""
-        SELECT 1 as exists_flag
+        SELECT h.is_active
         FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
-        WHERE h.coin_id = @coin_id AND h.name = @name AND h.is_active = true
+        WHERE h.coin_id = @coin_id AND h.name = @name
+        ORDER BY h.created_at DESC, h.date DESC
         LIMIT 1
         """
 
         start_check = datetime.now()
-        existing = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
+        latest = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
         check_duration = (datetime.now() - start_check).total_seconds()
         logger.info(f"Lightweight ownership check took {check_duration:.3f}s for {name}/{coin_id}")
 
-        if existing:
-            raise ValueError(f"User {name} already owns coin {coin_id}")
+        if latest:
+            # Normalize boolean which may arrive as a native bool or string
+            is_active = latest[0].get('is_active')
+            is_active_flag = False
+            if isinstance(is_active, str):
+                is_active_flag = is_active.lower() == 'true'
+            else:
+                is_active_flag = bool(is_active)
+
+            if is_active_flag:
+                raise ValueError(f"User {name} already owns coin {coin_id}")
 
         # Prepare row for streaming insert
         # Ensure datetime fields are JSON-serializable for streaming insert
@@ -440,20 +453,33 @@ class BigQueryService:
         import uuid
         from datetime import datetime as dt
         
-        # Lightweight existence check to confirm current ownership
+        # Lightweight existence check: fetch the latest history row for this
+        # user+coin and confirm the latest is_active flag. This avoids
+        # failures when older active rows exist but a later removal cleared ownership.
         check_query = f"""
-        SELECT 1 as exists_flag
+        SELECT h.is_active
         FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
-        WHERE h.coin_id = @coin_id AND h.name = @name AND h.is_active = true
+        WHERE h.coin_id = @coin_id AND h.name = @name
+        ORDER BY h.created_at DESC, h.date DESC
         LIMIT 1
         """
 
         start_check = datetime.now()
-        current_ownership = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
+        latest = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
         check_duration = (datetime.now() - start_check).total_seconds()
         logger.info(f"Lightweight ownership existence check took {check_duration:.3f}s for {name}/{coin_id}")
 
-        if not current_ownership:
+        if not latest:
+            raise ValueError(f"User {name} does not currently own coin {coin_id}")
+
+        is_active = latest[0].get('is_active')
+        is_active_flag = False
+        if isinstance(is_active, str):
+            is_active_flag = is_active.lower() == 'true'
+        else:
+            is_active_flag = bool(is_active)
+
+        if not is_active_flag:
             raise ValueError(f"User {name} does not currently own coin {coin_id}")
 
         record_id = str(uuid.uuid4())
@@ -540,7 +566,7 @@ class BigQueryService:
         WITH latest_records AS (
             SELECT 
                 h.name, h.coin_id, h.date, h.is_active, h.created_at,
-                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) as rn
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
             {where_clause}
         )
@@ -566,7 +592,7 @@ class BigQueryService:
         WITH latest_records AS (
             SELECT 
                 h.name, h.coin_id, h.date, h.is_active, h.created_at,
-                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.date DESC, h.created_at DESC) as rn
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) as rn
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
             WHERE h.name = @name
         )
@@ -1204,9 +1230,10 @@ class BigQueryService:
         SELECT 
             h.name, 
             COALESCE(h.coin_id, h.id) as id,  -- Use coin_id if available, fallback to id for legacy data
-            h.date
+            h.date,
+            h.created_at
         FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
-        ORDER BY h.date DESC
+        ORDER BY h.created_at DESC
         """
         
         return await self._get_cached_or_query(query, {})
@@ -1281,42 +1308,85 @@ class BigQueryService:
                 where_clauses.append("FORMAT_DATE('%Y-%m', h.date) = @date_filter")
                 params['date_filter'] = filters['date_filter']
 
-        # By default, exclude inactive history entries from admin view unless explicitly requested.
-        # If caller sets filters['include_inactive'] = True, we will include inactive entries.
+        # Determine whether to include inactive entries
         include_inactive = bool(filters and filters.get('include_inactive'))
-        if not include_inactive:
-            where_clauses.append("h.is_active = TRUE")
 
-        where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
-        
-        # Get total count
-        count_query = f"""
-        SELECT COUNT(*) as total
-        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
-        WHERE {where_sql}
-        """
-        
-        count_result = await self._get_cached_or_query(count_query, params)
-        total_count = count_result[0]['total'] if count_result else 0
+        # Build base WHERE SQL (do NOT include is_active here so latest-record
+        # computations can consider both active and inactive rows).
+        where_sql_base = " AND ".join(where_clauses) if where_clauses else "1=1"
+
+        # Get total count. If including inactive, count raw rows. If not,
+        # count latest active records per (name, coin_id).
+        if include_inactive:
+            count_query = f"""
+            SELECT COUNT(*) as total
+            FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+            WHERE {where_sql_base}
+            """
+            count_result = await self._get_cached_or_query(count_query, params)
+            total_count = count_result[0]['total'] if count_result else 0
+        else:
+            # Count latest active records per (name, coin_id)
+            count_query = f"""
+            WITH latest_records AS (
+                SELECT
+                    h.name,
+                    COALESCE(h.coin_id, h.id) as id,
+                    ROW_NUMBER() OVER (PARTITION BY h.name, COALESCE(h.coin_id, h.id) ORDER BY h.created_at DESC, h.date DESC) as rn,
+                    h.is_active
+                FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+                WHERE {where_sql_base}
+            )
+            SELECT COUNT(*) as total
+            FROM latest_records
+            WHERE rn = 1 AND is_active = TRUE
+            """
+            count_result = await self._get_cached_or_query(count_query, params)
+            total_count = count_result[0]['total'] if count_result else 0
         
         # Get paginated data
-        data_query = f"""
-        SELECT 
-            h.name, 
-            COALESCE(h.coin_id, h.id) as id,  -- Use coin_id if available, fallback to id for legacy data
-            h.date
-        FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
-        WHERE {where_sql}
-        ORDER BY h.date DESC
-        LIMIT @limit OFFSET @offset
-        """
-        
         params.update({
             'limit': limit,
             'offset': offset
         })
-        
-        data = await self._get_cached_or_query(data_query, params)
+
+        if not include_inactive:
+            # Return only latest record per (name, coin_id) where is_active = TRUE
+            data_query = f"""
+            WITH latest_records AS (
+                SELECT 
+                    h.name,
+                    COALESCE(h.coin_id, h.id) as id,
+                    h.date,
+                    h.created_at,
+                    h.is_active,
+                    ROW_NUMBER() OVER (PARTITION BY h.name, COALESCE(h.coin_id, h.id) ORDER BY h.created_at DESC, h.date DESC) as rn
+                FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+                WHERE {where_sql_base}
+            )
+            SELECT name, id, date, created_at
+            FROM latest_records
+            WHERE rn = 1 AND is_active = TRUE
+            ORDER BY date DESC
+            LIMIT @limit OFFSET @offset
+            """
+
+            data = await self._get_cached_or_query(data_query, params)
+        else:
+            # Include inactive: return raw history rows matching filters (existing behavior)
+            data_query = f"""
+            SELECT 
+                h.name, 
+                COALESCE(h.coin_id, h.id) as id,  -- Use coin_id if available, fallback to id for legacy data
+                h.date,
+                h.created_at
+            FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+            WHERE {where_sql_base}
+            ORDER BY h.date DESC
+            LIMIT @limit OFFSET @offset
+            """
+
+            data = await self._get_cached_or_query(data_query, params)
         
         total_pages = (total_count + limit - 1) // limit
         
