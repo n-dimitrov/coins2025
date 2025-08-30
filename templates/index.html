@@ -88,29 +88,38 @@
                 <div class="row g-3">
                     {% for member in member_stats %}
                     <div class="col-lg-3 col-md-4 col-sm-6">
+                        <!-- Option 1: Compact Grid Layout (Recommended) -->
                         <div class="card h-100 member-stat-card{% if selected_member and selected_member == member.name %} border-primary{% endif %}">
                             <div class="card-body text-center">
-                                <h5 class="card-title">{{ member.alias or member.name }}</h5>
-                                <div class="member-stats">
-                                    <div class="stat-item">
+                                <h5 class="card-title mb-3">{{ member.name }}</h5>
+                                
+                                <!-- Stats Grid -->
+                                <div class="stats-grid mb-3">
+                                    <div class="stat-item text-center">
                                         <div class="stat-number">{{ member.owned_coins_count or 0 }}</div>
-                                        <div class="stat-label">Coins Owned</div>
+                                        <div class="stat-label">Coins</div>
                                     </div>
-                                    {% if member.last_added_date %}
-                                    <div class="stat-item mt-2">
-                                        <div class="stat-label small text-muted">Last Added</div>
-                                        <div class="stat-date">{{ member.last_added_date.strftime('%b %d, %Y') if member.last_added_date else 'N/A' }}</div>
-                                        {% if member.last_coin_description %}
-                                        <div class="stat-coin small text-muted mt-1">{{ member.last_coin_description }}</div>
-                                        {% endif %}
+                                    <div class="stat-item text-center">
+                                        <div class="stat-number">{{ member.owned_countries_count or 0 }}</div>
+                                        <div class="stat-label">Countries</div>
                                     </div>
-                                    {% else %}
-                                    <div class="stat-item mt-2">
-                                        <div class="stat-label small text-muted">No coins added yet</div>
+                                    <div class="stat-item text-center">
+                                        <div class="stat-number">{{ member.regular_coins_count or 0 }}</div>
+                                        <div class="stat-label">Regular</div>
                                     </div>
-                                    {% endif %}
+                                    <div class="stat-item text-center">
+                                        <div class="stat-number">{{ member.commemorative_coins_count or 0 }}</div>
+                                        <div class="stat-label">Comm.</div>
+                                    </div>
                                 </div>
-                                <a href="/{{ group_context.group_key }}/{{ member.name }}/catalog" class="btn btn-outline-primary btn-sm mt-2">
+                                
+                                {% if member.last_added_date %}
+                                <div class="last-added text-muted small mb-2">
+                                    <i class="fas fa-calendar-alt me-1"></i>Last: {{ member.last_added_date.strftime('%b %d, %Y') if member.last_added_date else 'N/A' }}
+                                </div>
+                                {% endif %}
+                                
+                                <a href="/{{ group_context.group_key }}/{{ member.name }}/catalog" class="btn btn-outline-primary btn-sm">
                                     View Collection
                                 </a>
                             </div>

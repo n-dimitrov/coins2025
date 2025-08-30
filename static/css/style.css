@@ -1820,3 +1820,32 @@
     margin-bottom: 2rem;
 }
 
+/* New compact stats grid for member cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stats-grid .stat-item {
+    margin-bottom: 0;
+}
+
+.stats-grid .stat-number {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.stats-grid .stat-label {
+    font-size: 0.75rem;
+    margin-top: 0;
+}
+
+.last-added {
+    font-size: 0.8rem;
+    padding: 0.25rem 0;
+    border-top: 1px solid #e9ecef;
+    margin-top: 0.5rem;
+}
+

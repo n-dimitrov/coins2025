@@ -1503,6 +1503,9 @@ class BigQueryService:
                 gu.name,
                 gu.alias,
                 COUNT(DISTINCT CASE WHEN lo.is_active = true THEN lo.coin_id END) as owned_coins_count,
+                COUNT(DISTINCT CASE WHEN lo.is_active = true THEN lo.country END) as owned_countries_count,
+                COUNT(DISTINCT CASE WHEN lo.is_active = true AND lo.coin_type = 'RE' THEN lo.coin_id END) as regular_coins_count,
+                COUNT(DISTINCT CASE WHEN lo.is_active = true AND lo.coin_type = 'CC' THEN lo.coin_id END) as commemorative_coins_count,
                 MAX(CASE WHEN lo.is_active = true THEN lo.date END) as last_added_date,
                 MAX(CASE WHEN lo.is_active = true THEN 
                     CONCAT(
@@ -1524,6 +1527,9 @@ class BigQueryService:
             name,
             alias,
             owned_coins_count,
+            owned_countries_count,
+            regular_coins_count,
+            commemorative_coins_count,
             last_added_date,
             last_coin_description
         FROM member_stats
