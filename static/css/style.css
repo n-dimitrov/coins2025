@@ -1820,26 +1820,24 @@
     margin-bottom: 2rem;
 }
 
-/* New compact stats grid for member cards */
-.stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
+/* New compact stats line for member cards */
+.member-stats-line {
+    flex-wrap: wrap;
 }
 
-.stats-grid .stat-item {
-    margin-bottom: 0;
+.member-stats-line .text-center {
+    min-width: 50px;
+    flex: 0 0 auto;
 }
 
-.stats-grid .stat-number {
-    font-size: 1.5rem;
-    margin-bottom: 0.25rem;
+.member-stats-line .fw-bold {
+    font-size: 0.9rem !important;
+    line-height: 1;
 }
 
-.stats-grid .stat-label {
-    font-size: 0.75rem;
-    margin-top: 0;
+.member-stats-line .text-muted {
+    font-size: 0.7rem;
+    line-height: 1;
 }
 
 .last-added {
