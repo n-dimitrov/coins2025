@@ -44,6 +44,15 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Carousel indicator dots (3) -->
+                    <div class="d-flex justify-content-center mt-2">
+                        <div id="hero-dots" class="d-flex gap-2" aria-hidden="false">
+                            <span class="hero-dot"></span>
+                            <span class="hero-dot"></span>
+                            <span class="hero-dot"></span>
+                            <span class="hero-dot"></span>
+                        </div>
+                    </div>
                                     <!-- Compact stats inside hero -->
                                     <div class="d-flex justify-content-center align-items-center mt-4 gap-3 flex-wrap">
                                         <div class="text-center text-white-75 small">
@@ -94,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const coins = {{ latest_coins | default([]) | tojson }};
     if (!coins || coins.length === 0) return;
-
     let idx = 0;
     const countryEl = document.getElementById('hero-country');
     const valueEl = document.getElementById('hero-value');
@@ -102,44 +110,213 @@ document.addEventListener('DOMContentLoaded', function() {
     const cardEl = document.getElementById('hero-latest-coin');
     const imgEl = document.getElementById('hero-coin-img');
     const typeYearEl = document.getElementById('hero-type-year');
+    const dotsContainer = document.getElementById('hero-dots');
 
-    function setCoin(c) {
+    // Minimal styles for dots (kept here to avoid editing CSS files)
+    const style = document.createElement('style');
+    style.innerHTML = `
+    .hero-dot { display:inline-block; width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,0.4); cursor:pointer; }
+    .hero-dot.active { background: #ffffff; box-shadow: 0 0 6px rgba(0,0,0,0.2); }
+    .hero-dot.edge-dot { width:20px; border-radius:6px; }
+    `;
+    document.head.appendChild(style);
+
+    // Map four dots to [first, prev, next, last]
+    function visibleIndexes(i) {
+        const first = 0;
+        const prev = Math.max(0, i - 1);
+        const next = Math.min(coins.length - 1, i + 1);
+        const last = Math.max(0, coins.length - 1);
+        return [first, prev, next, last];
+    }
+
+    function updateDots(i) {
+        const vis = visibleIndexes(i);
+        // Ensure 4 dot elements exist
+        const dots = Array.from(dotsContainer.querySelectorAll('.hero-dot'));
+        // first clear active on all
+        for (let d = 0; d < 4; d++) {
+            const dot = dots[d];
+            if (!dot) continue;
+            dot.dataset.index = String(vis[d]);
+            dot.classList.remove('active');
+            if (d === 0 || d === 3) {
+                dot.classList.add('edge-dot');
+            } else {
+                dot.classList.remove('edge-dot');
+            }
+        }
+
+        // Activate based on position: first -> dot0, last -> dot3, otherwise -> prev (dot1)
+        const first = 0;
+        const last = Math.max(0, coins.length - 1);
+        if (i === first) {
+            if (dots[0]) dots[0].classList.add('active');
+        } else if (i === last) {
+            if (dots[3]) dots[3].classList.add('active');
+        } else {
+            if (dots[1]) dots[1].classList.add('active');
+        }
+    }
+
+    function setCoin(c, skipAnimation) {
         const flag = (typeof window !== 'undefined' && typeof window.getCountryFlag === 'function')
             ? window.getCountryFlag(c.country)
             : '🇪🇺';
 
-    flagEl.textContent = flag;
-    countryEl.textContent = c.country || '';
-    valueEl.textContent = c.value ? `€${parseFloat(c.value).toFixed(2)}` : '';
-    imgEl.src = c.image || c.image_url || '/static/images/coin-placeholder.png';
-    imgEl.alt = `${c.country || ''} coin`;
-    // Type + year: map RE -> Regular, CC -> Commemorative
-    const typeLabel = c.coin_type === 'RE' ? 'Regular' : (c.coin_type === 'CC' ? 'Commemorative' : c.coin_type || '');
-    // Show a middot between type and year when both are present, e.g. "Commemorative • 2024"
-    let typeYearText = '';
-    if (typeLabel && c.year) {
-        typeYearText = `${typeLabel} \u2022 ${c.year}`;
-    } else if (typeLabel) {
-        typeYearText = typeLabel;
-    } else if (c.year) {
-        typeYearText = `${c.year}`;
-    }
-    typeYearEl.textContent = typeYearText;
+        flagEl.textContent = flag;
+        countryEl.textContent = c.country || '';
+        valueEl.textContent = c.value ? `€${parseFloat(c.value).toFixed(2)}` : '';
+        imgEl.src = c.image || c.image_url || '/static/images/coin-placeholder.png';
+        imgEl.alt = `${c.country || ''} coin`;
+        const typeLabel = c.coin_type === 'RE' ? 'Regular' : (c.coin_type === 'CC' ? 'Commemorative' : c.coin_type || '');
+        let typeYearText = '';
+        if (typeLabel && c.year) {
+            typeYearText = `${typeLabel} \u2022 ${c.year}`;
+        } else if (typeLabel) {
+            typeYearText = typeLabel;
+        } else if (c.year) {
+            typeYearText = `${c.year}`;
+        }
+        typeYearEl.textContent = typeYearText;
 
         // Small 3D highlight animation
-        cardEl.classList.remove('hero-card-pop');
-        void cardEl.offsetWidth; // force reflow
-        cardEl.classList.add('hero-card-pop');
+        if (!skipAnimation) {
+            cardEl.classList.remove('hero-card-pop');
+            void cardEl.offsetWidth; // force reflow
+            cardEl.classList.add('hero-card-pop');
+        }
+
+        updateDots(idx);
     }
 
-    // Initial
-    setCoin(coins[idx]);
+    // Initial render and dots wiring
+    setCoin(coins[idx], true);
+    updateDots(idx);
 
-    // Rotate every 4 seconds
-    setInterval(function() {
-        idx = (idx + 1) % coins.length;
-        setCoin(coins[idx]);
-    }, 4000);
+    // Dot click -> jump to the corresponding coin (first, prev, next, last)
+    dotsContainer.querySelectorAll('.hero-dot').forEach(dot => {
+        dot.addEventListener('click', function() {
+            const targetIndex = parseInt(this.dataset.index || '0', 10);
+            if (!Number.isNaN(targetIndex)) {
+                idx = Math.max(0, Math.min(coins.length - 1, targetIndex));
+                setCoin(coins[idx]);
+                if (idx < coins.length - 1) {
+                    resetAutoRotate();
+                } else {
+                    stopAutoRotate();
+                }
+            }
+        });
+    });
+
+    // Auto rotate (reasonable interval)
+    let rotateInterval = 4500; // 4.5s
+    let rotateTimer = null;
+
+    function startAutoRotate() {
+        stopAutoRotate();
+        // Only auto-rotate if there are at least 2 coins and we're not at last
+        if (coins.length < 2 || idx >= coins.length - 1) return;
+        rotateTimer = setInterval(() => {
+            if (idx < coins.length - 1) {
+                idx = idx + 1;
+                setCoin(coins[idx]);
+            } else {
+                // stop at the last coin (no wrap-around)
+                stopAutoRotate();
+            }
+        }, rotateInterval);
+    }
+
+    function stopAutoRotate() {
+        if (rotateTimer) {
+            clearInterval(rotateTimer);
+            rotateTimer = null;
+        }
+    }
+
+    function resetAutoRotate() {
+        stopAutoRotate();
+        // Restart after a brief pause, but only if not at last coin
+        if (idx < coins.length - 1) {
+            setTimeout(startAutoRotate, 1200);
+        }
+    }
+
+    startAutoRotate();
+
+    // Swipe / drag support (touch + mouse)
+    let touchStartX = null;
+    let isPointerDown = false;
+
+    function onPointerStart(x) {
+        touchStartX = x;
+        isPointerDown = true;
+        stopAutoRotate();
+    }
+
+    function onPointerEnd(x) {
+        if (!isPointerDown || touchStartX === null) return;
+        const dx = x - touchStartX;
+        const threshold = 40; // px
+        if (dx > threshold) {
+            // swipe right -> previous, only if not at first
+            if (idx > 0) {
+                idx = idx - 1;
+                setCoin(coins[idx]);
+            }
+            resetAutoRotate();
+        } else if (dx < -threshold) {
+            // swipe left -> next, only if not at last
+            if (idx < coins.length - 1) {
+                idx = idx + 1;
+                setCoin(coins[idx]);
+            }
+            resetAutoRotate();
+        } else {
+            // small move - treat as a tap, do nothing
+            resetAutoRotate();
+        }
+
+        touchStartX = null;
+        isPointerDown = false;
+    }
+
+    // Touch events
+    cardEl.addEventListener('touchstart', function(e) {
+        const t = e.touches[0];
+        onPointerStart(t.clientX);
+    }, {passive: true});
+
+    cardEl.addEventListener('touchend', function(e) {
+        // touchend has no touches; use changedTouches
+        const t = e.changedTouches[0];
+        onPointerEnd(t.clientX);
+    });
+
+    // Mouse drag support
+    cardEl.addEventListener('mousedown', function(e) {
+        onPointerStart(e.clientX);
+    });
+    document.addEventListener('mouseup', function(e) {
+        // only end if pointer was down
+        if (isPointerDown) onPointerEnd(e.clientX);
+    });
+    // Prevent image drag ghost
+    imgEl.addEventListener('dragstart', function(e){ e.preventDefault(); });
+
+    // Also support clicking the card to advance
+    cardEl.addEventListener('click', function(e) {
+        // avoid treating drag as click
+        if (isPointerDown) return;
+        // advance only if not at last coin (no wrap-around)
+        if (idx < coins.length - 1) {
+            idx = idx + 1;
+            setCoin(coins[idx]);
+            resetAutoRotate();
+        }
+    });
 });
 </script>
 {% endblock %}
