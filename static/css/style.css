@@ -2,11 +2,23 @@
 
 /*
  * ===== THEME CONFIGURATION GUIDE =====
- * CURRENT THEME: COOL OCEAN THEME
- * CURRENT COIN CARD SCHEMA: GOLDEN CARDS
- * CURRENT MODAL HEADER SCHEMA: GOLDEN (via CSS variables)
+ * CURRENT THEME: PROFESSIONAL BLUE SCHEME ✨
+ * CURRENT COIN CARD SCHEMA: PROFESSIONAL BLUE CARDS ✨
+ * CURRENT MODAL HEADER SCHEMA: PROFESSIONAL BLUE (via CSS variables)
  * To change the color scheme, simply update the CSS variables in the :root section below.
  * All colors throughout the app will automatically update to use the new theme.
+ *
+ * Available Complete Themes (uncomment to switch):
+ * 1. PROFESSIONAL BLUE (Current) - Corporate blue & green ✨
+ * 2. WARM GOLDEN - Premium golden & brown tones
+ * 3. MODERN DARK - Elegant dark blue & purple
+ * 4. NATURE GREEN - Calm green & organic tones
+ * 5. SUNSET ORANGE - Warm orange & energetic feel
+ *
+ * To switch themes:
+ * 1. Comment out the current :root block
+ * 2. Uncomment the desired theme block above
+ * 3. Save and refresh the page
  *
  * Available theme variables:
  * --primary-color: Main brand color (buttons, links, accents)
@@ -18,12 +30,14 @@
  * --border-color: Border colors
  * --shadow-color: Shadow colors
  *
- * Modal Header Variables (for easy schema switching):
- * --modal-header-bg: Background gradient/color
- * --modal-header-shadow: Shadow effect
- * --modal-header-text: Text color
- * --modal-header-border: Border style
- * --modal-header-radius: Border radius
+ * Coin Card Variables (for unified hero and catalog styling):
+ * --coin-card-bg: Background gradient/color
+ * --coin-card-border: Border style
+ * --coin-card-shadow: Normal shadow
+ * --coin-card-shadow-hover: Hover shadow
+ * --coin-card-text: Primary text color
+ * --coin-card-text-muted: Secondary text color
+ * --coin-card-radius: Border radius
  *
  * To switch modal header schemas, add the corresponding class to the body element:
  * - modal-header-glassmorphism
@@ -38,53 +52,316 @@
  * Example themes are provided in comments below the variables.
  */
 
-/* ===== THEME CONFIGURATION ===== */
-/* Easily replaceable color scheme - change these variables to switch themes */
+/* ===== ALTERNATIVE APP COLOR THEMES ===== */
+/* Uncomment and modify the CSS variables below to switch to different themes */
+
+/* THEME 1: PROFESSIONAL MODERN (Current - Cool Ocean) */
+/*
 :root {
-    /* Primary Colors */
-    --primary-color: #0891b2; /* Sky blue */
-    --primary-hover: #0284c7; /* Darker sky blue for hover states */
-    --primary-light: #7dd3fc; /* Light sky blue */
-
-    /* Secondary Colors */
-    --secondary-color: #059669; /* Teal */
-    --secondary-hover: #047857; /* Darker teal */
-    --secondary-light: #6ee7b7; /* Light teal */
-
-    /* Status Colors */
-    --warning-color: #f59e0b; /* Orange */
-    --info-color: #7c3aed; /* Indigo */
-    --danger-color: #dc2626; /* Red */
-
-    /* Neutral Colors */
-    --dark-color: #0f172a; /* Navy */
-    --light-color: #f0f9ff; /* Light blue */
-
-    /* Background Colors */
-    --background-color: #f0f9ff; /* Light blue */
-    --surface-color: #ffffff; /* White for cards */
-    --surface-hover: #f9fafb; /* Light gray for hover */
-
-    /* Text Colors */
-    --text-color: #1e293b; /* Dark slate */
-    --text-muted: #64748b; /* Slate gray */
-    --text-inverse: #ffffff; /* White text for dark backgrounds */
-
-    /* Border Colors */
-    --border-color: #e2e8f0; /* Light slate */
-    --border-light: #f1f5f9; /* Very light slate */
-
-    /* Shadow Colors */
+    --primary-color: #0891b2;
+    --primary-hover: #0284c7;
+    --primary-light: #7dd3fc;
+    --secondary-color: #059669;
+    --secondary-hover: #047857;
+    --secondary-light: #6ee7b7;
+    --warning-color: #f59e0b;
+    --info-color: #7c3aed;
+    --danger-color: #dc2626;
+    --dark-color: #0f172a;
+    --light-color: #f0f9ff;
+    --background-color: #f0f9ff;
+    --surface-color: #ffffff;
+    --surface-hover: #f9fafb;
+    --text-color: #1e293b;
+    --text-muted: #64748b;
+    --text-inverse: #ffffff;
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
     --shadow-color: rgba(0, 0, 0, 0.1);
     --shadow-light: rgba(0, 0, 0, 0.05);
+}
+*/
 
-    /* Modal Header Colors (for easy schema switching) */
+/* ===== COMPLETE APP COLOR SCHEMES ===== */
+/* Professional, cohesive color palettes for the entire application */
+
+/* SCHEME 1: PROFESSIONAL BLUE (Corporate & Trustworthy) */
+/*
+:root {
+    --primary-color: #1e40af;
+    --primary-hover: #1d4ed8;
+    --primary-light: #dbeafe;
+    --secondary-color: #059669;
+    --secondary-hover: #047857;
+    --secondary-light: #d1fae5;
+    --accent-color: #7c3aed;
+    --accent-hover: #6d28d9;
+    --accent-light: #e9d5ff;
+    --warning-color: #d97706;
+    --info-color: #0891b2;
+    --danger-color: #dc2626;
+    --success-color: #16a34a;
+    --dark-color: #1e293b;
+    --light-color: #f8fafc;
+    --background-color: #f8fafc;
+    --surface-color: #ffffff;
+    --surface-hover: #f1f5f9;
+    --card-bg: #ffffff;
+    --card-border: #e2e8f0;
+    --text-color: #1e293b;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
+    --text-inverse: #ffffff;
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --shadow-color: rgba(30, 41, 59, 0.1);
+    --shadow-light: rgba(30, 41, 59, 0.05);
+    --shadow-dark: rgba(30, 41, 59, 0.15);
+    --modal-header-bg: linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #3b82f6 100%);
+    --modal-header-shadow: 0 4px 20px rgba(30, 64, 175, 0.3);
+    --modal-header-text: #ffffff;
+    --modal-header-border: 1px solid #1d4ed8;
+    --modal-header-radius: 12px;
+}
+*/
+
+/* SCHEME 2: WARM GOLDEN (Premium & Sophisticated) */
+/*
+:root {
+    --primary-color: #b45309;
+    --primary-hover: #92400e;
+    --primary-light: #fed7aa;
+    --secondary-color: #a16207;
+    --secondary-hover: #78350f;
+    --secondary-light: #fde68a;
+    --accent-color: #7c2d12;
+    --accent-hover: #5b1f0f;
+    --accent-light: #fed7aa;
+    --warning-color: #ca8a04;
+    --info-color: #b45309;
+    --danger-color: #dc2626;
+    --success-color: #16a34a;
+    --dark-color: #451a03;
+    --light-color: #fef7ed;
+    --background-color: #fef7ed;
+    --surface-color: #ffffff;
+    --surface-hover: #fef3c7;
+    --card-bg: #ffffff;
+    --card-border: #fed7aa;
+    --text-color: #451a03;
+    --text-muted: #9a3412;
+    --text-light: #c2410c;
+    --text-inverse: #ffffff;
+    --border-color: #fed7aa;
+    --border-light: #fde68a;
+    --shadow-color: rgba(69, 26, 3, 0.1);
+    --shadow-light: rgba(69, 26, 3, 0.05);
+    --shadow-dark: rgba(69, 26, 3, 0.15);
+    --modal-header-bg: linear-gradient(135deg, #b45309 0%, #92400e 50%, #d97706 100%);
+    --modal-header-shadow: 0 4px 20px rgba(180, 83, 9, 0.3);
+    --modal-header-text: #ffffff;
+    --modal-header-border: 1px solid #92400e;
+    --modal-header-radius: 12px;
+}
+*/
+
+/* SCHEME 3: MODERN DARK (Elegant & Contemporary) */
+/*
+:root {
+    --primary-color: #6366f1;
+    --primary-hover: #4f46e5;
+    --primary-light: #c7d2fe;
+    --secondary-color: #10b981;
+    --secondary-hover: #059669;
+    --secondary-light: #d1fae5;
+    --accent-color: #f59e0b;
+    --accent-hover: #d97706;
+    --accent-light: #fde68a;
+    --warning-color: #f59e0b;
+    --info-color: #06b6d4;
+    --danger-color: #ef4444;
+    --success-color: #22c55e;
+    --dark-color: #0f172a;
+    --light-color: #1e293b;
+    --background-color: #0f172a;
+    --surface-color: #1e293b;
+    --surface-hover: #334155;
+    --card-bg: #1e293b;
+    --card-border: #334155;
+    --text-color: #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-light: #cbd5e1;
+    --text-inverse: #0f172a;
+    --border-color: #334155;
+    --border-light: #475569;
+    --shadow-color: rgba(15, 23, 42, 0.3);
+    --shadow-light: rgba(15, 23, 42, 0.15);
+    --shadow-dark: rgba(15, 23, 42, 0.4);
+    --modal-header-bg: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #7c3aed 100%);
+    --modal-header-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+    --modal-header-text: #ffffff;
+    --modal-header-border: 1px solid #4f46e5;
+    --modal-header-radius: 12px;
+}
+*/
+
+/* SCHEME 4: NATURE GREEN (Calm & Organic) */
+/*
+:root {
+    --primary-color: #059669;
+    --primary-hover: #047857;
+    --primary-light: #d1fae5;
+    --secondary-color: #7c3aed;
+    --secondary-hover: #6d28d9;
+    --secondary-light: #e9d5ff;
+    --accent-color: #ea580c;
+    --accent-hover: #c2410c;
+    --accent-light: #fed7aa;
+    --warning-color: #d97706;
+    --info-color: #0891b2;
+    --danger-color: #dc2626;
+    --success-color: #16a34a;
+    --dark-color: #064e3b;
+    --light-color: #ecfdf5;
+    --background-color: #ecfdf5;
+    --surface-color: #ffffff;
+    --surface-hover: #d1fae5;
+    --card-bg: #ffffff;
+    --card-border: #a7f3d0;
+    --text-color: #064e3b;
+    --text-muted: #065f46;
+    --text-light: #047857;
+    --text-inverse: #ffffff;
+    --border-color: #a7f3d0;
+    --border-light: #d1fae5;
+    --shadow-color: rgba(6, 78, 59, 0.1);
+    --shadow-light: rgba(6, 78, 59, 0.05);
+    --shadow-dark: rgba(6, 78, 59, 0.15);
+    --modal-header-bg: linear-gradient(135deg, #059669 0%, #047857 50%, #10b981 100%);
+    --modal-header-shadow: 0 4px 20px rgba(5, 150, 105, 0.3);
+    --modal-header-text: #ffffff;
+    --modal-header-border: 1px solid #047857;
+    --modal-header-radius: 12px;
+}
+*/
+
+/* SCHEME 5: SUNSET ORANGE (Warm & Energetic) */
+/*
+:root {
+    --primary-color: #ea580c;
+    --primary-hover: #c2410c;
+    --primary-light: #fed7aa;
+    --secondary-color: #7c3aed;
+    --secondary-hover: #6d28d9;
+    --secondary-light: #e9d5ff;
+    --accent-color: #059669;
+    --accent-hover: #047857;
+    --accent-light: #d1fae5;
+    --warning-color: #d97706;
+    --info-color: #0891b2;
+    --danger-color: #dc2626;
+    --success-color: #16a34a;
+    --dark-color: #7c2d12;
+    --light-color: #fef3c7;
+    --background-color: #fef3c7;
+    --surface-color: #ffffff;
+    --surface-hover: #fef3c7;
+    --card-bg: #ffffff;
+    --card-border: #fed7aa;
+    --text-color: #7c2d12;
+    --text-muted: #a16207;
+    --text-light: #c2410c;
+    --text-inverse: #ffffff;
+    --border-color: #fed7aa;
+    --border-light: #fde68a;
+    --shadow-color: rgba(124, 45, 18, 0.1);
+    --shadow-light: rgba(124, 45, 18, 0.05);
+    --shadow-dark: rgba(124, 45, 18, 0.15);
+    --modal-header-bg: linear-gradient(135deg, #ea580c 0%, #c2410c 50%, #f97316 100%);
+    --modal-header-shadow: 0 4px 20px rgba(234, 88, 12, 0.3);
+    --modal-header-text: #ffffff;
+    --modal-header-border: 1px solid #c2410c;
+    --modal-header-radius: 12px;
+}
+*/
+
+/* ===== CURRENTLY ACTIVE: PROFESSIONAL BLUE SCHEME ===== */
+:root {
+    --primary-color: #1e40af;
+    --primary-hover: #1d4ed8;
+    --primary-light: #dbeafe;
+    --secondary-color: #059669;
+    --secondary-hover: #047857;
+    --secondary-light: #d1fae5;
+    --accent-color: #7c3aed;
+    --accent-hover: #6d28d9;
+    --accent-light: #e9d5ff;
+    --warning-color: #d97706;
+    --info-color: #0891b2;
+    --danger-color: #dc2626;
+    --success-color: #16a34a;
+    --dark-color: #1e293b;
+    --light-color: #f8fafc;
+    --background-color: #f8fafc;
+    --surface-color: #ffffff;
+    --surface-hover: #f1f5f9;
+    --card-bg: #ffffff;
+    --card-border: #e2e8f0;
+    --text-color: #1e293b;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
+    --text-inverse: #ffffff;
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --shadow-color: rgba(30, 41, 59, 0.1);
+    --shadow-light: rgba(30, 41, 59, 0.05);
+    --shadow-dark: rgba(30, 41, 59, 0.15);
+    --modal-header-bg: linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #3b82f6 100%);
+    --modal-header-shadow: 0 4px 20px rgba(30, 64, 175, 0.3);
+    --modal-header-text: #ffffff;
+    --modal-header-border: 1px solid #1d4ed8;
+    --modal-header-radius: 12px;
+    /* Unified coin card variables for consistent theming across hero and catalog */
+    --coin-card-bg: linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #3b82f6 100%);
+    --coin-card-border: 1px solid #1d4ed8;
+    --coin-card-shadow: 0 4px 20px rgba(30, 64, 175, 0.3);
+    --coin-card-shadow-hover: 0 8px 30px rgba(30, 64, 175, 0.4);
+    --coin-card-text: #ffffff;
+    --coin-card-text-muted: rgba(255, 255, 255, 0.9);
+    --coin-card-radius: 12px;
+}
+
+/* ORIGINAL: PROFESSIONAL MODERN (Cool Ocean) - Commented out */
+/*
+:root {
+    --primary-color: #0891b2;
+    --primary-hover: #0284c7;
+    --primary-light: #7dd3fc;
+    --secondary-color: #059669;
+    --secondary-hover: #047857;
+    --secondary-light: #6ee7b7;
+    --warning-color: #f59e0b;
+    --info-color: #7c3aed;
+    --danger-color: #dc2626;
+    --dark-color: #0f172a;
+    --light-color: #f0f9ff;
+    --background-color: #f0f9ff;
+    --surface-color: #ffffff;
+    --surface-hover: #f9fafb;
+    --text-color: #1e293b;
+    --text-muted: #64748b;
+    --text-inverse: #ffffff;
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-light: rgba(0, 0, 0, 0.05);
     --modal-header-bg: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
     --modal-header-shadow: 0 4px 20px rgba(245, 87, 108, 0.3);
     --modal-header-text: #ffffff;
     --modal-header-border: none;
     --modal-header-radius: 12px;
 }
+*/
 
 /* ===== ALTERNATIVE COIN CARD COLOR SCHEMAS ===== */
 /* Uncomment and modify the class name to switch between different card styles */
@@ -699,30 +976,31 @@ html, body {
     perspective: 1000px; /* enable 3D perspective for children */
 }
 
-/* Make catalog coin cards use golden schema */
+/* Make catalog coin cards use unified coin card variables */
 .catalog-page .coin-card {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(245, 87, 108, 0.3);
+    background: var(--coin-card-bg);
+    border: var(--coin-card-border);
+    border-radius: var(--coin-card-radius);
+    box-shadow: var(--coin-card-shadow);
     transform-style: preserve-3d;
     transition: all 0.3s ease;
+    color: var(--coin-card-text);
 }
 
 .catalog-page .coin-card .card-body { background: transparent; }
 
-/* golden hover effects for catalog cards */
+/* unified hover effects for catalog cards */
 .catalog-page .coin-card:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 30px rgba(245, 87, 108, 0.4);
+    box-shadow: var(--coin-card-shadow-hover);
 }
 
-/* Reuse golden pop style for opened catalog cards */
+/* Reuse unified pop style for opened catalog cards */
 .catalog-page .coin-card.card-pop,
 .coin-card.hero-card-pop,
 .hero-card-pop {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 30px rgba(245, 87, 108, 0.4);
+    box-shadow: var(--coin-card-shadow-hover);
 }
 
 /* Slightly enlarge image when popped */
@@ -730,23 +1008,27 @@ html, body {
     transform: scale(1.08);
 }
 
-/* Colors inside coin card for gradient background */
+/* Colors inside coin card for unified background */
 .catalog-page .coin-card,
 .catalog-page .coin-card .card-body,
 .catalog-page .coin-card .card-title,
-.catalog-page .coin-card .card-text,
 .catalog-page .coin-card .h5 {
-    color: white;
+    color: var(--coin-card-text);
+}
+
+.catalog-page .coin-card .card-text {
+    color: var(--coin-card-text-muted);
 }
 
 .catalog-page .coin-card .card-title {
     font-weight: 700;
 }
 
-/* Type badge (top-left) - adapted for light background */
+/* Type badge (top-left) - adapted for professional blue background */
 .catalog-page .coin-card .badge.position-absolute.start-0 {
-    background: var(--primary-color);
-    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     padding: 0.35rem 0.6rem;
     font-weight: 700;
@@ -1707,22 +1989,23 @@ html, body {
 #hero-latest-coin .card-body { padding: .5rem .75rem; }
 #hero-latest-coin .coin-image { height: 140px; object-fit: contain; background: #ffffff; }
 
-/* Hero-specific coin card styling - now using golden schema */
+/* Hero-specific coin card styling - now using unified coin card variables */
 .hero-coin-card {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(245, 87, 108, 0.3);
+    background: var(--coin-card-bg);
+    border: var(--coin-card-border);
+    border-radius: var(--coin-card-radius);
+    box-shadow: var(--coin-card-shadow);
     transform-style: preserve-3d;
     transition: all 0.3s ease;
+    color: var(--coin-card-text);
 }
 .hero-coin-card .hero-flag { font-size: 2rem; }
-.hero-coin-card .fw-semibold { color: white; }
+.hero-coin-card .fw-semibold { color: var(--coin-card-text); }
 .hero-coin-card .card-body { background: transparent; }
 
 .hero-card-pop {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 30px rgba(245, 87, 108, 0.4);
+    box-shadow: var(--coin-card-shadow-hover);
 }
 
 /* Hero coin image */
