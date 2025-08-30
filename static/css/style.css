@@ -1765,3 +1765,58 @@
         font-size: 0.9rem;
     }
 }
+
+/* Member Statistics Section */
+.member-stat-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #e9ecef;
+}
+
+.member-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.member-stat-card.border-primary {
+    border-color: #0d6efd !important;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.stat-item {
+    margin-bottom: 0.5rem;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #0d6efd;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.25rem;
+}
+
+.stat-date {
+    font-size: 0.875rem;
+    color: #495057;
+    font-weight: 500;
+}
+
+.stat-coin {
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+    line-height: 1.3;
+}
+
+.member-stats-section h2 {
+    color: #343a40;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+

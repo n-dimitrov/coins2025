@@ -1481,6 +1481,57 @@ class BigQueryService:
         self._cache.clear()
         return {'success': True, 'message': 'History table deleted and recreated'}
 
+    async def get_group_member_stats(self, group_id: str) -> List[Dict[str, Any]]:
+        """Get statistics for each member in a group including owned coins count and last added date."""
+        query = f"""
+        WITH latest_ownership AS (
+            SELECT 
+                h.name, 
+                h.coin_id, 
+                h.date, 
+                h.is_active,
+                c.country,
+                c.series,
+                c.coin_type,
+                c.year,
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) as rn
+            FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
+            JOIN `{self.client.project}.{self.dataset_id}.{self.table_id}` c ON h.coin_id = c.coin_id
+        ),
+        member_stats AS (
+            SELECT 
+                gu.name,
+                gu.alias,
+                COUNT(DISTINCT CASE WHEN lo.is_active = true THEN lo.coin_id END) as owned_coins_count,
+                MAX(CASE WHEN lo.is_active = true THEN lo.date END) as last_added_date,
+                MAX(CASE WHEN lo.is_active = true THEN 
+                    CONCAT(
+                        CASE lo.coin_type 
+                            WHEN 'RE' THEN 'Regular' 
+                            WHEN 'CC' THEN 'Commemorative' 
+                            ELSE lo.coin_type 
+                        END, 
+                        ' • ', 
+                        lo.country, 
+                        CASE WHEN lo.year IS NOT NULL THEN CONCAT(' • ', CAST(lo.year AS STRING)) ELSE '' END
+                    ) END) as last_coin_description
+            FROM `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu
+            LEFT JOIN latest_ownership lo ON gu.name = lo.name AND lo.rn = 1
+            WHERE gu.group_id = @group_id AND gu.is_active = true
+            GROUP BY gu.name, gu.alias
+        )
+        SELECT 
+            name,
+            alias,
+            owned_coins_count,
+            last_added_date,
+            last_coin_description
+        FROM member_stats
+        ORDER BY owned_coins_count DESC, last_added_date DESC NULLS LAST, alias
+        """
+        
+        return await self._get_cached_or_query(query, {'group_id': group_id})
+
 
 # Process-global singleton holder + initializer. We prefer an explicit
 # startup-initialized instance rather than implicit per-import caching so the

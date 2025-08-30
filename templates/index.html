@@ -77,6 +77,53 @@
         </div>
     </div>
 </section>
+
+<!-- Member Statistics Section (only in group mode) -->
+{% if group_mode and member_stats %}
+<section class="member-stats-section py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center mb-4">Group Member Statistics</h2>
+                <div class="row g-3">
+                    {% for member in member_stats %}
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="card h-100 member-stat-card{% if selected_member and selected_member == member.name %} border-primary{% endif %}">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ member.alias or member.name }}</h5>
+                                <div class="member-stats">
+                                    <div class="stat-item">
+                                        <div class="stat-number">{{ member.owned_coins_count or 0 }}</div>
+                                        <div class="stat-label">Coins Owned</div>
+                                    </div>
+                                    {% if member.last_added_date %}
+                                    <div class="stat-item mt-2">
+                                        <div class="stat-label small text-muted">Last Added</div>
+                                        <div class="stat-date">{{ member.last_added_date.strftime('%b %d, %Y') if member.last_added_date else 'N/A' }}</div>
+                                        {% if member.last_coin_description %}
+                                        <div class="stat-coin small text-muted mt-1">{{ member.last_coin_description }}</div>
+                                        {% endif %}
+                                    </div>
+                                    {% else %}
+                                    <div class="stat-item mt-2">
+                                        <div class="stat-label small text-muted">No coins added yet</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <a href="/{{ group_context.group_key }}/{{ member.name }}/catalog" class="btn btn-outline-primary btn-sm mt-2">
+                                    View Collection
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
 {% endblock %}
 
 {% block scripts %}
