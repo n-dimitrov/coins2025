@@ -268,6 +268,10 @@ async def group_homepage(request: Request, group_name: str):
         
         # Get general stats (same as regular homepage)
         stats = await bigquery_service.get_stats()
+        
+        # Get member statistics for the group
+        member_stats = await bigquery_service.get_group_member_stats(group_context['id'])
+        
         # Fetch latest coins for this group so the hero shows coins
         try:
             coins_batch = await bigquery_service.get_coins_with_ownership(group_context['id'], limit=40)
@@ -305,6 +309,7 @@ async def group_homepage(request: Request, group_name: str):
             "group_context": group_context,
             "group_mode": True,
             "latest_coins": latest_coins,
+            "member_stats": member_stats,
             "selected_member": None,
             "canonical_path": f"/{group_context.get('group_key')}"
         })
@@ -347,6 +352,10 @@ async def group_member_homepage(request: Request, group_name: str, member_name: 
             }, status_code=404)
 
         stats = await bigquery_service.get_stats()
+        
+        # Get member statistics for the group
+        member_stats = await bigquery_service.get_group_member_stats(group_context['id'])
+        
         try:
             coins_batch = await bigquery_service.get_coins_with_ownership(group_context['id'], limit=40)
             latest_coins = []
@@ -383,6 +392,7 @@ async def group_member_homepage(request: Request, group_name: str, member_name: 
             "group_context": group_context,
             "group_mode": True,
             "latest_coins": latest_coins,
+            "member_stats": member_stats,
             "selected_member": matched,
             "canonical_path": f"/{group_context.get('group_key')}/{matched}"
         })

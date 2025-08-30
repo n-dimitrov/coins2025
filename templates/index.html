@@ -77,6 +77,70 @@
         </div>
     </div>
 </section>
+
+<!-- Member Statistics Section (only in group mode) -->
+{% if group_mode and member_stats %}
+<section class="member-stats-section py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center mb-4">Group Member Statistics</h2>
+                <div class="row g-3">
+                    {% for member in member_stats %}
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <!-- Compact Member Card Layout -->
+                        <div class="card h-100 member-stat-card{% if selected_member and selected_member == member.name %} border-primary{% endif %}">
+                            <div class="card-body text-center">
+                                <!-- First line: Name -->
+                                <h5 class="card-title mb-2">{{ member.name }}</h5>
+                                
+                                <!-- Second line: Statistics on one line -->
+                                <div class="member-stats-line d-flex justify-content-center align-items-center gap-3 mb-2">
+                                    <div class="text-center text-muted small">
+                                        <div class="fw-bold fs-5">{{ member.owned_coins_count or 0 }}</div>
+                                        <div class="text-muted">Coins</div>
+                                    </div>
+                                    <div class="text-center text-muted small">
+                                        <div class="fw-bold fs-5">{{ member.owned_countries_count or 0 }}</div>
+                                        <div class="text-muted">Countries</div>
+                                    </div>
+                                    <div class="text-center text-muted small">
+                                        <div class="fw-bold fs-5">{{ member.regular_coins_count or 0 }}</div>
+                                        <div class="text-muted">Regular</div>
+                                    </div>
+                                    <div class="text-center text-muted small">
+                                        <div class="fw-bold fs-5">{{ member.commemorative_coins_count or 0 }}</div>
+                                        <div class="text-muted">Commemorative</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Separator -->
+                                <hr class="my-2">
+                                
+                                <!-- Third line: Last added date + View button -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    {% if member.last_added_date %}
+                                    <div class="text-muted small">
+                                        <i class="fas fa-calendar-alt me-1"></i>{{ member.last_added_date.strftime('%d %B %Y') if member.last_added_date else 'N/A' }}
+                                    </div>
+                                    {% else %}
+                                    <div class="text-muted small">No coins added</div>
+                                    {% endif %}
+                                    <a href="/{{ group_context.group_key }}/{{ member.name }}/catalog" class="btn btn-outline-primary btn-sm">
+                                        View
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
 {% endblock %}
 
 {% block scripts %}
