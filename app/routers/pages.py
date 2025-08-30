@@ -42,15 +42,6 @@ async def homepage(request: Request):
                     'year': year_val,
                     'value': c.get('value')
                 })
-            # Randomize order so the hero shows different coins on each page load.
-            # Do not slice here; allow the caller or upstream logic to decide how many
-            # coins should be displayed in the hero. The BigQueryService already accepts
-            # a `limit` parameter and can be called with None for no limit.
-            try:
-                random.shuffle(latest_coins)
-            except Exception:
-                # If shuffle fails for any reason, fall back to original order
-                pass
         except Exception:
             latest_coins = []
         return templates.TemplateResponse("index.html", {
