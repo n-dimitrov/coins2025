@@ -1,11 +1,438 @@
 /* Custom Styles for My EuroCoins */
 
+/*
+ * ===== THEME CONFIGURATION GUIDE =====
+ * CURRENT THEME: COOL OCEAN THEME
+ * CURRENT COIN CARD SCHEMA: GOLDEN CARDS
+ * CURRENT MODAL HEADER SCHEMA: GOLDEN (via CSS variables)
+ * To change the color scheme, simply update the CSS variables in the :root section below.
+ * All colors throughout the app will automatically update to use the new theme.
+ *
+ * Available theme variables:
+ * --primary-color: Main brand color (buttons, links, accents)
+ * --secondary-color: Secondary color (success states, badges)
+ * --background-color: Main page background
+ * --surface-color: Card/modal backgrounds
+ * --text-color: Primary text color
+ * --text-muted: Secondary/muted text
+ * --border-color: Border colors
+ * --shadow-color: Shadow colors
+ *
+ * Modal Header Variables (for easy schema switching):
+ * --modal-header-bg: Background gradient/color
+ * --modal-header-shadow: Shadow effect
+ * --modal-header-text: Text color
+ * --modal-header-border: Border style
+ * --modal-header-radius: Border radius
+ *
+ * To switch modal header schemas, add the corresponding class to the body element:
+ * - modal-header-glassmorphism
+ * - modal-header-gradient
+ * - modal-header-minimalist
+ * - modal-header-golden (current)
+ * - modal-header-darkmode
+ * - modal-header-neumorphism
+ * - modal-header-ocean-enhanced
+ * - modal-header-vintage
+ *
+ * Example themes are provided in comments below the variables.
+ */
+
+/* ===== THEME CONFIGURATION ===== */
+/* Easily replaceable color scheme - change these variables to switch themes */
 :root {
-    --primary-color: #0066cc;
-    --secondary-color: #28a745;
-    --warning-color: #ffc107;
-    --info-color: #17a2b8;
-    --dark-color: #343a40;
+    /* Primary Colors */
+    --primary-color: #0891b2; /* Sky blue */
+    --primary-hover: #0284c7; /* Darker sky blue for hover states */
+    --primary-light: #7dd3fc; /* Light sky blue */
+
+    /* Secondary Colors */
+    --secondary-color: #059669; /* Teal */
+    --secondary-hover: #047857; /* Darker teal */
+    --secondary-light: #6ee7b7; /* Light teal */
+
+    /* Status Colors */
+    --warning-color: #f59e0b; /* Orange */
+    --info-color: #7c3aed; /* Indigo */
+    --danger-color: #dc2626; /* Red */
+
+    /* Neutral Colors */
+    --dark-color: #0f172a; /* Navy */
+    --light-color: #f0f9ff; /* Light blue */
+
+    /* Background Colors */
+    --background-color: #f0f9ff; /* Light blue */
+    --surface-color: #ffffff; /* White for cards */
+    --surface-hover: #f9fafb; /* Light gray for hover */
+
+    /* Text Colors */
+    --text-color: #1e293b; /* Dark slate */
+    --text-muted: #64748b; /* Slate gray */
+    --text-inverse: #ffffff; /* White text for dark backgrounds */
+
+    /* Border Colors */
+    --border-color: #e2e8f0; /* Light slate */
+    --border-light: #f1f5f9; /* Very light slate */
+
+    /* Shadow Colors */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-light: rgba(0, 0, 0, 0.05);
+
+    /* Modal Header Colors (for easy schema switching) */
+    --modal-header-bg: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
+    --modal-header-shadow: 0 4px 20px rgba(245, 87, 108, 0.3);
+    --modal-header-text: #ffffff;
+    --modal-header-border: none;
+    --modal-header-radius: 12px;
+}
+
+/* ===== ALTERNATIVE COIN CARD COLOR SCHEMAS ===== */
+/* Uncomment and modify the class name to switch between different card styles */
+
+/* SCHEMA 1: GLASSMORPHISM (Modern & Sleek) */
+.coin-card-glassmorphism {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+}
+
+/* SCHEMA 2: GRADIENT CARDS (Dynamic & Modern) */
+.coin-card-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+/* SCHEMA 3: MINIMALIST (Clean & Simple) */
+.coin-card-minimalist {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+}
+
+/* SCHEMA 4: WARM GOLDEN (Premium & Luxurious) */
+.coin-card-golden {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(245, 87, 108, 0.3);
+    color: white;
+}
+
+/* SCHEMA 5: DARK MODE CARDS (Modern & Professional) */
+.coin-card-darkmode {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    border: 1px solid #4a5568;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    color: #e2e8f0;
+}
+
+/* SCHEMA 6: NEUMORPHISM (Soft & Tactile) */
+.coin-card-neumorphism {
+    background: #f0f2f5;
+    border: none;
+    border-radius: 12px;
+    box-shadow:
+        8px 8px 16px rgba(163, 177, 198, 0.6),
+        -8px -8px 16px rgba(255, 255, 255, 0.8);
+    color: var(--text-color);
+}
+
+/* SCHEMA 7: OCEAN BLUE THEME (Current but Enhanced) */
+.coin-card-ocean-enhanced {
+    background: linear-gradient(135deg,
+        rgba(255,255,255,0.95) 0%,
+        rgba(99,102,241,0.05) 50%,
+        rgba(255,255,255,0.98) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.08);
+    color: var(--text-color);
+}
+
+/* SCHEMA 8: VINTAGE COIN (Retro & Classic) */
+.coin-card-vintage {
+    background: linear-gradient(135deg, #d4af37 0%, #b8860b 50%, #daa520 100%);
+    border: 2px solid #8b6914;
+    border-radius: 50%;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+    color: #2d1810;
+}
+
+/* ===== MODAL HEADER COLOR SCHEMAS ===== */
+/* These correspond to the coin card schemas above for easy switching */
+/* To switch schemas, add the desired class to the body element in your HTML */
+/* Example: <body class="modal-header-glassmorphism"> */
+
+/* MODAL HEADER 1: GLASSMORPHISM */
+.modal-header-glassmorphism {
+    --modal-header-bg: rgba(255, 255, 255, 0.1);
+    --modal-header-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --modal-header-text: var(--text-color);
+    --modal-header-border: 1px solid rgba(255, 255, 255, 0.2);
+    --modal-header-radius: 16px;
+}
+
+/* MODAL HEADER 2: GRADIENT CARDS */
+.modal-header-gradient {
+    --modal-header-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --modal-header-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+    --modal-header-text: #ffffff;
+    --modal-header-border: none;
+    --modal-header-radius: 12px;
+}
+
+/* MODAL HEADER 3: MINIMALIST */
+.modal-header-minimalist {
+    --modal-header-bg: #ffffff;
+    --modal-header-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --modal-header-text: var(--text-color);
+    --modal-header-border: 1px solid #e5e7eb;
+    --modal-header-radius: 8px;
+}
+
+/* MODAL HEADER 4: WARM GOLDEN (Current) */
+.modal-header-golden {
+    --modal-header-bg: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
+    --modal-header-shadow: 0 4px 20px rgba(245, 87, 108, 0.3);
+    --modal-header-text: #ffffff;
+    --modal-header-border: none;
+    --modal-header-radius: 12px;
+}
+
+/* MODAL HEADER 5: DARK MODE */
+.modal-header-darkmode {
+    --modal-header-bg: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    --modal-header-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --modal-header-text: #e2e8f0;
+    --modal-header-border: 1px solid #4a5568;
+    --modal-header-radius: 12px;
+}
+
+/* MODAL HEADER 6: NEUMORPHISM */
+.modal-header-neumorphism {
+    --modal-header-bg: #f0f2f5;
+    --modal-header-shadow: 8px 8px 16px rgba(163, 177, 198, 0.6), -8px -8px 16px rgba(255, 255, 255, 0.8);
+    --modal-header-text: var(--text-color);
+    --modal-header-border: none;
+    --modal-header-radius: 12px;
+}
+
+/* MODAL HEADER 7: OCEAN ENHANCED */
+.modal-header-ocean-enhanced {
+    --modal-header-bg: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(99,102,241,0.05) 50%, rgba(255,255,255,0.98) 100%);
+    --modal-header-shadow: 0 4px 16px rgba(99, 102, 241, 0.08);
+    --modal-header-text: var(--text-color);
+    --modal-header-border: 1px solid rgba(99, 102, 241, 0.15);
+    --modal-header-radius: 12px;
+}
+
+/* MODAL HEADER 8: VINTAGE */
+.modal-header-vintage {
+    --modal-header-bg: linear-gradient(135deg, #d4af37 0%, #b8860b 50%, #daa520 100%);
+    --modal-header-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+    --modal-header-text: #2d1810;
+    --modal-header-border: 2px solid #8b6914;
+    --modal-header-radius: 50%;
+}
+
+/* ===== HOVER EFFECTS FOR ALTERNATIVE SCHEMAS ===== */
+
+/* Glassmorphism hover */
+.coin-card-glassmorphism:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Gradient cards hover */
+.coin-card-gradient:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+}
+
+/* Minimalist hover */
+.coin-card-minimalist:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary-color);
+}
+
+/* Golden hover */
+.coin-card-golden:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(245, 87, 108, 0.4);
+}
+
+/* Dark mode hover */
+.coin-card-darkmode:hover {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Neumorphism hover */
+.coin-card-neumorphism:hover {
+    box-shadow:
+        12px 12px 24px rgba(163, 177, 198, 0.7),
+        -12px -12px 24px rgba(255, 255, 255, 0.9),
+        inset 2px 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+/* Ocean enhanced hover */
+.coin-card-ocean-enhanced:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(99, 102, 241, 0.2);
+    border-color: var(--primary-color);
+}
+
+/* Vintage hover */
+.coin-card-vintage:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.5);
+}
+
+/* ===== ADDITIONAL STYLING DETAILS ===== */
+
+/* Common text colors for different schemas */
+.coin-card-gradient .card-title,
+.coin-card-golden .card-title,
+.coin-card-vintage .card-title {
+    color: white;
+}
+
+.coin-card-darkmode .card-title {
+    color: #f7fafc;
+}
+
+.coin-card-glassmorphism .card-text,
+.coin-card-minimalist .card-text,
+.coin-card-neumorphism .card-text,
+.coin-card-ocean-enhanced .card-text {
+    color: var(--text-muted);
+}
+
+.coin-card-gradient .card-text,
+.coin-card-golden .card-text,
+.coin-card-darkmode .card-text {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.coin-card-vintage .card-text {
+    color: #4a2c17;
+}
+
+/* Badge styling for different schemas */
+.coin-card-gradient .badge,
+.coin-card-golden .badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.coin-card-darkmode .badge {
+    background: #4a5568;
+    color: #e2e8f0;
+}
+
+.coin-card-vintage .badge {
+    background: #8b6914;
+    color: #2d1810;
+}
+
+/* ===== HOW TO USE ===== */
+/*
+1. Replace the class name in your HTML or apply to existing cards:
+   .coin-card-unified → .coin-card-glassmorphism
+   .hero-coin-card → .coin-card-gradient
+   .catalog-page .coin-card → .coin-card-minimalist
+
+2. For best results, also update the page background to complement:
+   - Glassmorphism: Use a gradient background
+   - Gradient: Keep light backgrounds
+   - Minimalist: Clean white/light backgrounds
+   - Golden: Light backgrounds to make gold pop
+   - Dark mode: Dark page backgrounds
+   - Neumorphism: Light gray backgrounds
+   - Ocean: Light blue backgrounds (current)
+   - Vintage: Cream/warm backgrounds
+
+3. Test contrast ratios for accessibility
+*/
+/*
+ * ===== ALTERNATIVE THEME EXAMPLES =====
+ * Copy and paste these blocks to quickly switch themes:
+ *
+ * WARM EARTH THEME:
+ * --primary-color: #d97706; --secondary-color: #059669; --background-color: #fef7ed;
+ * --surface-color: #ffffff; --text-color: #1f2937; --text-muted: #6b7280;
+ *
+ * OCEAN THEME (CURRENT):
+ * --primary-color: #0891b2; --secondary-color: #059669; --background-color: #f0f9ff;
+ * --surface-color: #ffffff; --text-color: #1e293b; --text-muted: #64748b;
+ *
+ * ROYAL PURPLE THEME:
+ * --primary-color: #7c3aed; --secondary-color: #f59e0b; --background-color: #faf5ff;
+ * --surface-color: #ffffff; --text-color: #1f2937; --text-muted: #6b7280;
+ *
+ * MINIMALIST GRAY THEME:
+ * --primary-color: #374151; --secondary-color: #10b981; --background-color: #f9fafb;
+ * --surface-color: #ffffff; --text-color: #111827; --text-muted: #6b7280;
+ */
+
+/* ===== BASE THEME APPLICATION ===== */
+/* Apply the theme colors to the document */
+html, body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Update card backgrounds for dark theme */
+.card {
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.card-header {
+    background-color: var(--surface-hover);
+    border-bottom-color: var(--border-color);
+    color: var(--text-color);
+}
+
+/* Update form elements */
+.form-control {
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.form-control:focus {
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    border-color: var(--primary-color);
+}
+
+/* Update navigation */
+.navbar {
+    background-color: var(--surface-color) !important;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-brand, .navbar-nav .nav-link {
+    color: var(--text-color) !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary-color) !important;
 }
 
 /* Coin Image Preview Tooltip */
@@ -166,7 +593,7 @@
 
 /* Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, var(--primary-color) 0%, #004499 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, #0f172a 100%);
     min-height: 500px;
 }
 
@@ -248,23 +675,23 @@
 
 /* Catalog page: reuse hero background and hero coin card visuals */
 .catalog-page {
-    /* same as .hero-section for consistent look */
-    background: linear-gradient(135deg, var(--primary-color) 0%, #004499 100%);
+    /* subtle ocean-inspired background for main area */
+    background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
     min-height: 500px; /* keep hero-like height tone */
     padding-bottom: 60px;
 }
 
-/* Catalog header and results count should be white on hero-like background */
+/* Catalog header and results count should follow base color schema */
 .catalog-page h2,
 .catalog-page h1,
 .catalog-page .results-header,
 .catalog-page #results-count {
-    color: white !important;
+    color: var(--text-color) !important;
 }
 
 /* Slightly dim the results-count to match hero micro-copy */
 .catalog-page #results-count {
-    color: rgba(255,255,255,0.85) !important;
+    color: var(--text-muted) !important;
     font-weight: 500;
 }
 
@@ -272,30 +699,30 @@
     perspective: 1000px; /* enable 3D perspective for children */
 }
 
-/* Make catalog coin cards use the hero coin visual language */
+/* Make catalog coin cards use golden schema */
 .catalog-page .coin-card {
-    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
     border: none;
     border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow: 0 4px 20px rgba(245, 87, 108, 0.3);
     transform-style: preserve-3d;
-    transition: transform 0.35s cubic-bezier(.2,.9,.2,1), box-shadow 0.35s ease;
+    transition: all 0.3s ease;
 }
 
 .catalog-page .coin-card .card-body { background: transparent; }
 
-/* subtle pop on hover, matching hero card feel */
+/* golden hover effects for catalog cards */
 .catalog-page .coin-card:hover {
-    transform: translateY(-6px) rotateX(3deg) scale(1.02);
-    box-shadow: 0 18px 30px rgba(0,0,0,0.22), inset 0 2px 0 rgba(255,255,255,0.06);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(245, 87, 108, 0.4);
 }
 
-/* Reuse hero pop style for opened card: map .card-pop to the hero-card-pop look */
+/* Reuse golden pop style for opened catalog cards */
 .catalog-page .coin-card.card-pop,
 .coin-card.hero-card-pop,
 .hero-card-pop {
-    transform: translateY(-6px) rotateX(3deg) scale(1.02);
-    box-shadow: 0 18px 30px rgba(0,0,0,0.22), inset 0 2px 0 rgba(255,255,255,0.06);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(245, 87, 108, 0.4);
 }
 
 /* Slightly enlarge image when popped */
@@ -303,22 +730,22 @@
     transform: scale(1.08);
 }
 
-/* Colors inside coin card to match hero coin card */
+/* Colors inside coin card for gradient background */
 .catalog-page .coin-card,
 .catalog-page .coin-card .card-body,
 .catalog-page .coin-card .card-title,
 .catalog-page .coin-card .card-text,
 .catalog-page .coin-card .h5 {
-    color: rgba(255,255,255,0.95);
+    color: white;
 }
 
 .catalog-page .coin-card .card-title {
     font-weight: 700;
 }
 
-/* Type badge (top-left) - lighter translucent pill like hero */
+/* Type badge (top-left) - adapted for light background */
 .catalog-page .coin-card .badge.position-absolute.start-0 {
-    background: rgba(255,255,255,0.12);
+    background: var(--primary-color);
     color: white;
     border-radius: 12px;
     padding: 0.35rem 0.6rem;
@@ -354,12 +781,12 @@
     text-shadow: 0 1px 0 rgba(0,0,0,0.25);
 }
 
-/* Coin image: add subtle white border and glow like hero */
+/* Coin image: adapted for light background */
 .catalog-page .coin-card .coin-image {
-    background: rgba(255,255,255,0.02);
-    border: 3px solid rgba(255,255,255,0.06);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    background: #ffffff;
+    border: 2px solid rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .catalog-page .coin-card:hover .coin-image {
@@ -435,23 +862,22 @@
 /* Value badge style (if shown inside card) */
 .catalog-page .coin-value-badge,
 .catalog-page .coin-card .coin-value-badge {
-    background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+    background: var(--secondary-color);
     color: white;
     padding: 0.25rem 0.6rem;
     border-radius: 14px;
     font-weight: 700;
 }
 
-/* Small texts lighter */
+/* Small texts lighter for gradient background */
 .catalog-page .coin-card .card-text.small,
 .catalog-page .coin-card .card-text.text-muted {
-    color: rgba(255,255,255,0.85) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
 }
 
-/* Make the type/series line (e.g. "Commemorative • 2024") match hero white */
+/* Make the type/series line match gradient theme */
 .catalog-page .coin-card .card-text.text-muted.small {
-    /* match hero's text-white-50: muted white */
-    color: rgba(255,255,255,0.5) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
 }
 
 /* Make the feature text match hero styling (slightly lighter white) */
@@ -462,7 +888,8 @@
 
 /* Filters Sidebar */
 .filters-sidebar {
-    background: #f8f9fa;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
     border-radius: 15px;
     padding: 1.5rem;
     height: fit-content;
@@ -480,7 +907,7 @@
 
 .form-label {
     font-weight: 600;
-    color: var(--dark-color);
+    color: var(--text-color);
     margin-bottom: 0.5rem;
 }
 
@@ -492,7 +919,7 @@
 
 .form-control:focus, .form-select:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
 }
 
 /* Search Bar */
@@ -505,7 +932,7 @@
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    color: #6c757d;
+    color: var(--text-muted);
     z-index: 10;
 }
 
@@ -526,8 +953,8 @@
 }
 
 .btn-primary:hover {
-    background: #0056b3;
-    border-color: #0056b3;
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
     transform: translateY(-1px);
 }
 
@@ -565,7 +992,7 @@
     display: inline-block;
     width: 20px;
     height: 20px;
-    border: 3px solid rgba(0,102,204,.3);
+    border: 3px solid rgba(99, 102, 241, 0.3);
     border-radius: 50%;
     border-top-color: var(--primary-color);
     animation: spin 1s ease-in-out infinite;
@@ -672,7 +1099,7 @@
 }
 
 .coin-modal .modal-body {
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    background: linear-gradient(135deg, var(--surface-color) 0%, var(--background-color) 100%);
 }
 
 .coin-detail-container {
@@ -764,13 +1191,21 @@
 .coin-header {
     text-align: center;
     margin-bottom: 1rem;
-    padding-bottom: 1rem;
+    padding: 1.5rem;
     border-bottom: 2px solid #e9ecef;
+    /* Use CSS variables for easy schema switching */
+    background: var(--modal-header-bg);
+    border: var(--modal-header-border);
+    border-radius: var(--modal-header-radius);
+    box-shadow: var(--modal-header-shadow);
+    color: var(--modal-header-text);
 }
 
 /* Modal-specific header overrides: align left and ensure country name truncates */
 #coinDetailModal .coin-header {
     text-align: left;
+    /* Ensure text is visible on gradient background */
+    color: var(--modal-header-text);
 }
 
 #coinDetailModal .coin-country {
@@ -780,11 +1215,13 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     vertical-align: middle;
+    color: var(--modal-header-text);
 }
 
 #coinDetailModal .coin-value-badge {
     /* keep the same visual style but ensure it doesn't wrap */
     white-space: nowrap;
+    color: var(--modal-header-text);
 }
 
 /* Modal-specific visual adjustments */
@@ -812,7 +1249,7 @@
 
 /* Owner info modal: selected owner row */
 .owner-item.selected-owner {
-    background: rgba(0, 102, 204, 0.08);
+    background: rgba(99, 102, 241, 0.08);
     border-left: 4px solid var(--primary-color);
     padding-left: 0.5rem;
     border-radius: 6px;
@@ -842,11 +1279,8 @@
 #coinDetailModal .coin-header {
     position: sticky;
     top: 0;
-    /* layered background: translucent overlay on top of the hero gradient so the
-       header matches the card look even inside the white modal shell */
-    background-image: 
-        linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
-        linear-gradient(135deg, var(--primary-color) 0%, #004499 100%);
+    /* Use modal header variables for consistent theming */
+    background: var(--modal-header-bg);
     z-index: 10;
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
@@ -854,13 +1288,13 @@
     padding-left: 1rem;
     padding-right: 1rem;
     /* rounded top corners to match modal content */
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    border-top-left-radius: var(--modal-header-radius);
+    border-top-right-radius: var(--modal-header-radius);
     /* ensure background respects rounded corners */
     background-clip: padding-box;
-    color: rgba(255,255,255,0.95);
+    color: var(--modal-header-text);
     /* subtle inner separation */
-    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.03);
+    box-shadow: var(--modal-header-shadow);
 }
 
 #coinDetailModal .modal-body {
@@ -1273,22 +1707,22 @@
 #hero-latest-coin .card-body { padding: .5rem .75rem; }
 #hero-latest-coin .coin-image { height: 140px; object-fit: contain; background: #ffffff; }
 
-/* Hero-specific coin card styling */
+/* Hero-specific coin card styling - now using golden schema */
 .hero-coin-card {
-    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
     border: none;
     border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow: 0 4px 20px rgba(245, 87, 108, 0.3);
     transform-style: preserve-3d;
-    transition: transform 0.35s cubic-bezier(.2,.9,.2,1), box-shadow 0.35s ease;
+    transition: all 0.3s ease;
 }
 .hero-coin-card .hero-flag { font-size: 2rem; }
 .hero-coin-card .fw-semibold { color: white; }
 .hero-coin-card .card-body { background: transparent; }
 
 .hero-card-pop {
-    transform: translateY(-6px) rotateX(3deg) scale(1.02);
-    box-shadow: 0 18px 30px rgba(0,0,0,0.22), inset 0 2px 0 rgba(255,255,255,0.06);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(245, 87, 108, 0.4);
 }
 
 /* Hero coin image */
@@ -1731,7 +2165,7 @@
 
 /* Highlight selected group row */
 .admin-panel .table tbody tr.table-active {
-    background-color: rgba(0, 102, 204, 0.1);
+    background-color: rgba(99, 102, 241, 0.1);
 }
 
 /* Alert animations */
