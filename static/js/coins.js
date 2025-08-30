@@ -327,8 +327,8 @@ class CoinCatalog {
                 const search = this.currentFilters.search.toLowerCase();
                 const searchFields = [
                     coin.country.toLowerCase(),
-                    coin.feature?.toLowerCase() || '',
-                    coin.series?.toLowerCase() || ''
+                    (coin.feature && coin.feature.toLowerCase()) || '',
+                    (coin.series && coin.series.toLowerCase()) || ''
                 ];
                 if (!searchFields.some(field => field.includes(search))) {
                     return false;
@@ -723,7 +723,7 @@ class CoinCatalog {
 
             // Add a pop class to the corresponding card for a stronger 3D effect
             this.clearAllCardPop();
-            const cardEl = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
+            const cardEl = document.querySelector(`[data-coin-id="${coin.coin_id}"]`) && document.querySelector(`[data-coin-id="${coin.coin_id}"]`).closest('.coin-card');
             if (cardEl) cardEl.classList.add('card-pop');
 
             // Show modal
@@ -746,7 +746,7 @@ class CoinCatalog {
             const modal = new bootstrap.Modal(modalEl);
             // Attempt to add pop class to the fallback coin card
             this.clearAllCardPop();
-            const fallbackCard = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
+            const fallbackCard = document.querySelector(`[data-coin-id="${coin.coin_id}"]`) && document.querySelector(`[data-coin-id="${coin.coin_id}"]`).closest('.coin-card');
             if (fallbackCard) fallbackCard.classList.add('card-pop');
             modal.show();
             // The modal hide handler is installed centrally; no per-show
@@ -1106,7 +1106,7 @@ class CoinCatalog {
                 modalBody.style.transform = 'translateX(10px)';
                 // Update card pop highlighting: remove previous, add to new
                 this.clearAllCardPop();
-                const newCard = document.querySelector(`[data-coin-id="${coin.coin_id}"]`)?.closest('.coin-card');
+                const newCard = document.querySelector(`[data-coin-id="${coin.coin_id}"]`) && document.querySelector(`[data-coin-id="${coin.coin_id}"]`).closest('.coin-card');
                 if (newCard) newCard.classList.add('card-pop');
                 // Only fetch additional coin details if we're NOT in group context
                 // Group coins already have complete data including ownership
