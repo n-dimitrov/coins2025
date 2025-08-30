@@ -1234,7 +1234,8 @@ class BigQueryService:
             h.name, 
             COALESCE(h.coin_id, h.id) as id,  -- Use coin_id if available, fallback to id for legacy data
             h.date,
-            h.created_at
+            h.created_at,
+            h.is_active
         FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
         ORDER BY h.created_at DESC
         """
