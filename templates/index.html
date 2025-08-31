@@ -120,9 +120,15 @@
                                 <!-- Third line: Last added date + View button -->
                                 <div class="d-flex justify-content-between align-items-center">
                                     {% if member.last_added_date %}
-                                    <div class="text-muted small">
-                                        <i class="fas fa-calendar-alt me-1"></i>{{ member.last_added_date.strftime('%d %B %Y') if member.last_added_date else 'N/A' }}
-                                    </div>
+                                        <div class="text-muted small d-flex align-items-center justify-content-center">
+                                            <i class="fas fa-calendar-alt me-1"></i>
+                                            <span>
+                                                {{ member.last_added_date.strftime('%d %B %Y') if member.last_added_date else 'N/A' }}
+                                            </span>
+                                            {% if member.last_added_date_coins and member.last_added_date_coins > 0 %}
+                                                <span class="ms-2 text-muted small">+{{ member.last_added_date_coins }} coins</span>
+                                            {% endif %}
+                                        </div>
                                     {% else %}
                                     <div class="text-muted small">No coins added</div>
                                     {% endif %}

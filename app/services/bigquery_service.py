@@ -220,6 +220,74 @@ class BigQueryService:
         
         return await self._get_cached_or_query(query, {'group_id': group_id})
 
+    async def get_group_member_stats_by_user(self, group_id: str) -> List[Dict[str, Any]]:
+        """Return per-user stats for a group, preserving the stored user name.
+
+        This method lists active group users and merges the aggregated
+        statistics computed by `get_group_member_stats`. It ensures every
+        active user is present in the result (zero-filled when no data)
+        and sorts the final list by `last_added_date` (newest first).
+        """
+        # Get canonical list of group users (preserves gu.name)
+        users = await self.get_group_users(group_id)
+
+        # Get aggregated statistics computed in a single query
+        agg_stats = await self.get_group_member_stats(group_id)
+
+        # Build a mapping from name -> stats for quick lookup
+        stats_by_name: Dict[str, Dict[str, Any]] = {}
+        for s in agg_stats:
+            # The SQL returns 'name' key corresponding to gu.name (preserved)
+            key = s.get('name')
+            if key:
+                stats_by_name[key] = s
+
+        # Merge: ensure every user appears in output
+        results: List[Dict[str, Any]] = []
+        for u in users:
+            uname = u.get('name')
+            alias = u.get('alias') if isinstance(u, dict) else None
+            base = {
+                'name': uname,
+                'alias': alias,
+                'owned_coins_count': 0,
+                'owned_countries_count': 0,
+                'regular_coins_count': 0,
+                'commemorative_coins_count': 0,
+                'last_added_date': None,
+                'last_added_date_coins': 0
+            }
+
+            if uname and uname in stats_by_name:
+                st = stats_by_name[uname]
+                # Copy numeric fields with safe defaults
+                base['owned_coins_count'] = int(st.get('owned_coins_count') or 0)
+                base['owned_countries_count'] = int(st.get('owned_countries_count') or 0)
+                base['regular_coins_count'] = int(st.get('regular_coins_count') or 0)
+                base['commemorative_coins_count'] = int(st.get('commemorative_coins_count') or 0)
+                base['last_added_date'] = st.get('last_added_date')
+                # last_added_date_coins may be present from the SQL
+                base['last_added_date_coins'] = int(st.get('last_added_date_coins') or 0)
+
+            results.append(base)
+
+        # Helper to convert values to timestamps for sorting
+        def _to_ts(v):
+            if v is None:
+                return float('-inf')
+            if isinstance(v, datetime):
+                return v.timestamp()
+            # Attempt isoformat parse - best-effort, else treat as -inf
+            try:
+                return datetime.fromisoformat(str(v)).timestamp()
+            except Exception:
+                return float('-inf')
+
+        # Sort by last_added_date descending (newest first), None last
+        results.sort(key=lambda r: _to_ts(r.get('last_added_date')), reverse=True)
+
+        return results
+
     async def get_coin_ownership_by_group(self, coin_id: str, group_id: str) -> List[Dict[str, Any]]:
         """Get ownership information for a specific coin within a group."""
         query = f"""
@@ -1484,58 +1552,84 @@ class BigQueryService:
     async def get_group_member_stats(self, group_id: str) -> List[Dict[str, Any]]:
         """Get statistics for each member in a group including owned coins count and last added date."""
         query = f"""
+        -- Compute latest ownership row per (history.name, coin_id) then aggregate per group user.
         WITH latest_ownership AS (
             SELECT 
-                h.name, 
-                h.coin_id, 
-                h.date, 
+                h.name,
+                h.coin_id,
+                h.date,
                 h.is_active,
                 c.country,
                 c.series,
                 c.coin_type,
                 c.year,
-                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) as rn
+                ROW_NUMBER() OVER (PARTITION BY h.name, h.coin_id ORDER BY h.created_at DESC, h.date DESC) AS rn
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_history_table}` h
             JOIN `{self.client.project}.{self.dataset_id}.{self.table_id}` c ON h.coin_id = c.coin_id
         ),
-        member_stats AS (
-            SELECT 
-                gu.name,
-                gu.alias,
-                COUNT(DISTINCT CASE WHEN lo.is_active = true THEN lo.coin_id END) as owned_coins_count,
-                COUNT(DISTINCT CASE WHEN lo.is_active = true THEN lo.country END) as owned_countries_count,
-                COUNT(DISTINCT CASE WHEN lo.is_active = true AND lo.coin_type = 'RE' THEN lo.coin_id END) as regular_coins_count,
-                COUNT(DISTINCT CASE WHEN lo.is_active = true AND lo.coin_type = 'CC' THEN lo.coin_id END) as commemorative_coins_count,
-                MAX(CASE WHEN lo.is_active = true THEN lo.date END) as last_added_date,
-                MAX(CASE WHEN lo.is_active = true THEN 
-                    CONCAT(
-                        CASE lo.coin_type 
-                            WHEN 'RE' THEN 'Regular' 
-                            WHEN 'CC' THEN 'Commemorative' 
-                            ELSE lo.coin_type 
-                        END, 
-                        ' • ', 
-                        lo.country, 
-                        CASE WHEN lo.year IS NOT NULL THEN CONCAT(' • ', CAST(lo.year AS STRING)) ELSE '' END
-                    ) END) as last_coin_description
+
+        -- Events for group members: preserve gu.name (do not modify it) but match history rows
+        -- using a normalized comparison so loose differences in casing/whitespace don't drop matches.
+        member_events AS (
+            SELECT
+                gu.name AS name,
+                gu.alias AS alias,
+                lo.coin_id,
+                lo.country,
+                lo.coin_type,
+                lo.year,
+                lo.is_active,
+                lo.date
             FROM `{self.client.project}.{self.dataset_id}.{settings.bq_group_users_table}` gu
-            LEFT JOIN latest_ownership lo ON gu.name = lo.name AND lo.rn = 1
+            LEFT JOIN latest_ownership lo
+              ON lo.rn = 1 AND LOWER(TRIM(lo.name)) = LOWER(TRIM(gu.name))
             WHERE gu.group_id = @group_id AND gu.is_active = true
-            GROUP BY gu.name, gu.alias
+        ),
+
+        -- Aggregate per user to get totals and the last added date
+        member_agg AS (
+            SELECT
+                name,
+                alias,
+                COUNT(DISTINCT CASE WHEN is_active = true THEN coin_id END) AS owned_coins_count,
+                COUNT(DISTINCT CASE WHEN is_active = true THEN country END) AS owned_countries_count,
+                COUNT(DISTINCT CASE WHEN is_active = true AND coin_type = 'RE' THEN coin_id END) AS regular_coins_count,
+                COUNT(DISTINCT CASE WHEN is_active = true AND coin_type = 'CC' THEN coin_id END) AS commemorative_coins_count,
+                MAX(CASE WHEN is_active = true THEN date END) AS last_added_date
+            FROM member_events
+            GROUP BY name, alias
+        ),
+
+        -- For each user compute how many distinct coins were added on their last_added_date
+        last_day_counts AS (
+            SELECT
+                me.name,
+                COUNT(DISTINCT me.coin_id) AS last_added_date_coins
+            FROM member_events me
+            JOIN (
+                SELECT name, MAX(CASE WHEN is_active = true THEN date END) AS last_added_date
+                FROM member_events
+                GROUP BY name
+            ) m2
+              ON me.name = m2.name
+            WHERE me.is_active = true AND DATE(me.date) = DATE(m2.last_added_date)
+            GROUP BY me.name
         )
-        SELECT 
-            name,
-            alias,
-            owned_coins_count,
-            owned_countries_count,
-            regular_coins_count,
-            commemorative_coins_count,
-            last_added_date,
-            last_coin_description
-        FROM member_stats
-        ORDER BY owned_coins_count DESC, last_added_date DESC NULLS LAST, alias
+
+        SELECT
+            ma.name,
+            ma.alias,
+            ma.owned_coins_count,
+            ma.owned_countries_count,
+            ma.regular_coins_count,
+            ma.commemorative_coins_count,
+            ma.last_added_date,
+            COALESCE(ldc.last_added_date_coins, 0) AS last_added_date_coins
+        FROM member_agg ma
+        LEFT JOIN last_day_counts ldc ON ma.name = ldc.name
+        ORDER BY ma.last_added_date DESC NULLS LAST, ma.alias
         """
-        
+
         return await self._get_cached_or_query(query, {'group_id': group_id})
 
 
