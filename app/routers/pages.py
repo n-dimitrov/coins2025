@@ -274,7 +274,10 @@ async def group_homepage(request: Request, group_name: str):
         
         # Fetch latest coins for this group so the hero shows coins
         try:
-            coins_batch = await bigquery_service.get_coins_with_ownership(group_context['id'], limit=40)
+            # Use the same latest-coins query as the public homepage so the hero
+            # shows recent coins (this year and last year) regardless of group
+            # context. Ownership info is not required for the hero.
+            coins_batch = await bigquery_service.get_latest_coins(limit=40)
             latest_coins = []
             seen_ids = set()
             for c in coins_batch:
@@ -296,10 +299,6 @@ async def group_homepage(request: Request, group_name: str):
                     'year': year_val,
                     'value': c.get('value')
                 })
-            try:
-                random.shuffle(latest_coins)
-            except Exception:
-                pass
         except Exception:
             latest_coins = []
 
@@ -357,7 +356,8 @@ async def group_member_homepage(request: Request, group_name: str, member_name: 
         member_stats = await bigquery_service.get_group_member_stats(group_context['id'])
         
         try:
-            coins_batch = await bigquery_service.get_coins_with_ownership(group_context['id'], limit=40)
+            # Same behavior as the public homepage: show recent coins only.
+            coins_batch = await bigquery_service.get_latest_coins(limit=40)
             latest_coins = []
             seen_ids = set()
             for c in coins_batch:
@@ -379,10 +379,6 @@ async def group_member_homepage(request: Request, group_name: str, member_name: 
                     'year': year_val,
                     'value': c.get('value')
                 })
-            try:
-                random.shuffle(latest_coins)
-            except Exception:
-                pass
         except Exception:
             latest_coins = []
 
