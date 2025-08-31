@@ -11,7 +11,26 @@ A comprehensive, interactive web application for exploring and cataloging Euro c
 [![FastAPI](https://img.shields.io/badge/FastAPI-latest-green?style=flat-square)](https://fastapi.tiangolo.com)
 [![Google Cloud](https://img.shields.io/badge/Google%20Cloud-Run-blue?style=flat-square)](https://cloud.google.com/run)
 
-## � Changelog
+##  Changelog
+
+### [1.2.0] - 2025-08-31
+
+#### New Features
+- **Last-added metadata**: Compute `last_added_date_coins` and show a "+N coins" indicator for group members so it's clear when members recently added coins to their collections.
+- **Member statistics on landing page**: Add compact group member statistics cards to the homepage to surface quick collection insights.
+- **Admin export**: Add an "export active history" button with predictable filename and improved sorting by date and name for admin exports.
+
+#### Improvements
+- **Latest coins ordering**: Fix latest-coins sorting and avoid random shuffling so the most-recent coins are shown consistently.
+- **UI consistency**: Unify coin card styling across hero and catalog sections and add flexible modal header color schemas to improve visual consistency.
+- **Hero carousel**: Improve hero rotator navigation (4-dot first/prev/next/last, edge dot sizing, no wrap-around) for a better browsing experience.
+- **Small UX & housekeeping**: Preserve usernames in UI flows, keep import spinner behavior for admin imports, and apply several small fixes to polish the admin and catalog UX.
+
+#### Bug Fixes
+- **Stability fixes**: Minor fixes addressing order stability for latest coins and a few small UI regressions reported after v1.1.0.
+
+#### Data
+- No large data refresh in this release; incremental catalog/history fixes continue via the import pipeline.
 
 ### [1.1.0] - 2025-08-29
 

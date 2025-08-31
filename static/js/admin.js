@@ -1733,21 +1733,15 @@ async function exportHistoryCsv() {
     exportBtn.disabled = true;
 
     try {
-        // We only export currently owned coins for a specific user to match requirements
-        const selectedName = document.getElementById('filterHistoryName').value;
-        if (!selectedName) {
-            showAlert('Please select a user from the Name filter before exporting.', 'warning');
-            return;
-        }
-
-        const response = await fetch(`/api/admin/history/export?name=${encodeURIComponent(selectedName)}`);
+        // Export all active history (no name filter needed)
+        const response = await fetch('/api/admin/history/export');
         
         if (response.ok) {
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${selectedName}_owned_coins.csv`;
+            a.download = 'history.csv';
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);

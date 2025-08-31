@@ -232,5 +232,11 @@ class HistoryService:
 
         export_df = df_latest[['name', 'id', 'date']].copy()
         export_df['date'] = pd.to_datetime(export_df['date']).dt.strftime('%Y-%m-%d %H:%M:%S')
+        
+        # Sort by date (without time) DESC, then by name ASC
+        export_df['date_dt'] = pd.to_datetime(export_df['date'])
+        export_df['date_only'] = export_df['date_dt'].dt.date
+        export_df = export_df.sort_values(['date_only', 'name'], ascending=[False, True])
+        export_df = export_df.drop(columns=['date_dt', 'date_only'])
 
         return export_df
