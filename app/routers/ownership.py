@@ -6,11 +6,15 @@ import logging
 from app.models.ownership import OwnershipAdd, OwnershipRemove, OwnershipRecord, OwnershipResponse
 from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 from app.services.group_service import GroupService
+from app.security import get_ownership_dependency
 from app.config import settings
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/ownership", tags=["ownership"])
+
+# Ownership authentication dependency
+ownership_required = get_ownership_dependency()
 
 # Dependency to get BigQuery service (use cached provider)
 def get_bigquery_service() -> BigQueryService:
@@ -22,7 +26,8 @@ def get_group_service() -> GroupService:
 @router.post("/add", response_model=OwnershipResponse, status_code=status.HTTP_201_CREATED)
 async def add_coin_ownership(
     ownership: OwnershipAdd,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service: BigQueryService = Depends(get_bigquery_service),
+    _auth: bool = ownership_required
 ):
     """Add coin to user's collection."""
     try:
@@ -68,7 +73,8 @@ async def add_coin_ownership(
 @router.post("/remove", response_model=OwnershipResponse, status_code=status.HTTP_200_OK)
 async def remove_coin_ownership(
     ownership: OwnershipRemove,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service: BigQueryService = Depends(get_bigquery_service),
+    _auth: bool = ownership_required
 ):
     """Remove coin from user's collection."""
     try:

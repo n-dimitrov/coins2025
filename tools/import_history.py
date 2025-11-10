@@ -122,9 +122,8 @@ class HistoryImporter:
             # Rename id column to coin_id to match schema
             df = df.rename(columns={'id': 'coin_id'})
             
-            # Convert date column and drop the redundant date_only column
+            # Convert date column to proper timestamp format
             df['date'] = pd.to_datetime(df['date'])
-            df = df.drop(columns=['date_only'])
             
             # Add new fields for enhanced schema
             df['id'] = [str(uuid.uuid4()) for _ in range(len(df))]

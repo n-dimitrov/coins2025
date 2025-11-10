@@ -1,0 +1,35 @@
+# Production Requirements for My EuroCoins
+# Optimized for production deployment with security focus
+
+# Core FastAPI and server
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+starlette==0.27.0
+
+# Template engine
+jinja2==3.1.2
+
+# File upload and form handling
+python-multipart==0.0.6
+
+# Google Cloud services
+google-cloud-bigquery==3.12.0
+google-auth==2.23.4
+google-cloud-core==2.3.3
+
+# Environment and configuration
+python-dotenv==1.0.0
+
+# Security and validation
+cryptography==41.0.7
+email-validator==2.1.0
+
+# HTTP client for health checks
+httpx==0.25.2
+
+# Monitoring and logging (optional)
+structlog==23.2.0
+
+# Performance optimizations
+orjson==3.9.10
