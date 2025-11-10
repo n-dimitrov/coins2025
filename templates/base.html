@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if group_context %}{% if selected_member %}My EuroCoins | {{ selected_member }}@{{ group_context.name }}{% else %}My EuroCoins | {{ group_context.name }}{% endif %}{% else %}My EuroCoins{% endif %}</title>
     
-    <!-- Security Headers -->
+    <!-- Security Headers (Production Only) -->
+    {% if request and 'myeurocoins.org' in request.url._url %}
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    {% endif %}
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="{% block description %}Explore the complete collection of Euro coins from 1999 to 2025. Discover regular circulation and commemorative coins from all eurozone countries.{% endblock %}">
