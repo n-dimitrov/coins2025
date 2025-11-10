@@ -212,3 +212,67 @@ __marimo__/
 tmp/
 credentials/
 **/service_account.json
+
+# Project-specific files
+# Keep .env templates but ignore active .env
+!.env.development
+!.env.production
+!.env.public
+.env.local
+.env.temp
+
+# Google Cloud deployment logs
+gcloud_logs/
+
+# Application logs
+logs/
+*.log
+
+# SSL certificates and keys
+ssl/
+*.key
+*.crt
+*.pem
+*.p12
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# IDE and editor files
+.vscode/settings.json
+.vscode/launch.json
+*.swp
+*.swo
+*~
+
+# Docker volumes and data
+docker-data/
+volumes/
+
+# Temporary deployment files
+*.yaml.backup
+*.yml.backup
+app.yaml.temp
+cloudbuild.yaml.temp
+
+# Service configuration files with secrets
+myeurocoins.service.production
+nginx-myeurocoins.conf.production
+
+# Runtime files
+*.pid
+*.sock
+nohup.out
+
+# macOS specific
+.Trashes
+.Spotlight-V100
+.VolumeIcon.icns
+.fseventsd
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini

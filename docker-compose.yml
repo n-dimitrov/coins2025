@@ -1,0 +1,68 @@
+# My EuroCoins - Docker Compose Configuration
+# Production-ready containerized deployment
+
+version: '3.8'
+
+services:
+  myeurocoins:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myeurocoins-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - APP_ENV=production
+      - PORT=8080
+      - HOST=0.0.0.0
+      - GOOGLE_CLOUD_PROJECT=coins2025
+    env_file:
+      - .env
+    volumes:
+      # Mount credentials for Google Cloud
+      - ./credentials:/app/credentials:ro
+      # Optional: Mount data directory for local files
+      - ./data:/app/data:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - myeurocoins-network
+
+  # Optional: Reverse proxy with SSL termination
+  nginx:
+    image: nginx:alpine
+    container_name: myeurocoins-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro  # Mount SSL certificates
+    depends_on:
+      - myeurocoins
+    networks:
+      - myeurocoins-network
+
+networks:
+  myeurocoins-network:
+    driver: bridge
+
+# Optional: Add Redis for caching
+# redis:
+#   image: redis:7-alpine
+#   container_name: myeurocoins-redis
+#   restart: unless-stopped
+#   command: redis-server --appendonly yes
+#   volumes:
+#     - redis-data:/data
+#   networks:
+#     - myeurocoins-network
+
+# volumes:
+#   redis-data:

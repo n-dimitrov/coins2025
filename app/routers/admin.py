@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
 from fastapi.responses import JSONResponse, StreamingResponse
 from typing import List, Dict, Any, Optional
 import csv
@@ -9,6 +9,7 @@ from app.services.bigquery_service import BigQueryService, get_bigquery_service 
 from app.services.history_service import HistoryService
 from app.models.coin import Coin
 from app.models.history import History, HistoryCreate
+from app.security import get_admin_dependency
 import pandas as pd
 import uuid
 from datetime import timezone
@@ -20,8 +21,11 @@ router = APIRouter(prefix="/admin")
 bigquery_service = get_bq_provider()
 history_service = HistoryService()
 
+# Admin authentication dependency
+admin_required = get_admin_dependency()
+
 @router.post("/coins/upload")
-async def upload_coins_csv(file: UploadFile = File(...)):
+async def upload_coins_csv(file: UploadFile = File(...), _auth: bool = admin_required):
     """Upload and process CSV file for coin import."""
     try:
         # Validate file type
@@ -127,7 +131,7 @@ async def upload_coins_csv(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
 
 @router.post("/coins/import")
-async def import_selected_coins(coins: List[Dict[str, Any]]):
+async def import_selected_coins(coins: List[Dict[str, Any]], _auth: bool = admin_required):
     """Import selected coins to the database."""
     try:
         # Filter only selected coins (allow new or previously conflicted rows that were edited)
@@ -178,7 +182,7 @@ async def import_selected_coins(coins: List[Dict[str, Any]]):
         raise HTTPException(status_code=500, detail=f"Error importing coins: {str(e)}")
 
 @router.get("/coins/export")
-async def export_coins_csv():
+async def export_coins_csv(_auth: bool = admin_required):
     """Export all coins to CSV file sorted by year, series, country."""
     try:
         # Get all coins from BigQuery sorted by year, series, country
@@ -234,7 +238,8 @@ async def view_coins(
     offset: int = 0,
     search: Optional[str] = None,
     country: Optional[str] = None,
-    coin_type: Optional[str] = None
+    coin_type: Optional[str] = None,
+    _auth: bool = admin_required
 ):
     """Get coins for viewing in admin panel with pagination and filtering."""
     try:
@@ -265,7 +270,7 @@ async def view_coins(
 
 
 @router.post("/coins/reset")
-async def reset_catalog(recreate: bool = True):
+async def reset_catalog(recreate: bool = True, _auth: bool = admin_required):
     """Delete and recreate the catalog table. This is destructive and requires caution."""
     try:
         # Basic safety: require explicit recreate flag
@@ -287,7 +292,7 @@ async def reset_catalog(recreate: bool = True):
 
 
 @router.post("/history/reset")
-async def reset_history(recreate: bool = True):
+async def reset_history(recreate: bool = True, _auth: bool = admin_required):
     """Delete and recreate the history table. Destructive operation."""
     try:
         if not recreate:
@@ -308,7 +313,7 @@ async def reset_history(recreate: bool = True):
 
 
 @router.post("/clear-cache")
-async def clear_service_cache():
+async def clear_service_cache(_auth: bool = admin_required):
     """Clear the BigQuery service cache (admin utility to force fresh queries)."""
     try:
         bigquery_service.clear_cache()
@@ -318,7 +323,7 @@ async def clear_service_cache():
         raise HTTPException(status_code=500, detail=f"Error clearing cache: {str(e)}")
 
 @router.get("/coins/filter-options")
-async def get_coins_filter_options():
+async def get_coins_filter_options(_auth: bool = admin_required):
     """Get available filter options for coins (countries, etc)."""
     try:
         filter_options = await bigquery_service.get_coins_filter_options()
@@ -336,7 +341,7 @@ async def get_coins_filter_options():
 
 # History endpoints
 @router.post("/history/upload")
-async def upload_history_csv(file: UploadFile = File(...)):
+async def upload_history_csv(file: UploadFile = File(...), _auth: bool = admin_required):
     """Upload and process CSV file for history import - using HistoryService."""
     try:
         # Validate file type
@@ -386,7 +391,7 @@ async def upload_history_csv(file: UploadFile = File(...)):
 
 
 @router.post("/history/import")
-async def import_history_entries(history_data: List[Dict[str, Any]]):
+async def import_history_entries(history_data: List[Dict[str, Any]], _auth: bool = admin_required):
     """Import selected history entries to BigQuery - using HistoryService."""
     try:
         if not history_data:
@@ -430,7 +435,7 @@ async def import_history_entries(history_data: List[Dict[str, Any]]):
 
 
 @router.get("/history/export")
-async def export_history_csv(name: Optional[str] = None):
+async def export_history_csv(name: Optional[str] = None, _auth: bool = admin_required):
     """Export ownership CSV. If `name` is provided, export only coins currently owned by that user.
 
     CSV columns: name, id, date
@@ -468,7 +473,7 @@ async def export_history_csv(name: Optional[str] = None):
 
 
 @router.post("/history/import-csv-direct")
-async def import_history_csv_direct(file: UploadFile = File(...)):
+async def import_history_csv_direct(file: UploadFile = File(...), _auth: bool = admin_required):
     """
     Direct CSV import following tools/import_history.py workflow.
     Combines upload, validation, and import in one step.
@@ -504,7 +509,8 @@ async def view_history(
     limit: int = 50,
     search: Optional[str] = None,
     name: Optional[str] = None,
-    date_filter: Optional[str] = None
+    date_filter: Optional[str] = None,
+    _auth: bool = admin_required
 ):
     """Get paginated history entries with optional filters."""
     try:
@@ -543,7 +549,7 @@ async def view_history(
 
 
 @router.get("/history/filter-options")
-async def get_history_filter_options():
+async def get_history_filter_options(_auth: bool = admin_required):
     """Get available filter options for history."""
     try:
         filter_options = await bigquery_service.get_history_filter_options()

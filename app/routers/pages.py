@@ -3,6 +3,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, FileResponse
 from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
 from app.services.group_service import GroupService
+from app.config import settings
 import logging
 from datetime import datetime
 import random
@@ -110,10 +111,15 @@ async def coin_detail(request: Request, coin_id: str):
 @router.get("/Admin", response_class=HTMLResponse)
 async def admin_page(request: Request):
     """Admin page for managing groups and other administrative tasks."""
+    # Check if admin endpoints are enabled
+    if not settings.enable_admin_endpoints:
+        logger.warning(f"Admin page access blocked - admin endpoints disabled")
+        raise HTTPException(status_code=404, detail="Page not found")
+
     try:
         # Get all groups for admin interface
         groups_data = await bigquery_service.list_active_groups()
-        
+
         return templates.TemplateResponse("admin.html", {
             "request": request,
             "groups": groups_data,
