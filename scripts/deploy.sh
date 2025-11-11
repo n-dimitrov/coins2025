@@ -297,7 +297,7 @@ EOF
             --memory 1Gi \
             --cpu 1 \
             --max-instances 10 \
-            --set-env-vars "APP_ENV=$ENVIRONMENT" \
+            --set-env-vars "APP_ENV=$ENVIRONMENT,ENABLE_OWNERSHIP_ENDPOINTS=true,REQUIRE_ADMIN_AUTH=false" \
             --timeout 300
 
         # Get service URL
