@@ -111,8 +111,12 @@ def verify_ownership_auth(
     Raises:
         HTTPException: If authentication fails
     """
-    # For now, ownership endpoints use same auth as admin
-    # In future, could implement separate user authentication
+    # If admin auth is not required (public mode), allow access
+    if not settings.require_admin_auth:
+        logger.info(f"Public ownership access allowed from {get_client_ip(request)}")
+        return True
+
+    # Otherwise, require admin authentication
     return verify_admin_auth(request, credentials)
 
 class SecurityMiddleware:
