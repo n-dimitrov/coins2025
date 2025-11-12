@@ -1550,11 +1550,11 @@ class BigQueryService:
         return {'success': True, 'message': 'History table deleted and recreated'}
 
     async def get_group_member_stats(self, group_id: str) -> List[Dict[str, Any]]:
-        """Get statistics for each member in a group including owned coins count and last added date."""
+        """Get statistics for each member in a group including owned coins count, last added date, and recent activity history."""
         query = f"""
         -- Compute latest ownership row per (history.name, coin_id) then aggregate per group user.
         WITH latest_ownership AS (
-            SELECT 
+            SELECT
                 h.name,
                 h.coin_id,
                 h.date,
@@ -1614,6 +1614,40 @@ class BigQueryService:
               ON me.name = m2.name
             WHERE me.is_active = true AND DATE(me.date) = DATE(m2.last_added_date)
             GROUP BY me.name
+        ),
+
+        -- Recent activity history per member (last 5 unique activity dates)
+        member_activity_history AS (
+            SELECT
+                me.name,
+                DATE(me.date) as activity_date,
+                COUNT(DISTINCT me.coin_id) as coins_count
+            FROM member_events me
+            WHERE me.is_active = true AND me.date IS NOT NULL
+            GROUP BY me.name, DATE(me.date)
+        ),
+
+        recent_activities AS (
+            SELECT
+                name,
+                activity_date,
+                coins_count,
+                ROW_NUMBER() OVER (PARTITION BY name ORDER BY activity_date DESC) as activity_rank
+            FROM member_activity_history
+        ),
+
+        -- Group recent activities into JSON array per member
+        member_recent_activities AS (
+            SELECT
+                name,
+                ARRAY_AGG(
+                    STRUCT(activity_date as date, coins_count)
+                    ORDER BY activity_date DESC
+                    LIMIT 5
+                ) as recent_activities
+            FROM recent_activities
+            WHERE activity_rank <= 5
+            GROUP BY name
         )
 
         SELECT
@@ -1624,9 +1658,11 @@ class BigQueryService:
             ma.regular_coins_count,
             ma.commemorative_coins_count,
             ma.last_added_date,
-            COALESCE(ldc.last_added_date_coins, 0) AS last_added_date_coins
+            COALESCE(ldc.last_added_date_coins, 0) AS last_added_date_coins,
+            COALESCE(mra.recent_activities, []) AS recent_activities
         FROM member_agg ma
         LEFT JOIN last_day_counts ldc ON ma.name = ldc.name
+        LEFT JOIN member_recent_activities mra ON ma.name = mra.name
         ORDER BY ma.last_added_date DESC NULLS LAST, ma.alias
         """
 
