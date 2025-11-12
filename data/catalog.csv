@@ -1,116 +1,116 @@
 type,year,country,series,value,id,image,feature,volume
-RE,1999,Belgium,BEL-01,2.0,RE1999BEL-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2euroAl.jpg,,
-RE,1999,Belgium,BEL-01,1.0,RE1999BEL-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1999_1euro.gif,,
-RE,1999,Belgium,BEL-01,0.5,RE1999BEL-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_50cent_2002.jpg,,
-RE,1999,Belgium,BEL-01,0.2,RE1999BEL-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_20cent_2002.jpg,,
-RE,1999,Belgium,BEL-01,0.1,RE1999BEL-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_10cent_1999.jpg,,
 RE,1999,Belgium,BEL-01,0.05,RE1999BEL-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_5cent_1999.jpg,,
+RE,1999,Belgium,BEL-01,0.5,RE1999BEL-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_50cent_2002.jpg,,
+RE,1999,Belgium,BEL-01,2.0,RE1999BEL-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2euroAl.jpg,,
 RE,1999,Belgium,BEL-01,0.02,RE1999BEL-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2cent_2000.jpg,,
+RE,1999,Belgium,BEL-01,0.2,RE1999BEL-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_20cent_2002.jpg,,
 RE,1999,Belgium,BEL-01,0.01,RE1999BEL-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1cent_2000.jpg,,
-RE,1999,Germany,DEU-01,2.0,RE1999DEU-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_2euro.jpg,,
-RE,1999,Germany,DEU-01,1.0,RE1999DEU-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_1euro.jpg,,
-RE,1999,Germany,DEU-01,0.5,RE1999DEU-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_50cent.jpg,,
-RE,1999,Germany,DEU-01,0.2,RE1999DEU-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_20cent.jpg,,
+RE,1999,Belgium,BEL-01,1.0,RE1999BEL-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1999_1euro.gif,,
+RE,1999,Belgium,BEL-01,0.1,RE1999BEL-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_10cent_1999.jpg,,
+RE,1999,Germany,DEU-01,0.01,RE1999DEU-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_1cent.jpg,,
 RE,1999,Germany,DEU-01,0.1,RE1999DEU-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_10cent.jpg,,
 RE,1999,Germany,DEU-01,0.05,RE1999DEU-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_5cent.jpg,,
+RE,1999,Germany,DEU-01,0.5,RE1999DEU-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_50cent.jpg,,
+RE,1999,Germany,DEU-01,2.0,RE1999DEU-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_2euro.jpg,,
 RE,1999,Germany,DEU-01,0.02,RE1999DEU-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_2cent.jpg,,
-RE,1999,Germany,DEU-01,0.01,RE1999DEU-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_1cent.jpg,,
-RE,1999,Spain,ESP-01,2.0,RE1999ESP-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2Euro_2003.jpg,,
-RE,1999,Spain,ESP-01,1.0,RE1999ESP-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1Euro_1999.jpg,,
-RE,1999,Spain,ESP-01,0.5,RE1999ESP-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_50cent_1999.jpg,,
+RE,1999,Germany,DEU-01,0.2,RE1999DEU-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_20cent.jpg,,
+RE,1999,Germany,DEU-01,1.0,RE1999DEU-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/de/Germany_1euro.jpg,,
 RE,1999,Spain,ESP-01,0.2,RE1999ESP-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_20cent_2001.jpg,,
-RE,1999,Spain,ESP-01,0.1,RE1999ESP-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_10cent_2003.jpg,,
-RE,1999,Spain,ESP-01,0.05,RE1999ESP-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_5cent_1999.jpg,,
+RE,1999,Spain,ESP-01,1.0,RE1999ESP-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1Euro_1999.jpg,,
+RE,1999,Spain,ESP-01,2.0,RE1999ESP-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2Euro_2003.jpg,,
 RE,1999,Spain,ESP-01,0.02,RE1999ESP-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2cent_2002.jpg,,
+RE,1999,Spain,ESP-01,0.5,RE1999ESP-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_50cent_1999.jpg,,
+RE,1999,Spain,ESP-01,0.05,RE1999ESP-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_5cent_1999.jpg,,
+RE,1999,Spain,ESP-01,0.1,RE1999ESP-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_10cent_2003.jpg,,
 RE,1999,Spain,ESP-01,0.01,RE1999ESP-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1cent_1999.jpg,,
-RE,1999,Finland,FIN-01,2.0,RE1999FIN-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_2euro.jpg,,
+RE,1999,Finland,FIN-01,0.05,RE1999FIN-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_5cent.jpg,,
 RE,1999,Finland,FIN-01,1.0,RE1999FIN-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_1euro.jpg,,
-RE,1999,Finland,FIN-01,0.5,RE1999FIN-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_50cent.jpg,,
 RE,1999,Finland,FIN-01,0.2,RE1999FIN-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_20cent.jpg,,
 RE,1999,Finland,FIN-01,0.1,RE1999FIN-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_10cent.jpg,,
-RE,1999,Finland,FIN-01,0.05,RE1999FIN-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_5cent.jpg,,
-RE,1999,Finland,FIN-01,0.02,RE1999FIN-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_2cent.jpg,,
 RE,1999,Finland,FIN-01,0.01,RE1999FIN-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_1cent.jpg,,
-RE,1999,France,FRA-01,2.0,RE1999FRA-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_2euro.jpg,,
-RE,1999,France,FRA-01,1.0,RE1999FRA-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_1Euro.jpg,,
-RE,1999,France,FRA-01,0.5,RE1999FRA-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_50cent.jpg,,
-RE,1999,France,FRA-01,0.2,RE1999FRA-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_20cent.jpg,,
-RE,1999,France,FRA-01,0.1,RE1999FRA-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_10cent.jpg,,
+RE,1999,Finland,FIN-01,0.02,RE1999FIN-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_2cent.jpg,,
+RE,1999,Finland,FIN-01,2.0,RE1999FIN-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_2euro.jpg,,
+RE,1999,Finland,FIN-01,0.5,RE1999FIN-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_50cent.jpg,,
 RE,1999,France,FRA-01,0.05,RE1999FRA-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_5cent.jpg,,
+RE,1999,France,FRA-01,0.5,RE1999FRA-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_50cent.jpg,,
+RE,1999,France,FRA-01,2.0,RE1999FRA-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_2euro.jpg,,
 RE,1999,France,FRA-01,0.02,RE1999FRA-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_2cent.jpg,,
+RE,1999,France,FRA-01,0.2,RE1999FRA-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_20cent.jpg,,
 RE,1999,France,FRA-01,0.01,RE1999FRA-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_1cent.jpg,,
+RE,1999,France,FRA-01,1.0,RE1999FRA-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_1Euro.jpg,,
+RE,1999,France,FRA-01,0.1,RE1999FRA-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_10cent.jpg,,
 RE,1999,Italy,ITA-01,2.0,RE1999ITA-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_2euro.jpg,,
-RE,1999,Italy,ITA-01,1.0,RE1999ITA-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_1euro.jpg,,
-RE,1999,Italy,ITA-01,0.5,RE1999ITA-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_50cent.jpg,,
-RE,1999,Italy,ITA-01,0.2,RE1999ITA-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_20cent.jpg,,
-RE,1999,Italy,ITA-01,0.1,RE1999ITA-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_10cent.jpg,,
-RE,1999,Italy,ITA-01,0.05,RE1999ITA-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_5cent.jpg,,
 RE,1999,Italy,ITA-01,0.02,RE1999ITA-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_2cent.jpg,,
+RE,1999,Italy,ITA-01,0.5,RE1999ITA-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_50cent.jpg,,
+RE,1999,Italy,ITA-01,0.05,RE1999ITA-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_5cent.jpg,,
+RE,1999,Italy,ITA-01,0.2,RE1999ITA-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_20cent.jpg,,
+RE,1999,Italy,ITA-01,1.0,RE1999ITA-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_1euro.jpg,,
 RE,1999,Italy,ITA-01,0.01,RE1999ITA-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_1cent.jpg,,
-RE,1999,Netherlands,NLD-01,2.0,RE1999NLD-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_2euro_2001.jpg,,
-RE,1999,Netherlands,NLD-01,1.0,RE1999NLD-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_1euro_2000.jpg,,
-RE,1999,Netherlands,NLD-01,0.5,RE1999NLD-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_50cents_2000.jpg,,
-RE,1999,Netherlands,NLD-01,0.2,RE1999NLD-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_20cent_2000.jpg,,
-RE,1999,Netherlands,NLD-01,0.1,RE1999NLD-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_10cent_2000.jpg,,
+RE,1999,Italy,ITA-01,0.1,RE1999ITA-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/it/Italy_10cent.jpg,,
 RE,1999,Netherlands,NLD-01,0.05,RE1999NLD-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_5cent_2000.jpg,,
+RE,1999,Netherlands,NLD-01,0.5,RE1999NLD-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_50cents_2000.jpg,,
+RE,1999,Netherlands,NLD-01,0.1,RE1999NLD-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_10cent_2000.jpg,,
+RE,1999,Netherlands,NLD-01,2.0,RE1999NLD-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_2euro_2001.jpg,,
 RE,1999,Netherlands,NLD-01,0.02,RE1999NLD-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_2cent_2000.jpg,,
+RE,1999,Netherlands,NLD-01,0.2,RE1999NLD-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_20cent_2000.jpg,,
+RE,1999,Netherlands,NLD-01,1.0,RE1999NLD-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_1euro_2000.jpg,,
 RE,1999,Netherlands,NLD-01,0.01,RE1999NLD-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_1cent_2000.jpg,,
-RE,2001,Monaco,MCO-01,2.0,RE2001MCO-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/2e.jpg,,
-RE,2001,Monaco,MCO-01,1.0,RE2001MCO-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/1e.jpg,,
 RE,2001,Monaco,MCO-01,0.5,RE2001MCO-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_50cent_2001.jpg,,
-RE,2001,Monaco,MCO-01,0.2,RE2001MCO-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_20cent_2001.jpg,,
-RE,2001,Monaco,MCO-01,0.1,RE2001MCO-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_10cent_2001.jpg,,
-RE,2001,Monaco,MCO-01,0.05,RE2001MCO-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_5cent_2001.jpg,,
 RE,2001,Monaco,MCO-01,0.02,RE2001MCO-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_2cent_2001.jpg,,
 RE,2001,Monaco,MCO-01,0.01,RE2001MCO-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_1cent_2001.jpg,,
+RE,2001,Monaco,MCO-01,0.1,RE2001MCO-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_10cent_2001.jpg,,
+RE,2001,Monaco,MCO-01,2.0,RE2001MCO-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/2e.jpg,,
+RE,2001,Monaco,MCO-01,1.0,RE2001MCO-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/1e.jpg,,
+RE,2001,Monaco,MCO-01,0.2,RE2001MCO-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_20cent_2001.jpg,,
+RE,2001,Monaco,MCO-01,0.05,RE2001MCO-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_5cent_2001.jpg,,
+RE,2002,Austria,AUT-01,0.01,RE2002AUT-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_1cent.jpg,,
 RE,2002,Austria,AUT-01,2.0,RE2002AUT-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_2Euro.jpg,,
-RE,2002,Austria,AUT-01,1.0,RE2002AUT-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_1Euro.jpg,,
+RE,2002,Austria,AUT-01,0.05,RE2002AUT-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_5cent.jpg,,
 RE,2002,Austria,AUT-01,0.5,RE2002AUT-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_50cent.jpg,,
 RE,2002,Austria,AUT-01,0.2,RE2002AUT-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_20cent.jpg,,
 RE,2002,Austria,AUT-01,0.1,RE2002AUT-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_10cent.jpg,,
-RE,2002,Austria,AUT-01,0.05,RE2002AUT-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_5cent.jpg,,
+RE,2002,Austria,AUT-01,1.0,RE2002AUT-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_1Euro.jpg,,
 RE,2002,Austria,AUT-01,0.02,RE2002AUT-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_2cent.jpg,,
-RE,2002,Austria,AUT-01,0.01,RE2002AUT-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/at/Austria_1cent.jpg,,
-RE,2002,Greece,GRC-01,2.0,RE2002GRC-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_2euro.jpg,,
-RE,2002,Greece,GRC-01,1.0,RE2002GRC-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_1euro.jpg,,
-RE,2002,Greece,GRC-01,0.5,RE2002GRC-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_50cent.jpg,,
-RE,2002,Greece,GRC-01,0.2,RE2002GRC-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_20cent.jpg,,
 RE,2002,Greece,GRC-01,0.1,RE2002GRC-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_10cent.jpg,,
-RE,2002,Greece,GRC-01,0.05,RE2002GRC-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_5cent.jpg,,
 RE,2002,Greece,GRC-01,0.02,RE2002GRC-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_2cent.jpg,,
+RE,2002,Greece,GRC-01,2.0,RE2002GRC-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_2euro.jpg,,
+RE,2002,Greece,GRC-01,0.5,RE2002GRC-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_50cent.jpg,,
+RE,2002,Greece,GRC-01,0.05,RE2002GRC-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_5cent.jpg,,
+RE,2002,Greece,GRC-01,0.2,RE2002GRC-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_20cent.jpg,,
+RE,2002,Greece,GRC-01,1.0,RE2002GRC-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_1euro.jpg,,
 RE,2002,Greece,GRC-01,0.01,RE2002GRC-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/gr/Greece_1cent.jpg,,
-RE,2002,Ireland,IRL-01,2.0,RE2002IRL-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_2euro.jpg,,
-RE,2002,Ireland,IRL-01,1.0,RE2002IRL-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_1euro.jpg,,
-RE,2002,Ireland,IRL-01,0.5,RE2002IRL-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_50cent.jpg,,
-RE,2002,Ireland,IRL-01,0.2,RE2002IRL-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_20cent.jpg,,
 RE,2002,Ireland,IRL-01,0.1,RE2002IRL-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_10cent.jpg,,
-RE,2002,Ireland,IRL-01,0.05,RE2002IRL-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_5cent.jpg,,
-RE,2002,Ireland,IRL-01,0.02,RE2002IRL-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_2cent.jpg,,
 RE,2002,Ireland,IRL-01,0.01,RE2002IRL-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_1cent.jpg,,
-RE,2002,Luxembourg,LUX-01,2.0,RE2002LUX-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_2euro.jpg,,
-RE,2002,Luxembourg,LUX-01,1.0,RE2002LUX-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_1Euro.jpg,,
-RE,2002,Luxembourg,LUX-01,0.5,RE2002LUX-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_50cent.jpg,,
+RE,2002,Ireland,IRL-01,1.0,RE2002IRL-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_1euro.jpg,,
+RE,2002,Ireland,IRL-01,0.2,RE2002IRL-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_20cent.jpg,,
+RE,2002,Ireland,IRL-01,0.02,RE2002IRL-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_2cent.jpg,,
+RE,2002,Ireland,IRL-01,2.0,RE2002IRL-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_2euro.jpg,,
+RE,2002,Ireland,IRL-01,0.5,RE2002IRL-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_50cent.jpg,,
+RE,2002,Ireland,IRL-01,0.05,RE2002IRL-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/ie/Ireland_5cent.jpg,,
 RE,2002,Luxembourg,LUX-01,0.2,RE2002LUX-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_20cent.jpg,,
-RE,2002,Luxembourg,LUX-01,0.1,RE2002LUX-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_10cent.jpg,,
-RE,2002,Luxembourg,LUX-01,0.05,RE2002LUX-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_5cent.jpg,,
 RE,2002,Luxembourg,LUX-01,0.02,RE2002LUX-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_2cent.jpg,,
+RE,2002,Luxembourg,LUX-01,2.0,RE2002LUX-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_2euro.jpg,,
+RE,2002,Luxembourg,LUX-01,0.5,RE2002LUX-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_50cent.jpg,,
+RE,2002,Luxembourg,LUX-01,0.05,RE2002LUX-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_5cent.jpg,,
+RE,2002,Luxembourg,LUX-01,0.1,RE2002LUX-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_10cent.jpg,,
+RE,2002,Luxembourg,LUX-01,1.0,RE2002LUX-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_1Euro.jpg,,
 RE,2002,Luxembourg,LUX-01,0.01,RE2002LUX-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/lu/Luxembourg_1cent.jpg,,
-RE,2002,Portugal,PRT-01,2.0,RE2002PRT-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_2euro.jpg,,
-RE,2002,Portugal,PRT-01,1.0,RE2002PRT-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_1Euro.jpg,,
-RE,2002,Portugal,PRT-01,0.5,RE2002PRT-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_50cent.jpg,,
-RE,2002,Portugal,PRT-01,0.2,RE2002PRT-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_20cent.jpg,,
-RE,2002,Portugal,PRT-01,0.1,RE2002PRT-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_10cent.jpg,,
 RE,2002,Portugal,PRT-01,0.05,RE2002PRT-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_5cent.jpg,,
 RE,2002,Portugal,PRT-01,0.02,RE2002PRT-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_2cent.jpg,,
+RE,2002,Portugal,PRT-01,0.2,RE2002PRT-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_20cent.jpg,,
 RE,2002,Portugal,PRT-01,0.01,RE2002PRT-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_1cent.jpg,,
-RE,2002,Vatican City,VAT-01,2.0,RE2002VAT-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_2002.jpg,,
-RE,2002,Vatican City,VAT-01,1.0,RE2002VAT-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2002.jpg,,
-RE,2002,Vatican City,VAT-01,0.5,RE2002VAT-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_2002.jpg,,
-RE,2002,Vatican City,VAT-01,0.2,RE2002VAT-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_2002.jpg,,
-RE,2002,Vatican City,VAT-01,0.1,RE2002VAT-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_2002.jpg,,
-RE,2002,Vatican City,VAT-01,0.05,RE2002VAT-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_2002.jpg,,
-RE,2002,Vatican City,VAT-01,0.02,RE2002VAT-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_2002.jpg,,
+RE,2002,Portugal,PRT-01,1.0,RE2002PRT-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_1Euro.jpg,,
+RE,2002,Portugal,PRT-01,0.1,RE2002PRT-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_10cent.jpg,,
+RE,2002,Portugal,PRT-01,2.0,RE2002PRT-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_2euro.jpg,,
+RE,2002,Portugal,PRT-01,0.5,RE2002PRT-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/pt/Portugal_50cent.jpg,,
 RE,2002,Vatican City,VAT-01,0.01,RE2002VAT-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1cent_2002.jpg,,
+RE,2002,Vatican City,VAT-01,1.0,RE2002VAT-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2002.jpg,,
+RE,2002,Vatican City,VAT-01,0.2,RE2002VAT-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_2002.jpg,,
+RE,2002,Vatican City,VAT-01,0.02,RE2002VAT-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_2002.jpg,,
+RE,2002,Vatican City,VAT-01,0.5,RE2002VAT-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_2002.jpg,,
+RE,2002,Vatican City,VAT-01,0.05,RE2002VAT-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_2002.jpg,,
+RE,2002,Vatican City,VAT-01,2.0,RE2002VAT-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_2002.jpg,,
+RE,2002,Vatican City,VAT-01,0.1,RE2002VAT-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_2002.jpg,,
 CC,2004,Finland,CC-2004,2.0,CC2004FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2004/comm_2004_fi.jpg,Enlargement of the European Union by ten new Member States,1 million coins
 CC,2004,Greece,CC-2004,2.0,CC2004GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2004/comm_2004_el.jpg,Olympic Games in Athens 2004,50 million coins
 CC,2004,Italy,CC-2004,2.0,CC2004ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2004/comm_2004_it.jpg,5th decade of the World Food Programme,16 million coins
@@ -125,14 +125,14 @@ CC,2005,Luxembourg,CC-2005,2.0,CC2005LUX-A-CC1-200,https://www.ecb.europa.eu/eur
 CC,2005,San Marino,CC-2005,2.0,CC2005SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2005/comm_2005_sm.jpg,World Year of Physics 2005,"130,000 coins"
 CC,2005,Spain,CC-2005,2.0,CC2005ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2005/comm_2005_sp.jpg,4th centenary of the first edition of Miguel de Cervantes’ 'The ingenious gentleman Don Quixote of La Mancha',8 million coins
 CC,2005,Vatican City,CC-2005,2.0,CC2005VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2005/comm_2005_va.jpg,20th World Youth Day,"100,000 coins"
-RE,2005,Vatican City,VAT-02,2.0,RE2005VAT-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_SedeVacante.jpg,,
-RE,2005,Vatican City,VAT-02,1.0,RE2005VAT-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_SedeVacante.jpg,,
-RE,2005,Vatican City,VAT-02,0.5,RE2005VAT-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_SedeVacante.jpg,,
-RE,2005,Vatican City,VAT-02,0.2,RE2005VAT-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_SedeVacante.jpg,,
-RE,2005,Vatican City,VAT-02,0.1,RE2005VAT-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_SedeVacante.jpg,,
-RE,2005,Vatican City,VAT-02,0.05,RE2005VAT-A-RE2-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_SedeVacante.jpg,,
-RE,2005,Vatican City,VAT-02,0.02,RE2005VAT-A-RE2-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_SedeVacante.jpg,,
 RE,2005,Vatican City,VAT-02,0.01,RE2005VAT-A-RE2-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1cent_SedeVacante.jpg,,
+RE,2005,Vatican City,VAT-02,0.1,RE2005VAT-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_SedeVacante.jpg,,
+RE,2005,Vatican City,VAT-02,1.0,RE2005VAT-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_SedeVacante.jpg,,
+RE,2005,Vatican City,VAT-02,0.2,RE2005VAT-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_SedeVacante.jpg,,
+RE,2005,Vatican City,VAT-02,0.02,RE2005VAT-A-RE2-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_SedeVacante.jpg,,
+RE,2005,Vatican City,VAT-02,0.5,RE2005VAT-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_SedeVacante.jpg,,
+RE,2005,Vatican City,VAT-02,0.05,RE2005VAT-A-RE2-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_SedeVacante.jpg,,
+RE,2005,Vatican City,VAT-02,2.0,RE2005VAT-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_SedeVacante.jpg,,
 CC,2006,Belgium,CC-2006,2.0,CC2006BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2006/comm_2006_be.jpg,Atomium,5 million coins
 CC,2006,Finland,CC-2006,2.0,CC2006FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2006/comm_2006_fi.jpg,100th anniversary of universal and equal suffrage,2.5 million coins
 CC,2006,Germany,CC-2006,2.0,CC2006DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2006/comm_2006_de.jpg,Schleswig-Holstein,30 million coins
@@ -140,30 +140,30 @@ CC,2006,Italy,CC-2006,2.0,CC2006ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coi
 CC,2006,Luxembourg,CC-2006,2.0,CC2006LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2006/comm_2006_lu.jpg,"25th birthday of Grand-Duke Guillaume, heir to the throne",1.1 million coins
 CC,2006,San Marino,CC-2006,2.0,CC2006SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2006/comm_2006_sm.jpg,500th anniversary of Christopher Columbus' death,"120,000 coins"
 CC,2006,Vatican City,CC-2006,2.0,CC2006VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2006/comm_2006_va.jpg,5th Centenary of the Swiss Pontifical Guard,"100,000 coins"
-RE,2006,Monaco,MCO-02,2.0,RE2006MCO-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_2euro.jpg,,
-RE,2006,Monaco,MCO-02,1.0,RE2006MCO-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_1euro_2006.jpg,,
-RE,2006,Monaco,MCO-02,0.5,RE2006MCO-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_50cent_2006.jpg,,
-RE,2006,Monaco,MCO-02,0.2,RE2006MCO-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_20cent_2006.jpg,,
 RE,2006,Monaco,MCO-02,0.1,RE2006MCO-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_10cent_2006.jpg,,
-RE,2006,Monaco,MCO-02,0.05,RE2006MCO-A-RE2-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_5cent_2006.jpg,,
-RE,2006,Monaco,MCO-02,0.02,RE2006MCO-A-RE2-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_2cent_2006.jpg,,
 RE,2006,Monaco,MCO-02,0.01,RE2006MCO-A-RE2-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_1cent_2006.jpg,,
-RE,2006,San Marino,SMR-01,2.0,RE2006SMR-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2euro_2010.jpg,,
-RE,2006,San Marino,SMR-01,1.0,RE2006SMR-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_1euro_2010.jpg,,
-RE,2006,San Marino,SMR-01,0.5,RE2006SMR-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_50cent.jpg,,
+RE,2006,Monaco,MCO-02,1.0,RE2006MCO-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_1euro_2006.jpg,,
+RE,2006,Monaco,MCO-02,0.2,RE2006MCO-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_20cent_2006.jpg,,
+RE,2006,Monaco,MCO-02,0.02,RE2006MCO-A-RE2-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_2cent_2006.jpg,,
+RE,2006,Monaco,MCO-02,2.0,RE2006MCO-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_2euro.jpg,,
+RE,2006,Monaco,MCO-02,0.5,RE2006MCO-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_50cent_2006.jpg,,
+RE,2006,Monaco,MCO-02,0.05,RE2006MCO-A-RE2-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/mo/Monaco_5cent_2006.jpg,,
 RE,2006,San Marino,SMR-01,0.2,RE2006SMR-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_20cent.jpg,,
-RE,2006,San Marino,SMR-01,0.1,RE2006SMR-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_10cent.jpg,,
-RE,2006,San Marino,SMR-01,0.05,RE2006SMR-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_5cent.jpg,,
-RE,2006,San Marino,SMR-01,0.02,RE2006SMR-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2cent.jpg,,
 RE,2006,San Marino,SMR-01,0.01,RE2006SMR-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_1cent.jpg,,
-RE,2006,Vatican City,VAT-03,2.0,RE2006VAT-A-RE3-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_2013.jpg,,
-RE,2006,Vatican City,VAT-03,1.0,RE2006VAT-A-RE3-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2013.jpg,,
+RE,2006,San Marino,SMR-01,1.0,RE2006SMR-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_1euro_2010.jpg,,
+RE,2006,San Marino,SMR-01,0.05,RE2006SMR-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_5cent.jpg,,
+RE,2006,San Marino,SMR-01,0.5,RE2006SMR-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_50cent.jpg,,
+RE,2006,San Marino,SMR-01,0.02,RE2006SMR-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2cent.jpg,,
+RE,2006,San Marino,SMR-01,2.0,RE2006SMR-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2euro_2010.jpg,,
+RE,2006,San Marino,SMR-01,0.1,RE2006SMR-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_10cent.jpg,,
 RE,2006,Vatican City,VAT-03,0.5,RE2006VAT-A-RE3-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_2013.jpg,,
-RE,2006,Vatican City,VAT-03,0.2,RE2006VAT-A-RE3-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_2013.jpg,,
-RE,2006,Vatican City,VAT-03,0.1,RE2006VAT-A-RE3-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_2013.jpg,,
-RE,2006,Vatican City,VAT-03,0.05,RE2006VAT-A-RE3-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_2013.jpg,,
 RE,2006,Vatican City,VAT-03,0.02,RE2006VAT-A-RE3-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_2013.jpg,,
+RE,2006,Vatican City,VAT-03,0.2,RE2006VAT-A-RE3-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_2013.jpg,,
+RE,2006,Vatican City,VAT-03,1.0,RE2006VAT-A-RE3-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2013.jpg,,
 RE,2006,Vatican City,VAT-03,0.01,RE2006VAT-A-RE3-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1cent_2013.jpg,,
+RE,2006,Vatican City,VAT-03,0.1,RE2006VAT-A-RE3-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_2013.jpg,,
+RE,2006,Vatican City,VAT-03,2.0,RE2006VAT-A-RE3-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_2013.jpg,,
+RE,2006,Vatican City,VAT-03,0.05,RE2006VAT-A-RE3-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_2013.jpg,,
 CC,2007,Finland,CC-2007,2.0,CC2007FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2007/comm_2007_Finland.jpg,90th anniversary of Finland’s independence,2 million coins
 CC,2007,Germany,CC-2007,2.0,CC2007DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2007/comm_2007_Germany.jpg,Mecklenburg-Vorpommern,30 million coins
 CC,2007,Luxembourg,CC-2007,2.0,CC2007LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2007/comm_2007_luxembourg.jpg,Grand Ducal Palace,1.1 million coins
@@ -184,29 +184,29 @@ CC,2007,Netherlands,CC-2007-TOR,2.0,CC2007NLD-A-TOR-200,https://www.ecb.europa.e
 CC,2007,Portugal,CC-2007-TOR,2.0,CC2007PRT-A-TOR-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2007/joint_comm_2007_Portugal.jpg,50th anniversary of the Treaty of Rome,
 CC,2007,Slovenia,CC-2007-TOR,2.0,CC2007SVN-A-TOR-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2007/joint_comm_2007_Slovenia.jpg,50th anniversary of the Treaty of Rome,
 CC,2007,Spain,CC-2007-TOR,2.0,CC2007ESP-A-TOR-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2007/joint_comm_2007_Spain.jpg,50th anniversary of the Treaty of Rome,
-RE,2007,Finland,FIN-02,2.0,RE2007FIN-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_2euro.jpg,,
-RE,2007,Finland,FIN-02,1.0,RE2007FIN-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_1euro.jpg,,
 RE,2007,Finland,FIN-02,0.5,RE2007FIN-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_50cent.jpg,,
-RE,2007,Finland,FIN-02,0.2,RE2007FIN-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_20cent.jpg,,
-RE,2007,Finland,FIN-02,0.1,RE2007FIN-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_10cent.jpg,,
 RE,2007,Finland,FIN-02,0.05,RE2007FIN-A-RE2-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_5cent.jpg,,
+RE,2007,Finland,FIN-02,2.0,RE2007FIN-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_2euro.jpg,,
 RE,2007,Finland,FIN-02,0.02,RE2007FIN-A-RE2-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_2cent.jpg,,
+RE,2007,Finland,FIN-02,0.2,RE2007FIN-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_20cent.jpg,,
+RE,2007,Finland,FIN-02,1.0,RE2007FIN-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_1euro.jpg,,
 RE,2007,Finland,FIN-02,0.01,RE2007FIN-A-RE2-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_1cent.jpg,,
+RE,2007,Finland,FIN-02,0.1,RE2007FIN-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/fi/Finland_10cent.jpg,,
+RE,2007,Slovenia,SVN-01,0.05,RE2007SVN-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_5cent.jpg,,
+RE,2007,Slovenia,SVN-01,0.1,RE2007SVN-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_10cent.jpg,,
+RE,2007,Slovenia,SVN-01,0.5,RE2007SVN-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_50cent.jpg,,
+RE,2007,Slovenia,SVN-01,0.02,RE2007SVN-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_2cent.jpg,,
 RE,2007,Slovenia,SVN-01,2.0,RE2007SVN-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_2Euro.jpg,,
 RE,2007,Slovenia,SVN-01,1.0,RE2007SVN-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_1Euro.jpg,,
-RE,2007,Slovenia,SVN-01,0.5,RE2007SVN-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_50cent.jpg,,
-RE,2007,Slovenia,SVN-01,0.2,RE2007SVN-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_20cent.jpg,,
-RE,2007,Slovenia,SVN-01,0.1,RE2007SVN-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_10cent.jpg,,
-RE,2007,Slovenia,SVN-01,0.05,RE2007SVN-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_5cent.jpg,,
-RE,2007,Slovenia,SVN-01,0.02,RE2007SVN-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_2cent.jpg,,
 RE,2007,Slovenia,SVN-01,0.01,RE2007SVN-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_1cent.jpg,,
-RE,2008,Belgium,BEL-02,2.0,RE2008BEL-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2euro_2008.jpg,,
-RE,2008,Belgium,BEL-02,1.0,RE2008BEL-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1euro_2011.jpg,,
-RE,2008,Belgium,BEL-02,0.5,RE2008BEL-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_50cent_2008.jpg,,
-RE,2008,Belgium,BEL-02,0.2,RE2008BEL-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_20cent_2009.jpg,,
-RE,2008,Belgium,BEL-02,0.1,RE2008BEL-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_10cent_2008.jpg,,
+RE,2007,Slovenia,SVN-01,0.2,RE2007SVN-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/sl/Slovenia_20cent.jpg,,
 RE,2008,Belgium,BEL-02,0.05,RE2008BEL-A-RE2-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_5cent_2011.jpg,,
+RE,2008,Belgium,BEL-02,0.5,RE2008BEL-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_50cent_2008.jpg,,
+RE,2008,Belgium,BEL-02,2.0,RE2008BEL-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2euro_2008.jpg,,
 RE,2008,Belgium,BEL-02,0.02,RE2008BEL-A-RE2-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2cent_2013.jpg,,
+RE,2008,Belgium,BEL-02,0.2,RE2008BEL-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_20cent_2009.jpg,,
+RE,2008,Belgium,BEL-02,1.0,RE2008BEL-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1euro_2011.jpg,,
+RE,2008,Belgium,BEL-02,0.1,RE2008BEL-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_10cent_2008.jpg,,
 RE,2008,Belgium,BEL-02,0.01,RE2008BEL-A-RE2-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1cent_2013.jpg,,
 CC,2008,Belgium,CC-2008,2.0,CC2008BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2008/comm_2008_Belgium.jpg,60th anniversary of the Universal Declaration of Human Rights,5 million coins
 CC,2008,Finland,CC-2008,2.0,CC2008FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2008/comm_2008_Finland.jpg,60th anniversary of the Universal Declaration of Human Rights,1.5 million coins
@@ -218,22 +218,22 @@ CC,2008,Portugal,CC-2008,2.0,CC2008PRT-A-CC1-200,https://www.ecb.europa.eu/euro/
 CC,2008,San Marino,CC-2008,2.0,CC2008SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2008/comm_2008_San_Marino.jpg,European Year of Intercultural Dialogue,"130,000 coins"
 CC,2008,Slovenia,CC-2008,2.0,CC2008SVN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2008/comm_2008_Slovenia.jpg,500th anniversary of Primož Trubar's birth,1 million coins
 CC,2008,Vatican City,CC-2008,2.0,CC2008VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2008/comm_2008_Vatican.jpg,The Year of St. Paul – the 2000th anniversary of his birth,"100,000 coins"
-RE,2008,Cyprus,CYP-01,2.0,RE2008CYP-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_2Euro.jpg,,
 RE,2008,Cyprus,CYP-01,1.0,RE2008CYP-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_1euro.jpg,,
-RE,2008,Cyprus,CYP-01,0.5,RE2008CYP-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_50cent.jpg,,
-RE,2008,Cyprus,CYP-01,0.2,RE2008CYP-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_20cent.jpg,,
-RE,2008,Cyprus,CYP-01,0.1,RE2008CYP-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_10cent.jpg,,
 RE,2008,Cyprus,CYP-01,0.05,RE2008CYP-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_5cent.jpg,,
-RE,2008,Cyprus,CYP-01,0.02,RE2008CYP-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_2cent.jpg,,
+RE,2008,Cyprus,CYP-01,0.2,RE2008CYP-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_20cent.jpg,,
 RE,2008,Cyprus,CYP-01,0.01,RE2008CYP-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_1cent.jpg,,
-RE,2008,Malta,MLT-01,2.0,RE2008MLT-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_2euro.jpg,,
-RE,2008,Malta,MLT-01,1.0,RE2008MLT-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_1Euro.jpg,,
-RE,2008,Malta,MLT-01,0.5,RE2008MLT-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_50cent.jpg,,
-RE,2008,Malta,MLT-01,0.2,RE2008MLT-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_20cent.jpg,,
-RE,2008,Malta,MLT-01,0.1,RE2008MLT-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_10cent.jpg,,
-RE,2008,Malta,MLT-01,0.05,RE2008MLT-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_5cent.jpg,,
+RE,2008,Cyprus,CYP-01,0.1,RE2008CYP-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_10cent.jpg,,
+RE,2008,Cyprus,CYP-01,0.5,RE2008CYP-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_50cent.jpg,,
+RE,2008,Cyprus,CYP-01,0.02,RE2008CYP-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_2cent.jpg,,
+RE,2008,Cyprus,CYP-01,2.0,RE2008CYP-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/cy/Cyprus_2Euro.jpg,,
 RE,2008,Malta,MLT-01,0.02,RE2008MLT-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_2cent.jpg,,
+RE,2008,Malta,MLT-01,0.05,RE2008MLT-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_5cent.jpg,,
+RE,2008,Malta,MLT-01,0.5,RE2008MLT-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_50cent.jpg,,
+RE,2008,Malta,MLT-01,2.0,RE2008MLT-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_2euro.jpg,,
+RE,2008,Malta,MLT-01,0.1,RE2008MLT-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_10cent.jpg,,
+RE,2008,Malta,MLT-01,1.0,RE2008MLT-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_1Euro.jpg,,
 RE,2008,Malta,MLT-01,0.01,RE2008MLT-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_1cent.jpg,,
+RE,2008,Malta,MLT-01,0.2,RE2008MLT-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/mt/Malta_20cent.jpg,,
 CC,2009,Belgium,CC-2009,2.0,CC2009BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2009/comm_2009_be.jpg,200th anniversary of Louis Braille’s birth,5 million coins
 CC,2009,Finland,CC-2009,2.0,CC2009FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2009/comm_2009_fi.jpg,200th anniversary of Finnish autonomy and Porvoo Diet,1.6 million coins
 CC,2009,Germany,CC-2009,2.0,CC2009DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2009/comm_2009_de.jpg,Federal state of Saarland,30 million coins
@@ -259,14 +259,14 @@ CC,2009,Portugal,CC-2009-EMU,2.0,CC2009PRT-A-EMU-200,https://www.ecb.europa.eu/e
 CC,2009,Slovakia,CC-2009-EMU,2.0,CC2009SVK-A-EMU-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2009/joint_comm_2009_Slovakia.jpg,10th anniversary of Economic and Monetary Union,
 CC,2009,Slovenia,CC-2009-EMU,2.0,CC2009SVN-A-EMU-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2009/joint_comm_2009_Slovenia.jpg,10th anniversary of Economic and Monetary Union,
 CC,2009,Spain,CC-2009-EMU,2.0,CC2009ESP-A-EMU-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2009/joint_comm_2009_Spain.jpg,10th anniversary of Economic and Monetary Union,
-RE,2009,Slovakia,SVK-01,2.0,RE2009SVK-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_2Euro.jpg,,
 RE,2009,Slovakia,SVK-01,1.0,RE2009SVK-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_1Euro.jpg,,
-RE,2009,Slovakia,SVK-01,0.5,RE2009SVK-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_50cent.jpg,,
 RE,2009,Slovakia,SVK-01,0.2,RE2009SVK-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_20cent.jpg,,
-RE,2009,Slovakia,SVK-01,0.1,RE2009SVK-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_10cent.jpg,,
-RE,2009,Slovakia,SVK-01,0.05,RE2009SVK-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_5cent.jpg,,
+RE,2009,Slovakia,SVK-01,2.0,RE2009SVK-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_2Euro.jpg,,
 RE,2009,Slovakia,SVK-01,0.02,RE2009SVK-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_2cent.jpg,,
+RE,2009,Slovakia,SVK-01,0.5,RE2009SVK-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_50cent.jpg,,
+RE,2009,Slovakia,SVK-01,0.05,RE2009SVK-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_5cent.jpg,,
 RE,2009,Slovakia,SVK-01,0.01,RE2009SVK-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_1cent.jpg,,
+RE,2009,Slovakia,SVK-01,0.1,RE2009SVK-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/sk/Slovakia_10cent.jpg,,
 CC,2010,Belgium,CC-2010,2.0,CC2010BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2010/comm_2010_be.jpg,Belgian Presidency of the Council of the European Union in 2010,5 million coins
 CC,2010,Finland,CC-2010,2.0,CC2010FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2010/comm_2010_fi.jpg,Currency Decree of 1860 granting Finland the right to issue banknotes and coins,1.6 million coins
 CC,2010,France,CC-2010,2.0,CC2010FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2010/comm_2010_fr.jpg,70th anniversary of the Appeal of June 18,20 million coins
@@ -295,14 +295,14 @@ CC,2011,Slovakia,CC-2011,2.0,CC2011SVK-A-CC1-200,https://www.ecb.europa.eu/euro/
 CC,2011,Slovenia,CC-2011,2.0,CC2011SVN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2011/comm_2011_sl.jpg,100th anniversary of the birth of Franc Rozman-Stane,1 million coins
 CC,2011,Spain,CC-2011,2.0,CC2011ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2011/comm_2011_es.jpg,"Court of the Lions, Granada – UNESCO World Heritage series",8 million coins
 CC,2011,Vatican City,CC-2011,2.0,CC2011VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2011/comm_2011_va.jpg,26th World Youth Day,"115,000 coins"
-RE,2011,Estonia,EST-01,2.0,RE2011EST-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_2Euro.jpg,,
 RE,2011,Estonia,EST-01,1.0,RE2011EST-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_1Euro.jpg,,
-RE,2011,Estonia,EST-01,0.5,RE2011EST-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_50cent.jpg,,
-RE,2011,Estonia,EST-01,0.2,RE2011EST-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_20cent.jpg,,
-RE,2011,Estonia,EST-01,0.1,RE2011EST-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_10cent.jpg,,
-RE,2011,Estonia,EST-01,0.05,RE2011EST-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_5cent.jpg,,
-RE,2011,Estonia,EST-01,0.02,RE2011EST-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_2cent.jpg,,
 RE,2011,Estonia,EST-01,0.01,RE2011EST-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_1cent.jpg,,
+RE,2011,Estonia,EST-01,0.2,RE2011EST-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_20cent.jpg,,
+RE,2011,Estonia,EST-01,2.0,RE2011EST-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_2Euro.jpg,,
+RE,2011,Estonia,EST-01,0.02,RE2011EST-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_2cent.jpg,,
+RE,2011,Estonia,EST-01,0.5,RE2011EST-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_50cent.jpg,,
+RE,2011,Estonia,EST-01,0.05,RE2011EST-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_5cent.jpg,,
+RE,2011,Estonia,EST-01,0.1,RE2011EST-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/et/Estonia_10cent.jpg,,
 CC,2012,Belgium,CC-2012,2.0,CC2012BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2012/comm_2012_be.jpg,The 75th anniversary of the Queen Elisabeth Competition,5 million coins
 CC,2012,Finland,CC-2012,2.0,CC2012FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2012/comm_2012_fi.jpg,150th anniversary of the birth of the artist Helene Schjerfbeck,2 million coins
 CC,2012,France,CC-2012,2.0,CC2012FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2012/comm_2012_fr.jpg,"100th anniversary of the birth of Abbé Pierre, famous in France as protector of the poor",1 million coins
@@ -342,13 +342,13 @@ CC,2013,Germany,CC-2013,2.0,CC2013DEU-A-CC1-200,https://www.ecb.europa.eu/euro/c
 CC,2013,Germany,CC-2013,2.0,CC2013DEU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_de.jpg,50th anniversary of the signing of the Élysée Treaty,11 million coins
 CC,2013,Greece,CC-2013,2.0,CC2013GRC-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Greece.jpg,100th anniversary of the union of Crete with Greece,"750,000 coins"
 CC,2013,Greece,CC-2013,2.0,CC2013GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Greece_Plato.jpg,2 400th Anniversary of the founding of Plato’s Academy,"750,000 coins"
-CC,2013,Italy,CC-2013,2.0,CC2013ITA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Italy_Boccaccio.jpg,700th Anniversary of the birth of Giovanni BOCCACCIO,10 million coins
 CC,2013,Italy,CC-2013,2.0,CC2013ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Italy_Verdi.jpg,200th Anniversary of the birth of Giuseppe VERDI,10 million coins
+CC,2013,Italy,CC-2013,2.0,CC2013ITA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Italy_Boccaccio.jpg,700th Anniversary of the birth of Giovanni BOCCACCIO,10 million coins
 CC,2013,Luxembourg,CC-2013,2.0,CC2013LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Luxembourg.jpg,The National Anthem of the Grand Duchy of Luxembourg,1.4 million coins
 CC,2013,Malta,CC-2013,2.0,CC2013MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Malta.jpg,The Self-Government Constitution of 1921,"500,000 coins"
 CC,2013,Monaco,CC-2013,2.0,CC2013MCO-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Monaco.jpg,The 20th anniversary of the ONU joining,1.2 million coins
-CC,2013,Netherlands,CC-2013,2.0,CC2013NLD-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Netherlands.jpg,200 years Kingdom of the Netherlands,3.5 million coins
 CC,2013,Netherlands,CC-2013,2.0,CC2013NLD-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Netherlands_Abdication.jpg,The announcement of the abdication of the throne by Her Majesty Queen Beatrix,20 million coins
+CC,2013,Netherlands,CC-2013,2.0,CC2013NLD-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Netherlands.jpg,200 years Kingdom of the Netherlands,3.5 million coins
 CC,2013,Portugal,CC-2013,2.0,CC2013PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Portugal.jpg,The 250th anniversary of the construction of ‘Torre dos Clérigos’,"525,000 coins"
 CC,2013,San Marino,CC-2013,2.0,CC2013SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_San_Marino.jpg,500th anniversary of the death of the Italian painter Pinturicchio,"115,000 coins"
 CC,2013,Slovakia,CC-2013,2.0,CC2013SVK-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_sk.jpg,1150th anniversary of the advent of the mission of Constantine and Methodius to Great Moravia,1 million coins
@@ -356,34 +356,34 @@ CC,2013,Slovenia,CC-2013,2.0,CC2013SVN-A-CC1-200,https://www.ecb.europa.eu/euro/
 CC,2013,Spain,CC-2013,2.0,CC2013ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_es.jpg,Monastery of San Lorenzo de El Escorial – UNESCO World Heritage series,8 million coins
 CC,2013,Vatican City,CC-2013,2.0,CC2013VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Vatican_Rio.jpg,28th World Youth Day,"115,000 coins"
 CC,2013,Vatican City,CC-2013,2.0,CC2013VAT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2013/comm_2013_Vatican.jpg,Sede Vacante 2013,"125,000 coins"
-RE,2014,Andorra,AND-01,2.0,RE2014AND-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/ad_2euro.jpg,,
-RE,2014,Andorra,AND-01,1.0,RE2014AND-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_1euro.jpg,,
-RE,2014,Andorra,AND-01,0.5,RE2014AND-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_50cent.jpg,,
 RE,2014,Andorra,AND-01,0.2,RE2014AND-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_20cent.jpg,,
 RE,2014,Andorra,AND-01,0.1,RE2014AND-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_10cent.jpg,,
-RE,2014,Andorra,AND-01,0.05,RE2014AND-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_5cent.jpg,,
-RE,2014,Andorra,AND-01,0.02,RE2014AND-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_2cent.jpg,,
 RE,2014,Andorra,AND-01,0.01,RE2014AND-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_1cent.jpg,,
-RE,2014,Belgium,BEL-03,2.0,RE2014BEL-A-RE3-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2euro_2014ph.jpg,,
-RE,2014,Belgium,BEL-03,1.0,RE2014BEL-A-RE3-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1euro_2014.jpg,,
+RE,2014,Andorra,AND-01,1.0,RE2014AND-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_1euro.jpg,,
+RE,2014,Andorra,AND-01,2.0,RE2014AND-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/ad_2euro.jpg,,
+RE,2014,Andorra,AND-01,0.05,RE2014AND-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_5cent.jpg,,
+RE,2014,Andorra,AND-01,0.5,RE2014AND-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_50cent.jpg,,
+RE,2014,Andorra,AND-01,0.02,RE2014AND-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/ad/Andorra_2cent.jpg,,
+RE,2014,Belgium,BEL-03,0.05,RE2014BEL-A-RE3-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_5cent_2014.jpg,,
 RE,2014,Belgium,BEL-03,0.5,RE2014BEL-A-RE3-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_50cent_2014.jpg,,
+RE,2014,Belgium,BEL-03,2.0,RE2014BEL-A-RE3-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2euro_2014ph.jpg,,
+RE,2014,Belgium,BEL-03,0.02,RE2014BEL-A-RE3-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2cent_2014.jpg,,
 RE,2014,Belgium,BEL-03,0.2,RE2014BEL-A-RE3-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_20cent_2014.jpg,,
 RE,2014,Belgium,BEL-03,0.1,RE2014BEL-A-RE3-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2014_10cent.jpg,,
-RE,2014,Belgium,BEL-03,0.05,RE2014BEL-A-RE3-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_5cent_2014.jpg,,
-RE,2014,Belgium,BEL-03,0.02,RE2014BEL-A-RE3-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_2cent_2014.jpg,,
+RE,2014,Belgium,BEL-03,1.0,RE2014BEL-A-RE3-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1euro_2014.jpg,,
 RE,2014,Belgium,BEL-03,0.01,RE2014BEL-A-RE3-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/be/Belgium_1cent_2014.jpg,,
 CC,2014,Andorra,CC-2014,2.0,CC2014AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_andorra_council.jpg,20 years in the Council of Europe,100 000 coins
 CC,2014,Belgium,CC-2014,2.0,CC2014BEL-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Belgium_Cross.jpg,150 years of the Belgian Red Cross,"260,000 coins"
 CC,2014,Belgium,CC-2014,2.0,CC2014BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Belgium.jpg,Centenary of the start of the First World War,1.75 million coins
 CC,2014,Finland,CC-2014,2.0,CC2014FIN-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Finland_2.jpg,The 100th Anniversary of the birth of designer and interior designer Ilmari Tapiovaara,1 million coins
 CC,2014,Finland,CC-2014,2.0,CC2014FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Finland.jpg,100th Anniversary of the birth of author and artist Tove Jansson,1.5 million coins
-CC,2014,France,CC-2014,2.0,CC2014FRA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_France_2.jpg,The fight against AIDS by way of World AIDS Day,3 million coins
 CC,2014,France,CC-2014,2.0,CC2014FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_France.jpg,70th anniversary of the Normandy landings of 6 June 1944,3 million coins
+CC,2014,France,CC-2014,2.0,CC2014FRA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_France_2.jpg,The fight against AIDS by way of World AIDS Day,3 million coins
 CC,2014,Germany,CC-2014,2.0,CC2014DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Germany_Niedersachsen.jpg,Niedersachsen from the ‘Lander’ series,30 million coins
-CC,2014,Greece,CC-2014,2.0,CC2014GRC-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Greece.jpg,150th anniversary of the union of the Ionian Islands with Greece (1864-2014),"750,000 coins"
 CC,2014,Greece,CC-2014,2.0,CC2014GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Greece_2.jpg,400 years since the death of Domenikos Theotokopoulos (1614-2014),"750,000 coins"
-CC,2014,Italy,CC-2014,2.0,CC2014ITA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Italy.jpg,200th Anniversary of the foundation of Arma dei Carabinieri,6.5 million coins
+CC,2014,Greece,CC-2014,2.0,CC2014GRC-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Greece.jpg,150th anniversary of the union of the Ionian Islands with Greece (1864-2014),"750,000 coins"
 CC,2014,Italy,CC-2014,2.0,CC2014ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Italy_2.jpg,450th Anniversary of the birth of Galileo Galilei (born in 1564),6.5 million coins
+CC,2014,Italy,CC-2014,2.0,CC2014ITA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Italy.jpg,200th Anniversary of the foundation of Arma dei Carabinieri,6.5 million coins
 CC,2014,Latvia,CC-2014,2.0,CC2014LVA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Latvia.jpg,Riga — European Capital of Culture 2014,1 million coins
 CC,2014,Luxembourg,CC-2014,2.0,CC2014LUX-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Luxembourg_2.jpg,50th anniversary of the accession to the throne of the Grand-Duke Jean,1.4 million coins
 CC,2014,Luxembourg,CC-2014,2.0,CC2014LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Luxembourg.jpg,175th anniversary of the independence of the Grand-Duchy of Luxembourg,1.4 million coins
@@ -399,44 +399,44 @@ CC,2014,Slovenia,CC-2014,2.0,CC2014SVN-A-CC1-200,https://www.ecb.europa.eu/euro/
 CC,2014,Spain,CC-2014,2.0,CC2014ESP-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Spain_Head.jpg,Change of the Head of State,12 million coins
 CC,2014,Spain,CC-2014,2.0,CC2014ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Spain.jpg,UNESCO's World Cultural and Natural Heritage Sites — Park Güell,8 million coins
 CC,2014,Vatican City,CC-2014,2.0,CC2014VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2014/comm_2014_Vatican.jpg,25th anniversary of the fall of the Berlin Wall,"103,000 coins"
-RE,2014,Spain,ESP-02,2.0,RE2014ESP-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2euro_2014.jpg,,
-RE,2014,Spain,ESP-02,1.0,RE2014ESP-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1euro_2014.jpg,,
-RE,2014,Spain,ESP-02,0.5,RE2014ESP-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_50cent_2014.jpg,,
 RE,2014,Spain,ESP-02,0.2,RE2014ESP-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_20cent.jpg,,
-RE,2014,Spain,ESP-02,0.1,RE2014ESP-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_10cent.jpg,,
 RE,2014,Spain,ESP-02,0.05,RE2014ESP-A-RE2-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_5cent.jpg,,
+RE,2014,Spain,ESP-02,0.5,RE2014ESP-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_50cent_2014.jpg,,
+RE,2014,Spain,ESP-02,2.0,RE2014ESP-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2euro_2014.jpg,,
 RE,2014,Spain,ESP-02,0.02,RE2014ESP-A-RE2-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2cent.jpg,,
+RE,2014,Spain,ESP-02,1.0,RE2014ESP-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1euro_2014.jpg,,
 RE,2014,Spain,ESP-02,0.01,RE2014ESP-A-RE2-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1cent.jpg,,
-RE,2014,Latvia,LVA-01,2.0,RE2014LVA-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_2euro.jpg,,
-RE,2014,Latvia,LVA-01,1.0,RE2014LVA-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_1euro.jpg,,
-RE,2014,Latvia,LVA-01,0.5,RE2014LVA-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_50cent.jpg,,
-RE,2014,Latvia,LVA-01,0.2,RE2014LVA-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_20cent.jpg,,
-RE,2014,Latvia,LVA-01,0.1,RE2014LVA-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_10cent.jpg,,
+RE,2014,Spain,ESP-02,0.1,RE2014ESP-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_10cent.jpg,,
 RE,2014,Latvia,LVA-01,0.05,RE2014LVA-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_5cent.jpg,,
+RE,2014,Latvia,LVA-01,0.5,RE2014LVA-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_50cent.jpg,,
+RE,2014,Latvia,LVA-01,2.0,RE2014LVA-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_2euro.jpg,,
 RE,2014,Latvia,LVA-01,0.02,RE2014LVA-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_2cent.jpg,,
+RE,2014,Latvia,LVA-01,0.2,RE2014LVA-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_20cent.jpg,,
+RE,2014,Latvia,LVA-01,1.0,RE2014LVA-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_1euro.jpg,,
 RE,2014,Latvia,LVA-01,0.01,RE2014LVA-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_1cent.jpg,,
-RE,2014,Netherlands,NLD-02,2.0,RE2014NLD-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_2Euro.jpg,,
-RE,2014,Netherlands,NLD-02,1.0,RE2014NLD-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_1euro_2014.jpg,,
-RE,2014,Netherlands,NLD-02,0.5,RE2014NLD-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_50cent.jpg,,
-RE,2014,Netherlands,NLD-02,0.2,RE2014NLD-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_20cent.jpg,,
-RE,2014,Netherlands,NLD-02,0.1,RE2014NLD-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_10cent.jpg,,
+RE,2014,Latvia,LVA-01,0.1,RE2014LVA-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/lv/Latvia_10cent.jpg,,
 RE,2014,Netherlands,NLD-02,0.05,RE2014NLD-A-RE2-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_5cent_2014.jpg,,
+RE,2014,Netherlands,NLD-02,0.5,RE2014NLD-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_50cent.jpg,,
 RE,2014,Netherlands,NLD-02,0.02,RE2014NLD-A-RE2-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_2cent_2014.jpg,,
+RE,2014,Netherlands,NLD-02,2.0,RE2014NLD-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_2Euro.jpg,,
+RE,2014,Netherlands,NLD-02,0.2,RE2014NLD-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_20cent.jpg,,
+RE,2014,Netherlands,NLD-02,1.0,RE2014NLD-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_1euro_2014.jpg,,
 RE,2014,Netherlands,NLD-02,0.01,RE2014NLD-A-RE2-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_1cent_2014.jpg,,
-RE,2014,Vatican City,VAT-04,2.0,RE2014VAT-A-RE4-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_2016.jpg,,
-RE,2014,Vatican City,VAT-04,1.0,RE2014VAT-A-RE4-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2016.jpg,,
-RE,2014,Vatican City,VAT-04,0.5,RE2014VAT-A-RE4-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_2016.jpg,,
-RE,2014,Vatican City,VAT-04,0.2,RE2014VAT-A-RE4-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_2016.jpg,,
-RE,2014,Vatican City,VAT-04,0.1,RE2014VAT-A-RE4-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_2016.jpg,,
+RE,2014,Netherlands,NLD-02,0.1,RE2014NLD-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/nl/Netherlands_10cent.jpg,,
 RE,2014,Vatican City,VAT-04,0.05,RE2014VAT-A-RE4-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_2016.jpg,,
-RE,2014,Vatican City,VAT-04,0.02,RE2014VAT-A-RE4-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_2016.jpg,,
+RE,2014,Vatican City,VAT-04,2.0,RE2014VAT-A-RE4-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vaticano_2euro_2016.jpg,,
+RE,2014,Vatican City,VAT-04,0.1,RE2014VAT-A-RE4-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_2016.jpg,,
 RE,2014,Vatican City,VAT-04,0.01,RE2014VAT-A-RE4-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1cent_2016.jpg,,
+RE,2014,Vatican City,VAT-04,1.0,RE2014VAT-A-RE4-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2016.jpg,,
+RE,2014,Vatican City,VAT-04,0.2,RE2014VAT-A-RE4-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_2016.jpg,,
+RE,2014,Vatican City,VAT-04,0.02,RE2014VAT-A-RE4-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_2016.jpg,,
+RE,2014,Vatican City,VAT-04,0.5,RE2014VAT-A-RE4-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_2016.jpg,,
 CC,2015,Andorra,CC-2015,2.0,CC2015AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_andorra_30.jpg,30th anniversary of the Coming of Age and Political Rights to the Men and Women turning 18 years old,85 000 coins
 CC,2015,Andorra,CC-2015,2.0,CC2015AND-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_andorra_25.jpg,25th anniversary of the Signature of the Customs Agreement with the European Union,85 000 coins
 CC,2015,Belgium,CC-2015,2.0,CC2015BEL-A-CC1-200,https://fruitgarden.org/coins/coins/2.00c_Belgium_2015.jpg,2015 – Waterloo,
 CC,2015,Belgium,CC-2015,2.0,CC2015BEL-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Belgium.jpg,2015 – European Year for Development,250 000 coins
-CC,2015,Finland,CC-2015,2.0,CC2015FIN-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Finland_akseli.jpg,The 150th anniversary of the birth of artist Akseli Gallen-Kallela,500 000 coins
 CC,2015,Finland,CC-2015,2.0,CC2015FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Finland.jpg,The 150th anniversary of the birth of composer Jean Sibelius,1 million coins
+CC,2015,Finland,CC-2015,2.0,CC2015FIN-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Finland_akseli.jpg,The 150th anniversary of the birth of artist Akseli Gallen-Kallela,500 000 coins
 CC,2015,France,CC-2015,2.0,CC2015FRA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_France_Liberte.jpg,225th anniversary of the Fête de la Fédération (Festival of the Federation),4 million coins
 CC,2015,France,CC-2015,2.0,CC2015FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_France_peace.jpg,Europe building peace and security since 1945,4 million coins
 CC,2015,Germany,CC-2015,2.0,CC2015DEU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_de_Unity.jpg,25 years of German Unity,30 million coins
@@ -447,15 +447,15 @@ CC,2015,Italy,CC-2015,2.0,CC2015ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coi
 CC,2015,Latvia,CC-2015,2.0,CC2015LVA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Latvia_Stork.jpg,Endangered nature – the Black Stork,1 010 000 coins
 CC,2015,Latvia,CC-2015,2.0,CC2015LVA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Latvia.jpg,Latvian Presidency of the Council of the European Union,2 million coins
 CC,2015,Lithuania,CC-2015,2.0,CC2015LTU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_lithuania.jpg,The Lithuanian language,1 million coins
-CC,2015,Luxembourg,CC-2015,2.0,CC2015LUX-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Luxembourg.jpg,125th anniversary of the House of Nassau-Weilburg,"1,4 million coins"
 CC,2015,Luxembourg,CC-2015,2.0,CC2015LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Luxembourg_15_anniversary.jpg,15th anniversary of the accession to the throne of H.R.H. the Grand Duke,"1,4 million coins"
-CC,2015,Malta,CC-2015,2.0,CC2015MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Malta_Republic1974.jpg,Republic of Malta 1974,400 000 coins
+CC,2015,Luxembourg,CC-2015,2.0,CC2015LUX-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Luxembourg.jpg,125th anniversary of the House of Nassau-Weilburg,"1,4 million coins"
 CC,2015,Malta,CC-2015,2.0,CC2015MLT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Malta.jpg,First flight from Malta,300 000 coins
+CC,2015,Malta,CC-2015,2.0,CC2015MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Malta_Republic1974.jpg,Republic of Malta 1974,400 000 coins
 CC,2015,Monaco,CC-2015,2.0,CC2015MCO-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Monaco.jpg,800th anniversary of the construction of the first Castle on the rock,10 000 coins
-CC,2015,Portugal,CC-2015,2.0,CC2015PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Portugal_ship.jpg,"500 years of the first contacts with Timor, nowadays an independent Portuguese speaking country (Timor Lorosae)",520 000 coins
 CC,2015,Portugal,CC-2015,2.0,CC2015PRT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Portugal.jpg,150th Anniversary of the Portuguese Red Cross,520 000 coins
-CC,2015,San Marino,CC-2015,2.0,CC2015SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_San_Marino_25thGermanReunification.jpg,25th anniversary of the German reunification,100 000 coins
+CC,2015,Portugal,CC-2015,2.0,CC2015PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Portugal_ship.jpg,"500 years of the first contacts with Timor, nowadays an independent Portuguese speaking country (Timor Lorosae)",520 000 coins
 CC,2015,San Marino,CC-2015,2.0,CC2015SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_San_Marino.jpg,The 750th anniversary of the birth of Dante Alighieri,104 000 coins
+CC,2015,San Marino,CC-2015,2.0,CC2015SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_San_Marino_25thGermanReunification.jpg,25th anniversary of the German reunification,100 000 coins
 CC,2015,Slovakia,CC-2015,2.0,CC2015SVK-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Slovakia.jpg,200th anniversary of the birth of Ľudovít Štúr,1 million coins
 CC,2015,Slovenia,CC-2015,2.0,CC2015SVN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Slovenia.jpg,Emona-Ljubljana,1 million coins
 CC,2015,Spain,CC-2015,2.0,CC2015ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/comm_2015_Spain.jpg,Unesco’s World Cultural and Natural Heritage Sites — Cave of Altamira,8 million coins
@@ -481,67 +481,67 @@ CC,2015,Slovenia,CC-2015-EUF,2.0,CC2015SVN-A-EUF-200,https://www.ecb.europa.eu/e
 CC,2015,Spain,CC-2015-EUF,2.0,CC2015ESP-A-EUF-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2015/joint_comm_2015_Spain.jpg,The 30th anniversary of the EU flag,
 RE,2015,Spain,ESP-03,2.0,RE2015ESP-A-RE3-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_2euro_2015.jpg,,
 RE,2015,Spain,ESP-03,1.0,RE2015ESP-A-RE3-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/es/Spain_1Euro_2015.jpg,,
-RE,2015,Lithuania,LTU-01,2.0,RE2015LTU-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_2euro_2015.jpg,,
 RE,2015,Lithuania,LTU-01,1.0,RE2015LTU-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_1euro_2015.jpg,,
+RE,2015,Lithuania,LTU-01,0.05,RE2015LTU-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_5cent_2015.jpg,,
 RE,2015,Lithuania,LTU-01,0.5,RE2015LTU-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_50cent_2014.jpg,,
+RE,2015,Lithuania,LTU-01,2.0,RE2015LTU-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_2euro_2015.jpg,,
+RE,2015,Lithuania,LTU-01,0.02,RE2015LTU-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_2cent_2015.jpg,,
 RE,2015,Lithuania,LTU-01,0.2,RE2015LTU-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_20cent_2015.jpg,,
 RE,2015,Lithuania,LTU-01,0.1,RE2015LTU-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_10cent_2015.jpg,,
-RE,2015,Lithuania,LTU-01,0.05,RE2015LTU-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_5cent_2015.jpg,,
-RE,2015,Lithuania,LTU-01,0.02,RE2015LTU-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_2cent_2015.jpg,,
 RE,2015,Lithuania,LTU-01,0.01,RE2015LTU-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/lt/Lithuania_1cent_2015.jpg,,
-CC,2016,Andorra,CC-2016,2.0,CC2016AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_andorra_radio.jpg,25th anniversary of the Radio and Television of Andorra,85 000 coins
 CC,2016,Andorra,CC-2016,2.0,CC2016AND-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_andorra_150_anniversary.jpg,150 years of the New Reform 1866,85 000 coins
+CC,2016,Andorra,CC-2016,2.0,CC2016AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_andorra_radio.jpg,25th anniversary of the Radio and Television of Andorra,85 000 coins
 CC,2016,Austria,CC-2016,2.0,CC2016AUT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_austria.jpg,200 years of Oesterreichische Nationalbank,16 million coins
-CC,2016,Belgium,CC-2016,2.0,CC2016BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_belgium_children.jpg,International Missing Children’s Day,1 020 000 coins
 CC,2016,Belgium,CC-2016,2.0,CC2016BEL-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_belgium.jpg,Olympic Games,375 000 coins
+CC,2016,Belgium,CC-2016,2.0,CC2016BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_belgium_children.jpg,International Missing Children’s Day,1 020 000 coins
 CC,2016,Estonia,CC-2016,2.0,CC2016EST-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_estonia.jpg,100th anniversary of the birth of the famous Estonian chess grandmaster Paul Keres,500 000 coins
-CC,2016,Finland,CC-2016,2.0,CC2016FIN-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_finland_wright.jpg,The 100th anniversary of the birth of philosopher Georg Henrik von Wright,1 million coins
 CC,2016,Finland,CC-2016,2.0,CC2016FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_finland_leino.jpg,The Finnish writer and lyricist Eino Leino,1 million coins
-CC,2016,France,CC-2016,2.0,CC2016FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_france_mitterand.jpg,François Mitterrand,10 million coins
+CC,2016,Finland,CC-2016,2.0,CC2016FIN-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_finland_wright.jpg,The 100th anniversary of the birth of philosopher Georg Henrik von Wright,1 million coins
 CC,2016,France,CC-2016,2.0,CC2016FRA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_france.jpg,2016 UEFA European Championship,10 million coins
+CC,2016,France,CC-2016,2.0,CC2016FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_france_mitterand.jpg,François Mitterrand,10 million coins
 CC,2016,Germany,CC-2016,2.0,CC2016DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_germany.jpg,Saxony (Federal States series),30 million coins
-CC,2016,Greece,CC-2016,2.0,CC2016GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_greece_monastery.jpg,150 years from the Arkadi Monastery Torching,max 750 000 coins
 CC,2016,Greece,CC-2016,2.0,CC2016GRC-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_greece_dimitri.jpg,120 years from the birth of Dimitri Mitropoulos,max 750 000 coins
+CC,2016,Greece,CC-2016,2.0,CC2016GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_greece_monastery.jpg,150 years from the Arkadi Monastery Torching,max 750 000 coins
 CC,2016,Ireland,CC-2016,2.0,CC2016IRL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_ireland.jpg,100 years since the 1916 Easter Rising in Ireland,4.5 million coins
 CC,2016,Italy,CC-2016,2.0,CC2016ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_italy_donatello_270.jpg,550th anniversary of the death of Donatello,1.5 million coins
 CC,2016,Italy,CC-2016,2.0,CC2016ITA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_italy_plauto_270.jpg,2200th anniversary of the death of Tito Maccio Plauto,"1,5 million coins"
-CC,2016,Latvia,CC-2016,2.0,CC2016LVA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_latvia_vidzeme.jpg,Vidzeme,1 030 000 coins
 CC,2016,Latvia,CC-2016,2.0,CC2016LVA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_latvia_agriculture.jpg,Latvian agricultural industry,1 010 000 coins
+CC,2016,Latvia,CC-2016,2.0,CC2016LVA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_latvia_vidzeme.jpg,Vidzeme,1 030 000 coins
 CC,2016,Lithuania,CC-2016,2.0,CC2016LTU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_Lithuania_baltic_culture.jpg,The Baltic culture,1 million coins
 CC,2016,Luxembourg,CC-2016,2.0,CC2016LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_luxembourg_bridge_270.jpg,The 50th anniversary of the ‘Grand Duchess Charlotte Bridge’,1 million coins
-CC,2016,Malta,CC-2016,2.0,CC2016MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_malta_solidarity.jpg,The role of the Malta Community Chest Fund in Society,380 000 coins
 CC,2016,Malta,CC-2016,2.0,CC2016MLT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_malta.jpg,Ġgantija Temples,350 000 coins
+CC,2016,Malta,CC-2016,2.0,CC2016MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_malta_solidarity.jpg,The role of the Malta Community Chest Fund in Society,380 000 coins
 CC,2016,Monaco,CC-2016,2.0,CC2016MCO-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_monaco_charles.jpg,The 150th anniversary of the foundation of Monte Carlo by Charles III,15 000 coins
 CC,2016,Portugal,CC-2016,2.0,CC2016PRT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_portugal_bridge.jpg,50 years of the first bridge uniting the two riverbanks of the Tejo River,500 000 coins
 CC,2016,Portugal,CC-2016,2.0,CC2016PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_portugal_olympics_270.jpg,Portuguese team participating in the Rio 2016 Olympic Games,650 000 coins
-CC,2016,San Marino,CC-2016,2.0,CC2016SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_san_marino_sheakspeare.jpg,400th anniversary of the death of William Shakespeare,85 000 coins
 CC,2016,San Marino,CC-2016,2.0,CC2016SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_san_marino_donatello.jpg,550th anniversary of the death of Donatello,85 000 coins
+CC,2016,San Marino,CC-2016,2.0,CC2016SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_san_marino_sheakspeare.jpg,400th anniversary of the death of William Shakespeare,85 000 coins
 CC,2016,Slovakia,CC-2016,2.0,CC2016SVK-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_slovakia_presidency.jpg,The first Slovak Presidency of the Council of the European Union,1 million coins
 CC,2016,Slovenia,CC-2016,2.0,CC2016SVN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_slovenia_independence.jpg,The 25th anniversary of independence of the Republic of Slovenia,1 million coins
 CC,2016,Spain,CC-2016,2.0,CC2016ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_spain.jpg,Unesco’s World Cultural and and Natural Heritage Sites – Segovia,8 million coins
 CC,2016,Vatican City,CC-2016,2.0,CC2016VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2016/comm_2016_vatican_guard.jpg,The 200th anniversary of the Vatican Guard,105 000 coins
-CC,2017,Andorra,CC-2017,2.0,CC2017AND-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Andorra_pyrenean.jpg,Andorra – The Pyrenean country,85 000 coins
 CC,2017,Andorra,CC-2017,2.0,CC2017AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Andorra_100years.jpg,100 years of the anthem of Andorra,85 000 coins
+CC,2017,Andorra,CC-2017,2.0,CC2017AND-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Andorra_pyrenean.jpg,Andorra – The Pyrenean country,85 000 coins
 CC,2017,Belgium,CC-2017,2.0,CC2017BEL-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Belgium_Ghent.jpg,200th anniversary of the Ghent University,200 000 coins
 CC,2017,Belgium,CC-2017,2.0,CC2017BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_belgium_liege.jpg,200th anniversary of the University of Liège,200 000 coins
 CC,2017,Cyprus,CC-2017,2.0,CC2017CYP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Cyprus_Paphos.jpg,Paphos 2017 – European Capital of Culture,430 000 coins
 CC,2017,Estonia,CC-2017,2.0,CC2017EST-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Estonia_Independence.jpg,Estonia's Independence,1 500 000 coins
-CC,2017,Finland,CC-2017,2.0,CC2017FIN-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Finland_Nature.jpg,The Finnish nature,500 000 coins
 CC,2017,Finland,CC-2017,2.0,CC2017FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_finland_independence.jpg,Independent Finland 100 years,2.5 million coins
-CC,2017,France,CC-2017,2.0,CC2017FRA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_France_pink_ribbon.jpg,"25th anniversary of the pink ribbon, symbol of the fight against breast cancer",10 000 000 coins
+CC,2017,Finland,CC-2017,2.0,CC2017FIN-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Finland_Nature.jpg,The Finnish nature,500 000 coins
 CC,2017,France,CC-2017,2.0,CC2017FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_france_centenary.jpg,Centenary of Auguste Rodin,10 million coins
+CC,2017,France,CC-2017,2.0,CC2017FRA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_France_pink_ribbon.jpg,"25th anniversary of the pink ribbon, symbol of the fight against breast cancer",10 000 000 coins
 CC,2017,Germany,CC-2017,2.0,CC2017DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_germany_rhineland.jpg,Rhineland-Palatinate (‘Federal States’ (Bundesländer) series),30 million coins
-CC,2017,Greece,CC-2017,2.0,CC2017GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Greece_Nikos.jpg,60 years in memoriam of Nikos Kazantzakis,750 000 coins
 CC,2017,Greece,CC-2017,2.0,CC2017GRC-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Greece_Philippi.jpg,Archaeological site of Philippi,750 000 coins
+CC,2017,Greece,CC-2017,2.0,CC2017GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Greece_Nikos.jpg,60 years in memoriam of Nikos Kazantzakis,750 000 coins
 CC,2017,Italy,CC-2017,2.0,CC2017ITA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Italy_Titus.jpg,Bimillenary of the death of Titus Livius,1.5 million coins
 CC,2017,Italy,CC-2017,2.0,CC2017ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_italy_venice.jpg,400th Anniversary of the completion of the Basilica of San Marco in Venice,1.5 million coins
-CC,2017,Latvia,CC-2017,2.0,CC2017LVA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Latvia_Latgale.jpg,Latgale,530 000 coins
 CC,2017,Latvia,CC-2017,2.0,CC2017LVA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Latvia_Kurzeme.jpg,Kurzeme,530 000 coins
+CC,2017,Latvia,CC-2017,2.0,CC2017LVA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Latvia_Latgale.jpg,Latgale,530 000 coins
 CC,2017,Lithuania,CC-2017,2.0,CC2017LTU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Lithuania_Vilnius.jpg,Vilnius,1 000 000 coins
 CC,2017,Luxembourg,CC-2017,2.0,CC2017LUX-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Luxembourg_GrandDuke.jpg,The 200th anniversary of the Grand Duke Guillaume III,500 000 coins
 CC,2017,Luxembourg,CC-2017,2.0,CC2017LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_luxembourg_anniversary.jpg,The 50th anniversary of the voluntariness of the Luxembourg army,500 000 coins
-CC,2017,Malta,CC-2017,2.0,CC2017MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Malta_Solidarity.jpg,Solidarity and peace,380 000 coins
 CC,2017,Malta,CC-2017,2.0,CC2017MLT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Malta_Hagar_Qim.jpg,Unesco World Heritage Site,405 000 coins
+CC,2017,Malta,CC-2017,2.0,CC2017MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Malta_Solidarity.jpg,Solidarity and peace,380 000 coins
 CC,2017,Monaco,CC-2017,2.0,CC2017MCO-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Monaco_Carabiniers.jpg,Carabiniers du Prince (‘Carabiniers’ of the Prince),15 000 coins
 CC,2017,Portugal,CC-2017,2.0,CC2017PRT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Portugal_Brandao.jpg,150 years of the birth of writer Raul Brandão,520 000 coins
 CC,2017,Portugal,CC-2017,2.0,CC2017PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Portugal_public_security.jpg,150 Years of Public Security,520 000 coins
@@ -550,26 +550,26 @@ CC,2017,San Marino,CC-2017,2.0,CC2017SMR-A-CC2-200,https://www.ecb.europa.eu/eur
 CC,2017,Slovakia,CC-2017,2.0,CC2017SVK-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_slovakia_university.jpg,The 550th anniversary of the University Istropolitana,1 million coins
 CC,2017,Slovenia,CC-2017,2.0,CC2017SVN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_slovenia_anniversary.jpg,The 10th anniversary of the euro in Slovenia,1 million coins
 CC,2017,Spain,CC-2017,2.0,CC2017ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_spain_asturias.jpg,Unesco’s World Cultural and Natural Heritage Sites – Churches of the Kingdom of Asturias,4 million coins
-CC,2017,Vatican City,CC-2017,2.0,CC2017VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Vatican_Fatima.jpg,Centenary of the Fatima apparitions,105 000 coins
 CC,2017,Vatican City,CC-2017,2.0,CC2017VAT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Vatican_Saint_Peter_Saint_Paul.jpg,1950th anniversary of the martyrdom of Saint Peter and Saint Paul,105 000 coins
-RE,2017,San Marino,SMR-02,2.0,RE2017SMR-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2euro_2017.jpg,,
-RE,2017,San Marino,SMR-02,1.0,RE2017SMR-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_1euro_2017.jpg,,
-RE,2017,San Marino,SMR-02,0.5,RE2017SMR-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_50cent_2017.jpg,,
-RE,2017,San Marino,SMR-02,0.2,RE2017SMR-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_20cent_2017.jpg,,
-RE,2017,San Marino,SMR-02,0.1,RE2017SMR-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_10cent_2017.jpg,,
+CC,2017,Vatican City,CC-2017,2.0,CC2017VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2017/comm_2017_Vatican_Fatima.jpg,Centenary of the Fatima apparitions,105 000 coins
 RE,2017,San Marino,SMR-02,0.05,RE2017SMR-A-RE2-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_5cent_2017.jpg,,
+RE,2017,San Marino,SMR-02,0.5,RE2017SMR-A-RE2-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_50cent_2017.jpg,,
+RE,2017,San Marino,SMR-02,2.0,RE2017SMR-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2euro_2017.jpg,,
 RE,2017,San Marino,SMR-02,0.02,RE2017SMR-A-RE2-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_2cent_2017.jpg,,
+RE,2017,San Marino,SMR-02,0.2,RE2017SMR-A-RE2-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_20cent_2017.jpg,,
+RE,2017,San Marino,SMR-02,1.0,RE2017SMR-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_1euro_2017.jpg,,
 RE,2017,San Marino,SMR-02,0.01,RE2017SMR-A-RE2-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_1cent_2017.jpg,,
-RE,2017,Vatican City,VAT-05,2.0,RE2017VAT-A-RE5-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2euro_2017.jpg,,
-RE,2017,Vatican City,VAT-05,1.0,RE2017VAT-A-RE5-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2017.jpg,,
-RE,2017,Vatican City,VAT-05,0.5,RE2017VAT-A-RE5-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_2017.jpg,,
+RE,2017,San Marino,SMR-02,0.1,RE2017SMR-A-RE2-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/sm/SanMarino_10cent_2017.jpg,,
 RE,2017,Vatican City,VAT-05,0.2,RE2017VAT-A-RE5-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_20cent_2017.jpg,,
+RE,2017,Vatican City,VAT-05,0.5,RE2017VAT-A-RE5-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_50cent_2017.jpg,,
 RE,2017,Vatican City,VAT-05,0.1,RE2017VAT-A-RE5-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_10cent_2017.jpg,,
-RE,2017,Vatican City,VAT-05,0.05,RE2017VAT-A-RE5-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_2017.jpg,,
-RE,2017,Vatican City,VAT-05,0.02,RE2017VAT-A-RE5-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_2017.jpg,,
+RE,2017,Vatican City,VAT-05,2.0,RE2017VAT-A-RE5-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2euro_2017.jpg,,
 RE,2017,Vatican City,VAT-05,0.01,RE2017VAT-A-RE5-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1cent_2017.jpg,,
-CC,2018,Andorra,CC-2018,2.0,CC2018AND-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_andorra_70yrs_declhumrights.jpg,70 years of the Universal Declaration of Human Rights,75 000 coins
+RE,2017,Vatican City,VAT-05,0.02,RE2017VAT-A-RE5-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_2cent_2017.jpg,,
+RE,2017,Vatican City,VAT-05,0.05,RE2017VAT-A-RE5-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_5cent_2017.jpg,,
+RE,2017,Vatican City,VAT-05,1.0,RE2017VAT-A-RE5-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/va/Vatican_1euro_2017.jpg,,
 CC,2018,Andorra,CC-2018,2.0,CC2018AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_andorra-25const.jpg,25th anniversary of the Andorran Constitution,75 000 coins
+CC,2018,Andorra,CC-2018,2.0,CC2018AND-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_andorra_70yrs_declhumrights.jpg,70 years of the Universal Declaration of Human Rights,75 000 coins
 CC,2018,Austria,CC-2018,2.0,CC2018AUT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2017_Austria_100years.jpg,100 years of the Austrian Republic,18 100 100 coins
 CC,2018,Belgium,CC-2018,2.0,CC2018BEL-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_belgium_esro2bsat.jpg,The 50th anniversary of the ESRO 2B satellite,260 000 coins
 CC,2018,Belgium,CC-2018,2.0,CC2018BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_belgium.jpg,The 50th anniversary of May 1968 events in Belgium,260 000 coins
@@ -579,65 +579,65 @@ CC,2018,Finland,CC-2018,2.0,CC2018FIN-A-CC2-200,https://www.ecb.europa.eu/euro/c
 CC,2018,Finland,CC-2018,2.0,CC2018FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_finland_landscape.jpg,Finnish national landscape Koli,1 million coins
 CC,2018,France,CC-2018,2.0,CC2018FRA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_france.jpg,Simone Veil,15 million coins
 CC,2018,France,CC-2018,2.0,CC2018FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_france_cornflower.jpg,Remembrance cornflower (Bleuet de France),15 million coins
-CC,2018,Germany,CC-2018,2.0,CC2018DEU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_germany_anniversary.jpg,The 100th birthday anniversary of the great German statesman and Chancellor Helmut Schmidt (1918-2015),30 million coins
 CC,2018,Germany,CC-2018,2.0,CC2018DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_Germany_berlin.jpg,Berlin (‘Federal States’ (Bundesländer) series),30 million coins
-CC,2018,Greece,CC-2018,2.0,CC2018GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_greece_kostispalamas.jpg,Kostis Palamas – 75 years in memoriam,750 000 coins
+CC,2018,Germany,CC-2018,2.0,CC2018DEU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_germany_anniversary.jpg,The 100th birthday anniversary of the great German statesman and Chancellor Helmut Schmidt (1918-2015),30 million coins
 CC,2018,Greece,CC-2018,2.0,CC2018GRC-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_greece_dodecanese.jpg,70 years since the union of the Dodecanese,750 000 coins
+CC,2018,Greece,CC-2018,2.0,CC2018GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_greece_kostispalamas.jpg,Kostis Palamas – 75 years in memoriam,750 000 coins
 CC,2018,Italy,CC-2018,2.0,CC2018ITA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_italy_health.jpg,The 60th Anniversary of the establishment of the Italian Ministry of Health,3 million coins
 CC,2018,Italy,CC-2018,2.0,CC2018ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_italy_anniversary.jpg,The 70th Anniversary of the Coming into Force of the Italian Constitution,4 million coins
-CC,2018,Latvia,CC-2018,2.0,CC2018LVA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_latvia_zemgale.jpg,Zemgale,512 000 coins
 CC,2018,Latvia,CC-2018,2.0,CC2018LVA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_latvia_joint.jpg,"Estonia, Latvia and Lithuania jointly issued a commemorative euro coin with a common design in 2018, celebrating the establishment of the States of Estonia and Latvia and the re-establishment of the State of Lithuania",512 000 coins
+CC,2018,Latvia,CC-2018,2.0,CC2018LVA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_latvia_zemgale.jpg,Zemgale,512 000 coins
 CC,2018,Lithuania,CC-2018,2.0,CC2018LTU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_lithuania_song.jpg,Lithuanian Song and Dance celebration (inscribed on the Unesco Representative List of the Intangible Cultural Heritage of Humanity),500 000 coins
 CC,2018,Lithuania,CC-2018,2.0,CC2018LTU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_lithuania_joint.jpg,"Estonia, Latvia and Lithuania jointly issued a commemorative euro coin with a common design in 2018, celebrating the establishment of the States of Estonia and Latvia and the re-establishment of the State of Lithuania",1 million coins
 CC,2018,Luxembourg,CC-2018,2.0,CC2018LUX-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_luxembourg_175thanniv_duke.jpg,The 175th anniversary of the death of the Grand Duke Guillaume Ist,500 000 coins
 CC,2018,Luxembourg,CC-2018,2.0,CC2018LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_Luxembourg_150years.jpg,The 150th anniversary of the Luxembourg Constitution,500 000 coins
-CC,2018,Malta,CC-2018,2.0,CC2018MLT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_malta_culherit.jpg,Cultural Heritage,320 000 coins
 CC,2018,Malta,CC-2018,2.0,CC2018MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_malta.jpg,Unesco World Heritage Site — Temples of Mnajdra,320 000 coins
+CC,2018,Malta,CC-2018,2.0,CC2018MLT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_malta_culherit.jpg,Cultural Heritage,320 000 coins
 CC,2018,Monaco,CC-2018,2.0,CC2018MCO-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_monaco_bosio.jpg,François Joseph Bosio,16 000 coins
 CC,2018,Portugal,CC-2018,2.0,CC2018PRT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_portugal_botangarden.jpg,250 years of the Ajuda Botanical Garden (‘Jardim Botânico da Ajuda’),520 000 coins
 CC,2018,Portugal,CC-2018,2.0,CC2018PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_portugal_offprintworks.jpg,250 years of the Official Printing Works (‘Imprensa Nacional’),520 000 coins
-CC,2018,San Marino,CC-2018,2.0,CC2018SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_sanmarino_bernini.jpg,420th anniversary of the birth of Gian Lorenzo Bernini,60 500 coins
 CC,2018,San Marino,CC-2018,2.0,CC2018SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_sanmarino_anniversery.jpg,500th anniversary of the birth of Tintoretto,60 500 coins
+CC,2018,San Marino,CC-2018,2.0,CC2018SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_sanmarino_bernini.jpg,420th anniversary of the birth of Gian Lorenzo Bernini,60 500 coins
 CC,2018,Slovakia,CC-2018,2.0,CC2018SVK-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_slovakia_anniversary.jpg,The 25th anniversary of the establishment of the Slovak Republic,1 million coins
 CC,2018,Slovenia,CC-2018,2.0,CC2018SVN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_slovenia_bee.jpg,Slovenia World Day of Bees,1 million coins
 CC,2018,Spain,CC-2018,2.0,CC2018ESP-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_spain_felipe.jpg,The 50th anniversary of King FELIPE VI,400 000 coins
 CC,2018,Spain,CC-2018,2.0,CC2018ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_spain_santiago.jpg,UNESCO's World Cultural and Natural Heritage Sites - Santiago,300 000 coins
-CC,2018,Vatican City,CC-2018,2.0,CC2018VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_vatican_padrepio.jpg,50th Anniversary of the death of Padre Pio,101 000 coins
 CC,2018,Vatican City,CC-2018,2.0,CC2018VAT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_vatican.jpg,European Year of Cultural Heritage — The Laocoön group,101 000 coins
-CC,2019,Andorra,CC-2019,2.0,CC2019AND-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_ad_600yrs_councilland.jpg,600 years of the Council of the Land,60 000 coins
+CC,2018,Vatican City,CC-2018,2.0,CC2018VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2018/comm_2018_vatican_padrepio.jpg,50th Anniversary of the death of Padre Pio,101 000 coins
 CC,2019,Andorra,CC-2019,2.0,CC2019AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_ad_Skiwldcup.jpg,Ski World Cup Finals 2019,60 000 coins
+CC,2019,Andorra,CC-2019,2.0,CC2019AND-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_ad_600yrs_councilland.jpg,600 years of the Council of the Land,60 000 coins
 CC,2019,Belgium,CC-2019,2.0,CC2019BEL-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_450anniv_PieterBreugeltheelder.jpg,The 450th anniversary of the death of Pieter Bruegel the Elder,155 000 coins
 CC,2019,Belgium,CC-2019,2.0,CC2019BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_belgium_25anniv_EMI.jpg,25th anniversary of the European Monetary Institute (EMI),155 000 coins
-CC,2019,Estonia,CC-2019,2.0,CC2019EST-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_et_centUnivTartu.jpg,The centenary of the University of Tartu,1 000 000 coins
 CC,2019,Estonia,CC-2019,2.0,CC2019EST-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_et_150yrSongfestival.jpg,Song Festival’s 150-year anniversary,1 million coins
+CC,2019,Estonia,CC-2019,2.0,CC2019EST-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_et_centUnivTartu.jpg,The centenary of the University of Tartu,1 000 000 coins
 CC,2019,Finland,CC-2019,2.0,CC2019FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_fi_constitution_act.jpg,The Constitution Act of Finland,500 000 coins
 CC,2019,France,CC-2019,2.0,CC2019FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_fr_30anniv_fallBerlinwall.jpg,30 years of the fall of the Berlin Wall,10 million coins
 CC,2019,France,CC-2019,2.0,CC2019FRA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_fr_60annivAsterix.jpg,The 60th anniversary of Asterix,310 000 coins
-CC,2019,Germany,CC-2019,2.0,CC2019DEU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_de_30anniv_fallBerlinwall.jpg,The 30th anniversary of the fall of the Berlin wall,30 000 000 coins
 CC,2019,Germany,CC-2019,2.0,CC2019DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_de_70anniv_Bundesrat.jpg,The 70th anniversary of the Bundesrat’s founding,30 million coins
-CC,2019,Greece,CC-2019,2.0,CC2019GRC-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_el_150memAndrKalv.jpg,Andreas Kalvos — 150 years in memoriam,750 000 coins
+CC,2019,Germany,CC-2019,2.0,CC2019DEU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_de_30anniv_fallBerlinwall.jpg,The 30th anniversary of the fall of the Berlin wall,30 000 000 coins
 CC,2019,Greece,CC-2019,2.0,CC2019GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_el_centbirthManAndr.jpg,Centenary of the birth of Manolis Andronicos,750 000 coins
+CC,2019,Greece,CC-2019,2.0,CC2019GRC-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_el_150memAndrKalv.jpg,Andreas Kalvos — 150 years in memoriam,750 000 coins
 CC,2019,Ireland,CC-2019,2.0,CC2019IRL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_ie_100anniv_Irishparliament.jpg,100 years since the establishment of the Dáil Éireann (Irish Parliament),1 million coins
 CC,2019,Italy,CC-2019,2.0,CC2019ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_500anniv_Leodavinci.jpg,The 500th anniversary of the death of Leonardo da Vinci,3 million coins
 CC,2019,Latvia,CC-2019,2.0,CC2019LVA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_lv_rising_sun.jpg,The rising sun,307 000 coins
-CC,2019,Lithuania,CC-2019,2.0,CC2019LTU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_lt_sutartines.jpg,Sutartinės (Lithuanian multipart songs — inscribed on the Unesco Representative List of the Intangible Cultural Heritage of Humanity),500 000 coins
 CC,2019,Lithuania,CC-2019,2.0,CC2019LTU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_lt_samogitia.jpg,Samogitia (Lithuanian Ethnographic Regions),500 000 coins
-CC,2019,Luxembourg,CC-2019,2.0,CC2019LUX-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_lu_100anni_uni_suffrage.jpg,The 100th anniversary of the universal suffrage,500 000 coins
+CC,2019,Lithuania,CC-2019,2.0,CC2019LTU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_lt_sutartines.jpg,Sutartinės (Lithuanian multipart songs — inscribed on the Unesco Representative List of the Intangible Cultural Heritage of Humanity),500 000 coins
 CC,2019,Luxembourg,CC-2019,2.0,CC2019LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_100anniv_throneGrDuCharl.jpg,The 100th anniversary of the accession to the throne of Grand Duchess Charlotte,500 000 coins
-CC,2019,Malta,CC-2019,2.0,CC2019MLT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_mt_nature_dvpt.jpg,Nature and Environment,320 000 coins
+CC,2019,Luxembourg,CC-2019,2.0,CC2019LUX-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_lu_100anni_uni_suffrage.jpg,The 100th anniversary of the universal suffrage,500 000 coins
 CC,2019,Malta,CC-2019,2.0,CC2019MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_mt_Ta_Hagrat.jpg,Unesco World Heritage Site – pre-historic temples of Ta’ Haġrat,320 000 coins
+CC,2019,Malta,CC-2019,2.0,CC2019MLT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_mt_nature_dvpt.jpg,Nature and Environment,320 000 coins
 CC,2019,Monaco,CC-2019,2.0,CC2019MCO-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_mc_200annivthronePrHonV.jpg,The 200th anniversary of the accession to the throne of Prince Honoré V,15 000 coins
-CC,2019,Portugal,CC-2019,2.0,CC2019PRT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_pt_madeira.jpg,"600 years of the discovery of the Madeira Archipelago, by the Portuguese navigators Bartolomeu Perestrelo and Tristão Vaz",500 000 coins
 CC,2019,Portugal,CC-2019,2.0,CC2019PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_pt_Fernao_De_Magalhaes.jpg,500 years of the first circumnavigation organised and led by the Portuguese explorer and navigator Fernão De Magalhães,750 000 coins
-CC,2019,San Marino,CC-2019,2.0,CC2019SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_sm_550anniv_deathLippi.jpg,550th anniversary of the death of Filippo Lippi,60 500 coins
+CC,2019,Portugal,CC-2019,2.0,CC2019PRT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_pt_madeira.jpg,"600 years of the discovery of the Madeira Archipelago, by the Portuguese navigators Bartolomeu Perestrelo and Tristão Vaz",500 000 coins
 CC,2019,San Marino,CC-2019,2.0,CC2019SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_sm_500annivdeathLeoDV.jpg,500th anniversary of the death of Leonardo da Vinci,60 500 coins
+CC,2019,San Marino,CC-2019,2.0,CC2019SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_sm_550anniv_deathLippi.jpg,550th anniversary of the death of Filippo Lippi,60 500 coins
 CC,2019,Slovakia,CC-2019,2.0,CC2019SVK-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_sk_100annivdeathMRS.jpg,The 100th anniversary of the death of Milan Rastislav Štefánik,1 million coins
 CC,2019,Slovenia,CC-2019,2.0,CC2019SVN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_sv_100anni_university_ljublja.jpg,The 100th anniversary of the foundation of the University of Ljubljana,1 000 000 coins
 CC,2019,Spain,CC-2019,2.0,CC2019ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_es_Avila.jpg,Unesco’s World Cultural and Natural Heritage Sites — the old town of Avila and its churches outside the walls,1 million coins
 CC,2019,Vatican City,CC-2019,2.0,CC2019VAT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_vt_sistine.jpg,Sistine Chapel — End of the restoration 1994-2019,91 000 coins
 CC,2019,Vatican City,CC-2019,2.0,CC2019VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2019/comm_2019_vc_Vatctyst.jpg,90th anniversary of the foundation of the Vatican City State,91 000 coins
-CC,2020,Andorra,CC-2020,2.0,CC2020AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_ad_50female_suffrage.jpg,50 years of Universal Female Suffrage,60 000 coins
 CC,2020,Andorra,CC-2020,2.0,CC2020AND-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_ad_27ibamsum.jpg,The 27th Ibero-American Summit in Andorra,73 500 coins
+CC,2020,Andorra,CC-2020,2.0,CC2020AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_ad_50female_suffrage.jpg,50 years of Universal Female Suffrage,60 000 coins
 CC,2020,Belgium,CC-2020,2.0,CC2020BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_be_janvaneyck.jpg,Jan van Eyck,155 000 coins
 CC,2020,Belgium,CC-2020,2.0,CC2020BEL-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_be_iyph.jpg,International Year of Plant Health 2020 (IYPH 2020),755 000 coins
 CC,2020,Cyprus,CC-2020,2.0,CC2020CYP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_cy_institute_neurology.jpg,The 30th anniversary of the Cyprus Institute of Neurology and genetics,412 000 coins
@@ -645,41 +645,41 @@ CC,2020,Estonia,CC-2020,2.0,CC2020EST-A-CC1-200,https://www.ecb.europa.eu/euro/c
 CC,2020,Estonia,CC-2020,2.0,CC2020EST-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_et_centTartuPeaceTreaty.jpg,The centenary of the Tartu Peace Treaty,1 000 000 coins
 CC,2020,Finland,CC-2020,2.0,CC2020FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_fi_100_linna.jpg,Väinö Linna 100 years,800 000 coins
 CC,2020,Finland,CC-2020,2.0,CC2020FIN-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_fi_100turku_univerity.jpg,Universities and society – University of Turku 100 years,800 000 coins
-CC,2020,France,CC-2020,2.0,CC2020FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_fr_medical_research.jpg,Medical Research,300 000 coins
 CC,2020,France,CC-2020,2.0,CC2020FRA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_fr_charles_de_gaulle.jpg,Charles de Gaulle,18 061 940 coins
+CC,2020,France,CC-2020,2.0,CC2020FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_fr_medical_research.jpg,Medical Research,300 000 coins
 CC,2020,Germany,CC-2020,2.0,CC2020DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_de_50_kniefall_warschau.jpg,The 50th anniversary of Willy Brandt’s Kniefall von Warschau,30 millions coins
 CC,2020,Germany,CC-2020,2.0,CC2020DEU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_de_brandenburg.jpg,Brandenburg (the Bundesländer series),30 000 000 coins
 CC,2020,Greece,CC-2020,2.0,CC2020GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_gr_union_thrace.jpg,100 years since the union of Thrace with Greece,750 000 coins
 CC,2020,Greece,CC-2020,2.0,CC2020GRC-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_gr_battle_thermopylae.jpg,2 500 years since the Battle of Thermopylae,750 000 coins
-CC,2020,Italy,CC-2020,2.0,CC2020ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_it_150mariamontessori.jpg,150th anniversary of the birth of Maria Montessori,3 000 000 coins
 CC,2020,Italy,CC-2020,2.0,CC2020ITA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_it_80annivFoundNatFiredept.jpg,The 80th Anniversary of Foundation of ‘Corpo Nazionale dei Vigili del Fuoco’ (National Fire Department),3 000 000 coins
+CC,2020,Italy,CC-2020,2.0,CC2020ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_it_150mariamontessori.jpg,150th anniversary of the birth of Maria Montessori,3 000 000 coins
 CC,2020,Latvia,CC-2020,2.0,CC2020LVA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_lv_latgalian_ceramics.jpg,Latgalian ceramics,412 000 coins
-CC,2020,Lithuania,CC-2020,2.0,CC2020LTU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_li_unesco_kalnas.jpg,UNESCO Cultural Heritage - Kryžių Kalnas (the Hill of Crosses),500 000 coins
 CC,2020,Lithuania,CC-2020,2.0,CC2020LTU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_lt_aucksta.jpg,Aukštaitija (from the series Lithuanian Etnographic Regions),500 000 coins
+CC,2020,Lithuania,CC-2020,2.0,CC2020LTU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_li_unesco_kalnas.jpg,UNESCO Cultural Heritage - Kryžių Kalnas (the Hill of Crosses),500 000 coins
 CC,2020,Luxembourg,CC-2020,2.0,CC2020LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_lu_birth_prince_charles.jpg,The birth of Prince Charles,500 000 coins
 CC,2020,Luxembourg,CC-2020,2.0,CC2020LUX-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_lu_200annivbirthPrHenri.jpg,The 200th anniversary of the birth of Prince Henri,500 000 coins
-CC,2020,Malta,CC-2020,2.0,CC2020MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_mt_children_games.jpg,Children’s games,220 000 coins
 CC,2020,Malta,CC-2020,2.0,CC2020MLT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_mt_skorba.jpg,Unesco World Heritage Site – pre-historic temples of Skorba,170 000 coins
+CC,2020,Malta,CC-2020,2.0,CC2020MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_mt_children_games.jpg,Children’s games,220 000 coins
 CC,2020,Monaco,CC-2020,2.0,CC2020MCO-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_mc_300princehonoreiii.jpg,The 300th anniversary of the birth of Prince Honoré III,15 000 coins
-CC,2020,Portugal,CC-2020,2.0,CC2020PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_pt_university_coimbra.jpg,730th anniversary of the University of Coimbra,360 000 coins
 CC,2020,Portugal,CC-2020,2.0,CC2020PRT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_pt_75un.jpg,75th anniversary of the United Nations,510 000 coins
+CC,2020,Portugal,CC-2020,2.0,CC2020PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_pt_university_coimbra.jpg,730th anniversary of the University of Coimbra,360 000 coins
 CC,2020,San Marino,CC-2020,2.0,CC2020SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_sm_250giambattista_tiepolo.jpg,250th anniversary of the death of Giambattista Tiepolo,54 000 coins
 CC,2020,San Marino,CC-2020,2.0,CC2020SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_sm_raphael.jpg,500th anniversary of the death of Raphael,54 000 coins
 CC,2020,Slovakia,CC-2020,2.0,CC2020SVK-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_sk_anniversary_oecd.jpg,20th anniversary of Slovakia’s accession to the Organisation for Economic Co-operation and Development (OECD),1 million coins
 CC,2020,Slovenia,CC-2020,2.0,CC2020SVN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_sl_birth_bohoric.jpg,The 500th anniversary of the birth of Adam Bohorič,1 000 000 coins
 CC,2020,Spain,CC-2020,2.0,CC2020ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_es_unesco_aragon.jpg,UNESCO’s World Cultural and Natural Heritage Sites – Aragón and the Aragonese Mudejar architecture,4 000 000 coins
-CC,2020,Vatican City,CC-2020,2.0,CC2020VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_vc_500raphael_sanzio.jpg,500th Anniversary of the death of Raphael Sanzio,101 000 coins
 CC,2020,Vatican City,CC-2020,2.0,CC2020VAT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_sm_popejpii.jpg,100th Anniversary of the Birth of Pope John Paul II,101 000 coins
-CC,2021,Andorra,CC-2021,2.0,CC2021AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/2021_comm_Andorra1-elderly_540x540.jpg,Taking care of our seniors,70 000 coins
+CC,2020,Vatican City,CC-2020,2.0,CC2020VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2020/comm_2020_vc_500raphael_sanzio.jpg,500th Anniversary of the death of Raphael Sanzio,101 000 coins
 CC,2021,Andorra,CC-2021,2.0,CC2021AND-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/2021_comm_Andorra1-ladymeritchell_540x540.jpg,Our Lady of Meritxell,73 750 coins
+CC,2021,Andorra,CC-2021,2.0,CC2021AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/2021_comm_Andorra1-elderly_540x540.jpg,Taking care of our seniors,70 000 coins
 CC,2021,Belgium,CC-2021,2.0,CC2021BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_be_autumn.jpg,The 500th anniversary of the appearance of the ordinance of the second period of coin issuance during the reign of Charles V,155 000 coins
 CC,2021,Belgium,CC-2021,2.0,CC2021BEL-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/2021_comm_BelgiumLuxembourg-union_540x540.jpg,The 100th anniversary of the constitution of the Belgium-Luxembourg Economic Union (BLEU),155 000 coins
 CC,2021,Estonia,CC-2021,2.0,CC2021EST-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_estonia-wolf.jpg,The Estonian national animal – the wolf,1 000 000 coins
 CC,2021,Estonia,CC-2021,2.0,CC2021EST-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_ee_september.jpg,Finno-Ugric peoples,1 000 000 coins
 CC,2021,Finland,CC-2021,2.0,CC2021FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_fl_autumn.jpg,The 100-year autonomy of Åland,800 000 coins
 CC,2021,Finland,CC-2021,2.0,CC2021FIN-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_fi_finnish_democracy.jpg,Journalism and Open Communication Supporting the Finnish Democracy,800 000 coins
-CC,2021,France,CC-2021,2.0,CC2021FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/2021_comm_France1-olympics%20540x540.jpg,Olympic Games Paris 2024,510 000 coins
 CC,2021,France,CC-2021,2.0,CC2021FRA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_fr_unicef.jpg,UNICEF,7 500 000 coins
+CC,2021,France,CC-2021,2.0,CC2021FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/2021_comm_France1-olympics%20540x540.jpg,Olympic Games Paris 2024,510 000 coins
 CC,2021,Germany,CC-2021,2.0,CC2021DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/DE%202021%20Sachsen-Anhalt.jpg,Bundesländer series – Saxony-Anhalt,30 000 000 coins
 CC,2021,Greece,CC-2021,2.0,CC2021GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_gr_200_greek_revolution.jpg,200 years since the Greek Revolution,1 500 000 coins
 CC,2021,Italy,CC-2021,2.0,CC2021ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_it_150_rome_capital.jpg,150th Anniversary of the institution of Rome Capital of Italy,3 000 000 coins
@@ -687,13 +687,13 @@ CC,2021,Italy,CC-2021,2.0,CC2021ITA-A-CC2-200,https://www.ecb.europa.eu/euro/coi
 CC,2021,Latvia,CC-2021,2.0,CC2021LVA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_lv_100_anniversary_iure.jpg,The 100th anniversary of Latvia’s international recognition de iure,412 000 coins
 CC,2021,Lithuania,CC-2021,2.0,CC2021LTU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_lt_3q.jpg,Dzūkija (from the series ‘Lithuanian Ethnographic Regions’),500 000 coins
 CC,2021,Lithuania,CC-2021,2.0,CC2021LTU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_lt_unesco_zuvintas.jpg,UNESCO’s Man and the Biosphere Programme - Žuvintas Biosphere Reserve,500 000 coins
-CC,2021,Luxembourg,CC-2021,2.0,CC2021LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_lu_mariage_duke_henry.jpg,The 40th anniversary of the marriage of Grand Duke Henri,500 000 coins
 CC,2021,Luxembourg,CC-2021,2.0,CC2021LUX-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_lu_grand_duc_anniversary.jpg,The 100th anniversary of the Grand Duke Jean,500 000 coins
-CC,2021,Malta,CC-2021,2.0,CC2021MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_mt_tarxien_temples_1.jpg,Maltese prehistoric temples of Tarxien (of the series UNESCO World Heritage Site),181 000 coins
+CC,2021,Luxembourg,CC-2021,2.0,CC2021LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_lu_mariage_duke_henry.jpg,The 40th anniversary of the marriage of Grand Duke Henri,500 000 coins
 CC,2021,Malta,CC-2021,2.0,CC2021MLT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_mt_june.jpg,Heroes of the pandemic,72 500 coins
+CC,2021,Malta,CC-2021,2.0,CC2021MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_mt_tarxien_temples_1.jpg,Maltese prehistoric temples of Tarxien (of the series UNESCO World Heritage Site),181 000 coins
 CC,2021,Monaco,CC-2021,2.0,CC2021MCO-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/2021_comm_Monaco1-mariageprincier_540x540.jpg,10th anniversary of the marriage of Prince Albert II and Princess Charlene,15 000 coins
-CC,2021,Portugal,CC-2021,2.0,CC2021PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_pt_olympics.jpg,Portugal’s participation in the 2020 Tokyo Olympics,500 000 coins
 CC,2021,Portugal,CC-2021,2.0,CC2021PRT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/PT%202021%20EU%20presidency.jpg,Portuguese Presidency of the Council of the European Union,510 000 coins
+CC,2021,Portugal,CC-2021,2.0,CC2021PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_pt_olympics.jpg,Portugal’s participation in the 2020 Tokyo Olympics,500 000 coins
 CC,2021,San Marino,CC-2021,2.0,CC2021SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/2021_comm_san-marino1-duerer_540x540.jpg,The 550th anniversary of the birth of Albrecht Dürer,54 000 coins
 CC,2021,San Marino,CC-2021,2.0,CC2021SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_sm_march.jpg,The 450th anniversary of the birth of Caravaggio,54 000 coins
 CC,2021,Slovakia,CC-2021,2.0,CC2021SVK-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2021/comm_2021_sk_november.jpg,The 100th anniversary of the birth of Alexander Dubček,1 000 000 coins
@@ -712,11 +712,11 @@ CC,2022,France,CC-2022,2.0,CC2022FRA-A-CC1-200,https://www.ecb.europa.eu/euro/co
 CC,2022,France,CC-2022,2.0,CC2022FRA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/FR-chirac.jpg,The 90th anniversary of President Jacques Chirac’s birth,9 000 000 coins
 CC,2022,Germany,CC-2022,2.0,CC2022DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/DE-thueringen.jpg,Bundeslander series – Thuringia,30 000 000 coins
 CC,2022,Greece,CC-2022,2.0,CC2022GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0445-23r.jpg,200 years from the first Greek Constitution,750 000 coins
-CC,2022,Italy,CC-2022,2.0,CC2022ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/IT-borsellino.jpg,The 30th Anniversary of the death of Giovanni Falcone and Paolo Borsellino,3 000 000 coins
 CC,2022,Italy,CC-2022,2.0,CC2022ITA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/2022_1comm_Italy-polizia_540x540.jpg,170th Anniversary of the foundation of the Italian National Police,3 000 000 coins
+CC,2022,Italy,CC-2022,2.0,CC2022ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/IT-borsellino.jpg,The 30th Anniversary of the death of Giovanni Falcone and Paolo Borsellino,3 000 000 coins
 CC,2022,Latvia,CC-2022,2.0,CC2022LVA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0427-23r.jpg,The centenary of Latvijas Banka – financial literacy,415 000 coins
-CC,2022,Lithuania,CC-2022,2.0,CC2022LTU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0431-23r.jpg,Lithuanian Ethnographic Regions - Suvalkija,500 000 coins
 CC,2022,Lithuania,CC-2022,2.0,CC2022LTU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0429-23r.jpg,100 years of basketball in Lithuania,750 000 coins
+CC,2022,Lithuania,CC-2022,2.0,CC2022LTU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0431-23r.jpg,Lithuanian Ethnographic Regions - Suvalkija,500 000 coins
 CC,2022,Luxembourg,CC-2022,2.0,CC2022LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/2022_comm1_Luxembourg-stephanieguillaume_540x540.jpg,The 10th anniversary of the marriage of the Hereditary Grand Duke Guillaume and the Hereditary Grand Duchesse Stéphanie,500 000 coins
 CC,2022,Luxembourg,CC-2022,2.0,CC2022LUX-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/LU-lezteburg.jpg,The 50th Anniversary of the legal protection of the Luxembourg flag,500 000 coins
 CC,2022,Malta,CC-2022,2.0,CC2022MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0410-23r.jpg,UNESCO,192 000 coins
@@ -726,10 +726,10 @@ CC,2022,San Marino,CC-2022,2.0,CC2022SMR-A-CC1-200,https://www.ecb.europa.eu/eur
 CC,2022,San Marino,CC-2022,2.0,CC2022SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0453-23r.jpg,Bicentenary of the death of Antonio Canova,55 000 coins
 CC,2022,Slovakia,CC-2022,2.0,CC2022SVK-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0441-23r.jpg,The 300th anniversary of the construction of continental Europe’s first atmospheric steam engine for draining mines,1 000 000 coins
 CC,2022,Slovenia,CC-2022,2.0,CC2022SVN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/SL-slovenia.jpg,The 150th anniversary of the birth of architect Jože Plečnik,1 000 000 coins
-CC,2022,Spain,CC-2022,2.0,CC2022ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0416-23r.jpg,The 5th centennary of the first circumnavigation of the Earth,1 000 000 coins
 CC,2022,Spain,CC-2022,2.0,CC2022ESP-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0415-23r.jpg,UNESCO,1 000 000 coins
-CC,2022,Vatican City,CC-2022,2.0,CC2022VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0407-23r.jpg,The 25th anniversary of the death of Mother Teresa of Calcutta,84 000 coins
+CC,2022,Spain,CC-2022,2.0,CC2022ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0416-23r.jpg,The 5th centennary of the first circumnavigation of the Earth,1 000 000 coins
 CC,2022,Vatican City,CC-2022,2.0,CC2022VAT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0408-23r.jpg,The 125th anniversary of the birth of Pope Paul VI,84 000 coins
+CC,2022,Vatican City,CC-2022,2.0,CC2022VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/0407-23r.jpg,The 25th anniversary of the death of Mother Teresa of Calcutta,84 000 coins
 CC,2022,Austria,CC-2022-ERA,2.0,CC2022AUT-A-ERA-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/Austria1.jpg,35 years of the Erasmus programme,
 CC,2022,Belgium,CC-2022-ERA,2.0,CC2022BEL-A-ERA-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/Belgium1.jpg,35 years of the Erasmus programme,
 CC,2022,Cyprus,CC-2022-ERA,2.0,CC2022CYP-A-ERA-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/Cyprus1.jpg,35 years of the Erasmus programme,
@@ -749,8 +749,8 @@ CC,2022,Portugal,CC-2022-ERA,2.0,CC2022PRT-A-ERA-200,https://www.ecb.europa.eu/e
 CC,2022,Slovakia,CC-2022-ERA,2.0,CC2022SVK-A-ERA-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/Slovakia.jpg,35 years of the Erasmus programme,
 CC,2022,Slovenia,CC-2022-ERA,2.0,CC2022SVN-A-ERA-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/Slovenia.jpg,35 years of the Erasmus programme,
 CC,2022,Spain,CC-2022-ERA,2.0,CC2022ESP-A-ERA-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2022/Spain.jpg,35 years of the Erasmus programme,
-RE,2022,France,FRA-02,2.0,RE2022FRA-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_2euro_2022.jpg,,
 RE,2022,France,FRA-02,1.0,RE2022FRA-A-RE2-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_1euro_2022.jpg,,
+RE,2022,France,FRA-02,2.0,RE2022FRA-A-RE2-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/fr/France_2euro_2022.jpg,,
 CC,2023,Andorra,CC-2023,2.0,CC2023AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/coins1.jpg,Summer solstice fire festivals in the Pyrenees,70 000 coins
 CC,2023,Andorra,CC-2023,2.0,CC2023AND-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/coins2.jpg,30 years of the entry of the Principality of Andorra into the United Nations,70 000 coins
 CC,2023,Belgium,CC-2023,2.0,CC2023BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/coins3.jpg,The 75th anniversary of the national suffrage for women in Belgium,130 000 coins
@@ -776,8 +776,8 @@ CC,2023,Luxembourg,CC-2023,2.0,CC2023LUX-A-CC2-200,https://www.ecb.europa.eu/eur
 CC,2023,Malta,CC-2023,2.0,CC2023MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/IMG_0041_540x540.jpg,The arrival of the French in Malta in 1798,85 500 coins
 CC,2023,Malta,CC-2023,2.0,CC2023MLT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/IMG_0049_540x540.jpg,The 550th anniversary of the birth of Nicolaus Copernicus,95 500 coins
 CC,2023,Monaco,CC-2023,2.0,CC2023MCO-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/coins10.jpg,100th anniversary of the birth of Prince Rainier III,25 000 coins
-CC,2023,Portugal,CC-2023,2.0,CC2023PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/coins11.jpg,Peace,1 015 000 coins
 CC,2023,Portugal,CC-2023,2.0,CC2023PRT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/coins12.jpg,World Youth Day,1 015 000 coins
+CC,2023,Portugal,CC-2023,2.0,CC2023PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/coins11.jpg,Peace,1 015 000 coins
 CC,2023,San Marino,CC-2023,2.0,CC2023SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/IMG_0053_540x540.jpg,The 500th anniversary of the death of Luca Signorelli,56 000 coins
 CC,2023,San Marino,CC-2023,2.0,CC2023SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/IMG_0029.jpg,The 500th anniversary of the death of Perugino,56 000 coins
 CC,2023,Slovakia,CC-2023,2.0,CC2023SVK-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/IMG_0049.jpg,200th anniversary of the start of the horse-drawn express mail coach service between Vienna and Bratislava,1 000 000 coins
@@ -787,26 +787,26 @@ CC,2023,Spain,CC-2023,2.0,CC2023ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coi
 CC,2023,Spain,CC-2023,2.0,CC2023ESP-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/0418-23r.jpg,UNESCO,1 500 000 coins
 CC,2023,Vatican City,CC-2023,2.0,CC2023VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/Vatican_Alessandro_Manzoni1.jpg,The 150th anniversary of the death of Alessandro Manzoni,82 500 coins
 CC,2023,Vatican City,CC-2023,2.0,CC2023VAT-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2023/IMG_0031.jpg,The 5th Centenary of the death of Pietro Perugino,82 500 coins
-RE,2023,Croatia,HRV-01,2.0,RE2023HRV-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_2euro.jpg,,
-RE,2023,Croatia,HRV-01,1.0,RE2023HRV-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_1euro.jpg,,
 RE,2023,Croatia,HRV-01,0.5,RE2023HRV-A-RE1-050,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_50cent.jpg,,
-RE,2023,Croatia,HRV-01,0.2,RE2023HRV-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_20cent.jpg,,
+RE,2023,Croatia,HRV-01,2.0,RE2023HRV-A-RE1-200,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_2euro.jpg,,
 RE,2023,Croatia,HRV-01,0.1,RE2023HRV-A-RE1-010,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_10cent.jpg,,
-RE,2023,Croatia,HRV-01,0.05,RE2023HRV-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_5cent.jpg,,
-RE,2023,Croatia,HRV-01,0.02,RE2023HRV-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_2cent.jpg,,
 RE,2023,Croatia,HRV-01,0.01,RE2023HRV-A-RE1-001,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_1cent.jpg,,
+RE,2023,Croatia,HRV-01,1.0,RE2023HRV-A-RE1-100,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_1euro.jpg,,
+RE,2023,Croatia,HRV-01,0.2,RE2023HRV-A-RE1-020,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_20cent.jpg,,
+RE,2023,Croatia,HRV-01,0.02,RE2023HRV-A-RE1-002,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_2cent.jpg,,
+RE,2023,Croatia,HRV-01,0.05,RE2023HRV-A-RE1-005,https://www.ecb.europa.eu/euro/coins/common/shared/img/hr/Croatia_5cent.jpg,,
 CC,2024,Andorra,CC-2024,2.0,CC2024AND-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/Andorra_01.jpg,100 years of skiing in Andorra,60 000 coins
 CC,2024,Andorra,CC-2024,2.0,CC2024AND-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/Andorra_02.jpg,UCI Mountain Bike World Championships 2024,60 000 coins
-CC,2024,Belgium,CC-2024,2.0,CC2024BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0032-540x540_2.jpg,Fight against cancer in Belgium,2 130 000 coins
 CC,2024,Belgium,CC-2024,2.0,CC2024BEL-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/2024_comm_Belgium2.jpg,The Belgian presidency of the Council of the EU,2 128 500 coins
+CC,2024,Belgium,CC-2024,2.0,CC2024BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0032-540x540_2.jpg,Fight against cancer in Belgium,2 130 000 coins
 CC,2024,Croatia,CC-2024,2.0,CC2024HRV-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/Croatia.jpg,The 500th anniversary of Marko Marulić’s enduring legacy,200 000 coins
 CC,2024,Croatia,CC-2024,2.0,CC2024HRV-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/Croatia1.jpg,Varaždin (Stari grad Varaždin – the Old Town of Varaždin),200 000 coins
 CC,2024,Cyprus,CC-2024,2.0,CC2024CYP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/Cyprus.jpg,20 years since the Accession of Cyprus to the European Union,7 000 coins
 CC,2024,Estonia,CC-2024,2.0,CC2024EST-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0060.jpg,The cornflower – Estonian national flower,1 000 000 coins
-CC,2024,Finland,CC-2024,2.0,CC2024FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/Finland1.jpg,Finnish Architecture,400 000 coins
 CC,2024,Finland,CC-2024,2.0,CC2024FIN-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0036.jpg,Elections and democracy,400 000 coins
-CC,2024,France,CC-2024,2.0,CC2024FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0044-540x540_2.jpg,The Eiffel Tower,24 000 000 coins
+CC,2024,Finland,CC-2024,2.0,CC2024FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/Finland1.jpg,Finnish Architecture,400 000 coins
 CC,2024,France,CC-2024,2.0,CC2024FRA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/2024_comm_France1.JPG,Jeux Olympiques 2024 - Lutte,510 000 coins
+CC,2024,France,CC-2024,2.0,CC2024FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0044-540x540_2.jpg,The Eiffel Tower,24 000 000 coins
 CC,2024,Germany,CC-2024,2.0,CC2024DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0112.jpg,"The 175th anniversary of the Frankfurt Constitution (also known as the St Paul’s Church Constitution, which was the first attempt to create a unified German nation state.)",30 000 000 coins
 CC,2024,Germany,CC-2024,2.0,CC2024DEU-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0080-540x540_1.jpg,Mecklenburg-Vorpommern,30 000 000 coins
 CC,2024,Greece,CC-2024,2.0,CC2024GRC-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/Greece_021.jpg,50 years from the restoration of democracy in Greece,750 000 coins
@@ -826,8 +826,22 @@ CC,2024,San Marino,CC-2024,2.0,CC2024SMR-A-CC1-200,https://www.ecb.europa.eu/eur
 CC,2024,San Marino,CC-2024,2.0,CC2024SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0081_1.jpg,The 50th anniversary of the Declaration of Citizens' Rights and the Fundamental Principles of San Marino,56 000 coins
 CC,2024,Slovakia,CC-2024,2.0,CC2024SVK-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/Slovakia1.jpg,100th anniversary of the Košice Peace Marathon,1 000 000 coins
 CC,2024,Slovenia,CC-2024,2.0,CC2024SVN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/Slovenia.jpg,250 years of National and University Library (Narodna in univerzitetna knjižnica),1 000 000 coins
-CC,2024,Spain,CC-2024,2.0,CC2024ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0083.jpg,200 years since the creation of the National Police as a state security corp,1 500 000 coins
 CC,2024,Spain,CC-2024,2.0,CC2024ESP-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0087_1.jpg,"The recognition of Seville (Archivo de Indias, Real Alcazar de Sevilla y Catedral de Sevilla) as a UNESCO World Heritage Site",1 500 000 coins
+CC,2024,Spain,CC-2024,2.0,CC2024ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0083.jpg,200 years since the creation of the National Police as a state security corp,1 500 000 coins
 CC,2024,Vatican City,CC-2024,2.0,CC2024VAT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2024/IMG_0056-540x540.jpg,The 750th anniversary of the death of St. Thomas Aquinas,82 900 coins
 CC,2025,Belgium,CC-2025,2.0,CC2025BEL-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/Belgium.jpg,National Lottery of Belgium,1 000 000 coins
+CC,2025,Finland,CC-2025,2.0,CC2025FIN-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/Finland.jpg,Finnish state visits – diplomacy and foreign policy,204 000 coins
+CC,2025,France,CC-2025,2.0,CC2025FRA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/IMG_0147_540x540.jpg,Louvre,315 000 coins
+CC,2025,Germany,CC-2025,2.0,CC2025DEU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/Germany540x540.jpg,Federal state (Land) of Saarland,30 000 000 coins
+CC,2025,Italy,CC-2025,2.0,CC2025ITA-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/Italy_540x540.jpg,Jubilee 2025,3 000 000 coins
+CC,2025,Italy,CC-2025,2.0,CC2025ITA-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/Italy.jpg,Amerigo Vespucci Tour Mondiale 2023-2025,3 000 000 coins
+CC,2025,Lithuania,CC-2025,2.0,CC2025LTU-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/IMG_0131_540x540.jpg,Defence,500 000 coins
+CC,2025,Luxembourg,CC-2025,2.0,CC2025LUX-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/IMG_0141_540x540.jpg,The 75th anniversary of the Robert Schuman declaration of 9 May 1950,200 000 coins
+CC,2025,Luxembourg,CC-2025,2.0,CC2025LUX-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/IMG_0135_540x540.jpg,The 25th anniversary of the accession to the throne of Grand Duke Henri,200 000 coins
+CC,2025,Malta,CC-2025,2.0,CC2025MLT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/Malta.jpg,Maltese ox (il-gendus Malti),145 000 coins
+CC,2025,Monaco,CC-2025,2.0,CC2025MCO-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/Monaco.jpg,Comté de Carladès,15 000 coins
+CC,2025,Portugal,CC-2025,2.0,CC2025PRT-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/Portugal.jpg,World scouting,"above, the phrase “Sempre alerta. Sempre pronto” —the two Portuguese translations of Baden-Powell’s motto ‘Be Prepared,’ used by the two major Scouting organizations in Portugal; to the left, the name of the designer; below, the era and issuing country, “Portugal” ; and to the right, the national coat of arms of Portugal, followed by the mintmark “Casa da Moeda”. The coin’s outer ring bears the 12 stars of the European flag."
+CC,2025,San Marino,CC-2025,2.0,CC2025SMR-A-CC2-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/IMG_0159_540x540.jpg,Giubileo Anno Santo 2025 - Pellegrini di Speranza,56 000 coins
+CC,2025,San Marino,CC-2025,2.0,CC2025SMR-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/San%20Marino.jpg,The 550th anniversary of the birth of Michelangelo,56 000 coins
 CC,2025,Slovakia,CC-2025,2.0,CC2025SVK-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/Slovakia.jpg,100th anniversary of the first international sports tournament in the territory of the Slovak Republic – the Ice Hockey European Championship,1 000 000 coins
+CC,2025,Spain,CC-2025,2.0,CC2025ESP-A-CC1-200,https://www.ecb.europa.eu/euro/coins/comm/html/comm_2025/Spain_540x540.jpg,The recognition of Salamanca as a UNESCO World Heritage Site,2 000 000 coins
