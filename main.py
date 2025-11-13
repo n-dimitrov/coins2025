@@ -115,8 +115,41 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Mount static files with cache control
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+import time
+
+class SmartCacheStaticFiles(StaticFiles):
+    """Smart cache control based on environment."""
+    async def get_response(self, path: str, scope) -> Response:
+        response = await super().get_response(path, scope)
+        if isinstance(response, FileResponse) and path.endswith(('.css', '.js')):
+
+            if settings.is_development:
+                # Development: Aggressive cache-busting for debugging
+                response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+                response.headers["Pragma"] = "no-cache"
+                response.headers["ETag"] = f'"dev-{int(time.time())}"'
+            else:
+                # Production: Smart caching with validation
+                try:
+                    # Use file modification time as ETag for proper cache validation
+                    file_path = os.path.join("static", path)
+                    if os.path.exists(file_path):
+                        mtime = int(os.path.getmtime(file_path))
+                        response.headers["Cache-Control"] = "public, max-age=3600, must-revalidate"
+                        response.headers["ETag"] = f'"{mtime}"'
+                    else:
+                        # Fallback for missing files
+                        response.headers["Cache-Control"] = "no-cache"
+                except Exception:
+                    # Fallback on error
+                    response.headers["Cache-Control"] = "no-cache"
+
+        return response
+
+app.mount("/static", SmartCacheStaticFiles(directory="static"), name="static")
 
 # Include routers based on configuration
 logger.info("Configuring application routes...")
@@ -149,6 +182,42 @@ logger.info(f"Admin endpoints: {'Enabled' if settings.enable_admin_endpoints els
 logger.info(f"Ownership endpoints: {'Enabled' if settings.enable_ownership_endpoints else 'Disabled'}")
 logger.info(f"Admin authentication: {'Required' if settings.require_admin_auth else 'Optional'}")
 logger.info(f"Allowed admin IPs: {settings.admin_allowed_ips}")
+
+# Temporary debug endpoint for static file verification
+@app.get("/debug/static-files")
+async def debug_static_files():
+    """Debug endpoint to check static file status."""
+    import hashlib
+    from datetime import datetime
+
+    def file_info(filepath):
+        if not os.path.exists(filepath):
+            return {"exists": False}
+
+        stat = os.stat(filepath)
+        with open(filepath, 'rb') as f:
+            content = f.read()
+            content_hash = hashlib.md5(content).hexdigest()
+
+        with open(filepath, 'r', encoding='utf-8') as f:
+            text = f.read()
+            has_carousel = '.activity-carousel' in text
+
+        return {
+            "exists": True,
+            "size": stat.st_size,
+            "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+            "md5": content_hash,
+            "has_carousel_code": has_carousel
+        }
+
+    return {
+        "server_time": datetime.now().isoformat(),
+        "css_file": file_info("static/css/style.css"),
+        "js_file": file_info("static/js/app.js"),
+        "expected_css_size": 68255,
+        "expected_css_hash": "8b0fd90e4fb1c511f0f703289d18658c"
+    }
 
 if __name__ == "__main__":
     logger.info(f"Starting server on {settings.host}:{settings.port}")
