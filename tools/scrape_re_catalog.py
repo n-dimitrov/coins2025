@@ -16,6 +16,7 @@ urls = [
     "https://www.ecb.europa.eu/euro/coins/html/ad.en.html", # Andorra
     "https://www.ecb.europa.eu/euro/coins/html/at.en.html", # Austria
     "https://www.ecb.europa.eu/euro/coins/html/be.en.html", # Belgium
+    "https://www.ecb.europa.eu/euro/coins/html/bg.en.html", # Bulgaria
     "https://www.ecb.europa.eu/euro/coins/html/hr.en.html", # Croatia
     "https://www.ecb.europa.eu/euro/coins/html/cy.en.html", # Cyprus
     "https://www.ecb.europa.eu/euro/coins/html/et.en.html", # Estonia
@@ -40,8 +41,8 @@ urls = [
 ]
 
 
-country = "Andorra"
-url = urls[0]
+country = "Bulgaria"
+url = urls[3]
 
 print("Country: ", country , "Loading URL: ", url)
 driver.get(url)
