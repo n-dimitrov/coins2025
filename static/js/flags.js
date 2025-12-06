@@ -7,7 +7,8 @@
         'Austria': '🇦🇹', 'Netherlands': '🇳🇱', 'Portugal': '🇵🇹', 'Greece': '🇬🇷',
         'Ireland': '🇮🇪', 'Slovenia': '🇸🇮', 'Slovakia': '🇸🇰', 'Estonia': '🇪🇪',
         'Latvia': '🇱🇻', 'Lithuania': '🇱🇹', 'Malta': '🇲🇹', 'Cyprus': '🇨🇾',
-        'Monaco': '🇲🇨', 'Vatican City': '🇻🇦', 'San Marino': '🇸🇲', 'Andorra': '🇦🇩'
+        'Monaco': '🇲🇨', 'Vatican City': '🇻🇦', 'San Marino': '🇸🇲', 'Andorra': '🇦🇩',
+        'Bulgaria': '🇧🇬'
     };
 
     function getCountryFlag(country) {

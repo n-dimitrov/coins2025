@@ -78,6 +78,9 @@ GOOGLE_APPLICATION_CREDENTIALS=./credentials/service_account.json
 # BigQuery Configuration
 BQ_DATASET=db
 BQ_TABLE=catalog
+BQ_HISTORY_TABLE=history
+BQ_GROUPS_TABLE=groups
+BQ_GROUP_USERS_TABLE=group_users
 
 # Application Settings
 APP_ENV=development
@@ -87,8 +90,17 @@ CACHE_DURATION_MINUTES=5
 # Server Configuration
 PORT=8000
 HOST=0.0.0.0
+
+# Security Settings (Development - Permissive)
+ADMIN_API_KEY=dev-admin-key-change-in-production
+ADMIN_ALLOWED_IPS=127.0.0.1,::1,0.0.0.0
+ENABLE_ADMIN_ENDPOINTS=true
+ENABLE_OWNERSHIP_ENDPOINTS=true
+ENABLE_DOCS=true
+REQUIRE_ADMIN_AUTH=false
+STRICT_CORS=false
 EOF
-    print_success "Default .env file created"
+    print_success "Default .env file created with admin endpoints enabled"
 else
     print_success ".env file exists"
 fi
@@ -155,6 +167,7 @@ TEMPLATE_FILES=(
     "templates/base.html"
     "templates/index.html"
     "templates/catalog.html"
+    "templates/admin.html"
     "templates/404.html"
     "templates/error.html"
 )
@@ -173,6 +186,7 @@ echo "======================================"
 echo ""
 print_status "Server will be available at:"
 echo "  📱 Application: http://localhost:8000"
+echo "  🔧 Admin Panel: http://localhost:8000/Admin"
 echo "  📚 API Docs:    http://localhost:8000/api/docs"
 echo "  🔍 Health:      http://localhost:8000/api/health"
 echo ""
