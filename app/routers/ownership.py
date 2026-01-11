@@ -153,37 +153,6 @@ async def get_coin_owners(
             detail="Failed to get coin owners"
         )
 
-@router.post("/hard-delete", response_model=OwnershipResponse, status_code=status.HTTP_200_OK)
-async def hard_delete_coin_ownership(
-    ownership: OwnershipRemove,
-    bigquery_service = Depends(get_database_service_dep),
-    _auth: bool = ownership_required
-):
-    """Permanently delete ownership record from database (hard delete)."""
-    try:
-        await bigquery_service.hard_delete_coin_ownership(
-            name=ownership.name,
-            coin_id=ownership.coin_id
-        )
-
-        logger.info(f"Hard deleted ownership: {ownership.name} -> {ownership.coin_id}")
-        return OwnershipResponse(
-            message="Ownership record permanently deleted",
-            success=True
-        )
-
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
-    except Exception as e:
-        logger.error(f"Error hard deleting ownership: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to hard delete ownership"
-        )
-
 @router.get("/user/{user_name}/history")
 async def get_user_ownership_history(
     user_name: str,

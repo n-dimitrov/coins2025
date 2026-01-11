@@ -450,76 +450,11 @@ class NeonService:
         return record_id
 
     async def remove_coin_ownership(self, name: str, coin_id: str, removal_date: datetime, created_by: str = None) -> str:
-        """Remove coin ownership by adding a removal record."""
-        record_id = str(uuid.uuid4())
-        current_time = datetime.now()
-
-        # Lightweight existence check
-        check_query = """
-        SELECT is_active
-        FROM history
-        WHERE coin_id = %(coin_id)s AND name = %(name)s
-        ORDER BY created_at DESC, date DESC
-        LIMIT 1
-        """
-
-        start_check = datetime.now()
-        latest = await self._get_cached_or_query(check_query, {'coin_id': coin_id, 'name': name})
-        check_duration = (datetime.now() - start_check).total_seconds()
-        logger.info(f"Lightweight ownership existence check took {check_duration:.3f}s for {name}/{coin_id}")
-
-        if not latest:
-            raise ValueError(f"User {name} does not currently own coin {coin_id}")
-
-        is_active = latest[0].get('is_active')
-        is_active_flag = bool(is_active)
-
-        if not is_active_flag:
-            raise ValueError(f"User {name} does not currently own coin {coin_id}")
-
-        # Insert removal record
-        insert_query = """
-        INSERT INTO history (id, name, coin_id, date, created_at, created_by, is_active)
-        VALUES (%(id)s, %(name)s, %(coin_id)s, %(date)s, %(created_at)s, %(created_by)s, false)
-        """
-
-        params = {
-            'id': record_id,
-            'name': name,
-            'coin_id': coin_id,
-            'date': removal_date,
-            'created_at': current_time,
-            'created_by': created_by or 'api'
-        }
-
-        start_insert = datetime.now()
-        try:
-            async with await self._get_connection() as conn:
-                async with conn.cursor() as cur:
-                    await cur.execute(insert_query, params)
-            insert_duration = (datetime.now() - start_insert).total_seconds()
-            logger.info(f"Removal insert succeeded in {insert_duration:.3f}s for {record_id}")
-        except Exception as e:
-            logger.error(f"Removal insert failed: {str(e)}")
-            raise
-
-        # Invalidate related cache
-        start_invalidate = datetime.now()
-        await self._invalidate_ownership_cache(coin_id=coin_id, user_name=name)
-        invalidate_duration = (datetime.now() - start_invalidate).total_seconds()
-        logger.info(f"Cache invalidation took {invalidate_duration:.3f}s for {name}/{coin_id}")
-
-        total_duration = (datetime.now() - start_check).total_seconds()
-        logger.info(f"Total remove_coin_ownership duration: {total_duration:.3f}s for {name}/{coin_id}")
-
-        return record_id
-
-    async def hard_delete_coin_ownership(self, name: str, coin_id: str) -> bool:
         """Permanently delete ownership record from database (hard delete)."""
         try:
             async with await self._get_connection() as conn:
                 async with conn.cursor() as cur:
-                    # Check if record exists
+                    # Check if any records exist for this user and coin
                     check_query = """
                     SELECT id FROM history
                     WHERE name = %(name)s AND coin_id = %(coin_id)s
@@ -529,7 +464,7 @@ class NeonService:
                     result = await cur.fetchone()
 
                     if not result:
-                        raise ValueError(f"No ownership record found for {name}/{coin_id}")
+                        raise ValueError(f"User {name} does not own coin {coin_id}")
 
                     # Delete all records for this user and coin
                     delete_query = """
@@ -540,14 +475,14 @@ class NeonService:
 
             # Invalidate cache
             await self._invalidate_ownership_cache(coin_id=coin_id, user_name=name)
-            logger.info(f"Hard deleted all records for {name}/{coin_id}")
-            return True
+            logger.info(f"Permanently deleted ownership: {name} -> {coin_id}")
+            return ""
 
         except ValueError as e:
-            logger.warning(f"Hard delete failed: {str(e)}")
+            logger.warning(f"Remove ownership failed: {str(e)}")
             raise
         except Exception as e:
-            logger.error(f"Hard delete error: {str(e)}")
+            logger.error(f"Remove ownership error: {str(e)}")
             raise
 
     async def get_current_coin_ownership(self, coin_id: str, name: str = None) -> List[Dict[str, Any]]:
