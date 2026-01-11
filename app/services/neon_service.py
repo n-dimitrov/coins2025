@@ -548,7 +548,9 @@ class NeonService:
                (group_id and str(group_id) in cache_key) or \
                'ownership' in cache_key.lower() or \
                'coins_with_ownership' in cache_key.lower() or \
-               'member' in cache_key.lower():  # Invalidate group member stats too
+               'member' in cache_key.lower() or \
+               'history' in cache_key.lower() or \
+               'activity' in cache_key.lower():  # Invalidate activities too
                 keys_to_remove.append(cache_key)
 
         for key in keys_to_remove:
