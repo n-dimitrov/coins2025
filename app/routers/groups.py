@@ -3,25 +3,25 @@ from typing import List, Optional
 import logging
 
 from app.models.group import (
-    GroupCreate, GroupUpdate, GroupResponse, 
+    GroupCreate, GroupUpdate, GroupResponse,
     GroupUserAdd, GroupUserUpdate, GroupUserResponse,
     GroupListResponse, GroupUsersListResponse, ApiResponse
 )
-from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
+from app.services.neon_service import get_neon_service
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/groups", tags=["groups"])
 
-# Dependency to get BigQuery service (cached provider)
-def get_bigquery_service() -> BigQueryService:
-    return get_bq_provider()
+# Dependency to get Neon database service (cached provider)
+def get_database_service_dep():
+    return get_neon_service()
 
 # Group management endpoints
 @router.post("/", response_model=ApiResponse, status_code=status.HTTP_201_CREATED)
 async def create_group(
     group: GroupCreate,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service = Depends(get_database_service_dep)
 ):
     """Create a new group."""
     try:
@@ -48,7 +48,7 @@ async def create_group(
 
 @router.get("/", response_model=GroupListResponse)
 async def list_groups(
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service = Depends(get_database_service_dep)
 ):
     """List all active groups."""
     try:
@@ -69,7 +69,7 @@ async def list_groups(
 @router.get("/{group_key}", response_model=GroupResponse)
 async def get_group(
     group_key: str,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service = Depends(get_database_service_dep)
 ):
     """Get group details by group key."""
     try:
@@ -94,7 +94,7 @@ async def get_group(
 async def update_group(
     group_key: str,
     group: GroupUpdate,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service = Depends(get_database_service_dep)
 ):
     """Update group information."""
     try:
@@ -133,7 +133,7 @@ async def update_group(
 @router.delete("/{group_key}", response_model=ApiResponse)
 async def delete_group(
     group_key: str,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service = Depends(get_database_service_dep)
 ):
     """Delete a group (soft delete)."""
     try:
@@ -174,7 +174,7 @@ async def delete_group(
 async def add_user_to_group(
     group_key: str,
     user: GroupUserAdd,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service = Depends(get_database_service_dep)
 ):
     """Add a user to a group."""
     try:
@@ -215,7 +215,7 @@ async def add_user_to_group(
 @router.get("/{group_key}/users", response_model=GroupUsersListResponse)
 async def get_group_users(
     group_key: str,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service = Depends(get_database_service_dep)
 ):
     """Get all users in a group."""
     try:
@@ -250,7 +250,7 @@ async def update_group_user(
     group_key: str,
     user_name: str,
     user: GroupUserUpdate,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service = Depends(get_database_service_dep)
 ):
     """Update a user in a group."""
     try:
@@ -291,7 +291,7 @@ async def update_group_user(
 async def remove_user_from_group(
     group_key: str,
     user_name: str,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service = Depends(get_database_service_dep)
 ):
     """Remove a user from a group."""
     try:

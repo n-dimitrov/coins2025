@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # My EuroCoins - Local Development and Testing Script
-# This script sets up and runs the application locally for testing
+# This script sets up and runs the application locally with Neon PostgreSQL
 
 set -e  # Exit on any error
 
-echo "🪙 My EuroCoins - Local Development Setup"
-echo "========================================"
+echo "🪙 My EuroCoins - Local Development Setup (Neon PostgreSQL)"
+echo "==========================================================="
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -69,48 +69,31 @@ print_success "Dependencies installed"
 
 # Check environment file
 if [[ ! -f ".env" ]]; then
-    print_warning ".env file not found. Creating default .env file..."
-    cat > .env << EOF
-# Google Cloud Configuration
-GOOGLE_CLOUD_PROJECT=coins2025
-GOOGLE_APPLICATION_CREDENTIALS=./credentials/service_account.json
-
-# BigQuery Configuration
-BQ_DATASET=db
-BQ_TABLE=catalog
-BQ_HISTORY_TABLE=history
-BQ_GROUPS_TABLE=groups
-BQ_GROUP_USERS_TABLE=group_users
-
-# Application Settings
-APP_ENV=development
-LOG_LEVEL=INFO
-CACHE_DURATION_MINUTES=5
-
-# Server Configuration
-PORT=8000
-HOST=0.0.0.0
-
-# Security Settings (Development - Permissive)
-ADMIN_API_KEY=dev-admin-key-change-in-production
-ADMIN_ALLOWED_IPS=127.0.0.1,::1,0.0.0.0
-ENABLE_ADMIN_ENDPOINTS=true
-ENABLE_OWNERSHIP_ENDPOINTS=true
-ENABLE_DOCS=true
-REQUIRE_ADMIN_AUTH=false
-STRICT_CORS=false
-EOF
-    print_success "Default .env file created with admin endpoints enabled"
+    print_error ".env file not found!"
+    print_error "Please create .env file with your Neon connection string:"
+    print_error ""
+    print_error "DATABASE_TYPE=neon"
+    print_error "DATABASE_URL=postgresql://user:password@host/database"
+    print_error ""
+    print_error "Example: postgresql://neondb_owner:password@ep-xyz.us-east-1.neon.tech/neondb"
+    exit 1
 else
     print_success ".env file exists"
-fi
 
-# Check service account credentials
-if [[ ! -f "credentials/service_account.json" ]]; then
-    print_warning "Google Cloud service account credentials not found at credentials/service_account.json"
-    print_warning "BigQuery functionality may not work without proper credentials"
-else
-    print_success "Google Cloud credentials found"
+    # Check if DATABASE_URL is set
+    if grep -q "DATABASE_URL=" .env; then
+        print_success "DATABASE_URL is configured"
+    else
+        print_error "DATABASE_URL not found in .env file"
+        exit 1
+    fi
+
+    # Check if DATABASE_TYPE is set to neon
+    if grep -q "DATABASE_TYPE=neon" .env; then
+        print_success "DATABASE_TYPE is set to neon"
+    else
+        print_warning "DATABASE_TYPE might not be set to neon"
+    fi
 fi
 
 # Test imports
@@ -118,8 +101,7 @@ print_status "Testing Python imports..."
 python3 -c "
 import fastapi
 import uvicorn
-import jinja2
-from google.cloud import bigquery
+import psycopg
 print('✅ All required packages imported successfully')
 " || {
     print_error "Failed to import required packages"
@@ -128,22 +110,31 @@ print('✅ All required packages imported successfully')
 
 print_success "All imports successful"
 
-# Test BigQuery connection (if credentials exist)
-if [[ -f "credentials/service_account.json" ]]; then
-    print_status "Testing BigQuery connection..."
-    python3 -c "
+# Test Neon connection
+print_status "Testing Neon database connection..."
+python3 -c "
 import os
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './credentials/service_account.json'
+from dotenv import load_dotenv
+
+load_dotenv()
+db_url = os.getenv('DATABASE_URL')
+
+if not db_url:
+    print('❌ DATABASE_URL not found in .env')
+    exit(1)
+
 try:
-    from google.cloud import bigquery
-    client = bigquery.Client(project='coins2025')
-    query = 'SELECT 1 as test'
-    result = list(client.query(query).result())
-    print('✅ BigQuery connection successful')
+    import psycopg
+    conn = psycopg.connect(db_url)
+    print('✅ Neon connection successful')
+    conn.close()
 except Exception as e:
-    print(f'⚠️  BigQuery connection failed: {e}')
-" || print_warning "BigQuery test failed - continuing anyway"
-fi
+    print(f'❌ Neon connection failed: {e}')
+    exit(1)
+" || {
+    print_error "Neon connection test failed"
+    exit 1
+}
 
 # Check static files
 print_status "Checking static files..."
@@ -181,18 +172,19 @@ for file in "${TEMPLATE_FILES[@]}"; do
 done
 
 echo ""
-echo "🚀 Starting FastAPI Development Server"
-echo "======================================"
+echo "🚀 Starting FastAPI Development Server (Neon PostgreSQL)"
+echo "========================================================"
 echo ""
 print_status "Server will be available at:"
-echo "  📱 Application: http://localhost:8000"
-echo "  🔧 Admin Panel: http://localhost:8000/Admin"
-echo "  📚 API Docs:    http://localhost:8000/api/docs"
-echo "  🔍 Health:      http://localhost:8000/api/health"
+echo "  📱 Application: http://localhost:8080"
+echo "  🔧 Catalog:     http://localhost:8080/catalog"
+echo "  🔍 Health:      http://localhost:8080/api/health"
 echo ""
+print_status "Database: Neon PostgreSQL"
+print_status "Environment: development"
 print_status "Press Ctrl+C to stop the server"
 echo ""
 
 # Run the FastAPI application
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
-exec uvicorn main:app --host 0.0.0.0 --port 8000 --reload --log-level info
+exec python main.py

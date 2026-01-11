@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, FileResponse
-from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
+from app.services.neon_service import get_neon_service
 from app.services.group_service import GroupService
 from app.config import settings
 import logging
@@ -11,7 +11,7 @@ import random
 logger = logging.getLogger(__name__)
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
-bigquery_service = get_bq_provider()
+bigquery_service = get_neon_service()
 group_service = GroupService()
 
 @router.get("/", response_class=HTMLResponse)

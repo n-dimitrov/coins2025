@@ -4,7 +4,7 @@ from datetime import datetime
 import logging
 
 from app.models.ownership import OwnershipAdd, OwnershipRemove, OwnershipRecord, OwnershipResponse
-from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
+from app.services.neon_service import get_neon_service
 from app.services.group_service import GroupService
 from app.security import get_ownership_dependency
 from app.config import settings
@@ -16,9 +16,9 @@ router = APIRouter(prefix="/api/ownership", tags=["ownership"])
 # Ownership authentication dependency
 ownership_required = get_ownership_dependency()
 
-# Dependency to get BigQuery service (use cached provider)
-def get_bigquery_service() -> BigQueryService:
-    return get_bq_provider()
+# Dependency to get database service
+def get_database_service_dep():
+    return get_neon_service()
 
 def get_group_service() -> GroupService:
     return GroupService()
@@ -26,15 +26,15 @@ def get_group_service() -> GroupService:
 @router.post("/add", response_model=OwnershipResponse, status_code=status.HTTP_201_CREATED)
 async def add_coin_ownership(
     ownership: OwnershipAdd,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service),
+    bigquery_service = Depends(get_database_service_dep),
     _auth: bool = ownership_required
 ):
     """Add coin to user's collection."""
     try:
         # Validate coin exists in catalog
-        coin_query = f"""
-        SELECT coin_id FROM `{bigquery_service.client.project}.{bigquery_service.dataset_id}.{bigquery_service.table_id}`
-        WHERE coin_id = @coin_id
+        coin_query = """
+        SELECT coin_id FROM catalog
+        WHERE coin_id = %(coin_id)s
         """
         coin_results = await bigquery_service._get_cached_or_query(coin_query, {'coin_id': ownership.coin_id})
         if not coin_results:
@@ -73,7 +73,7 @@ async def add_coin_ownership(
 @router.post("/remove", response_model=OwnershipResponse, status_code=status.HTTP_200_OK)
 async def remove_coin_ownership(
     ownership: OwnershipRemove,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service),
+    bigquery_service = Depends(get_database_service_dep),
     _auth: bool = ownership_required
 ):
     """Remove coin from user's collection."""
@@ -109,7 +109,7 @@ async def remove_coin_ownership(
 async def get_user_coins(
     user_name: str,
     group_id: Optional[str] = None,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service = Depends(get_database_service_dep)
 ):
     """Get all coins currently owned by a user."""
     try:
@@ -131,7 +131,7 @@ async def get_user_coins(
 async def get_coin_owners(
     coin_id: str,
     group_id: Optional[str] = None,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service = Depends(get_database_service_dep)
 ):
     """Get current owners of a specific coin."""
     try:
@@ -153,25 +153,56 @@ async def get_coin_owners(
             detail="Failed to get coin owners"
         )
 
+@router.post("/hard-delete", response_model=OwnershipResponse, status_code=status.HTTP_200_OK)
+async def hard_delete_coin_ownership(
+    ownership: OwnershipRemove,
+    bigquery_service = Depends(get_database_service_dep),
+    _auth: bool = ownership_required
+):
+    """Permanently delete ownership record from database (hard delete)."""
+    try:
+        await bigquery_service.hard_delete_coin_ownership(
+            name=ownership.name,
+            coin_id=ownership.coin_id
+        )
+
+        logger.info(f"Hard deleted ownership: {ownership.name} -> {ownership.coin_id}")
+        return OwnershipResponse(
+            message="Ownership record permanently deleted",
+            success=True
+        )
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        logger.error(f"Error hard deleting ownership: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to hard delete ownership"
+        )
+
 @router.get("/user/{user_name}/history")
 async def get_user_ownership_history(
     user_name: str,
     group_id: Optional[str] = None,
-    bigquery_service: BigQueryService = Depends(get_bigquery_service)
+    bigquery_service = Depends(get_database_service_dep)
 ):
     """Get complete ownership history for a user (including removed coins)."""
     try:
         group_join = ""
         group_where = ""
         params = {'name': user_name}
-        
+
         if group_id:
-            group_join = f"JOIN `{bigquery_service.client.project}.{bigquery_service.dataset_id}.{settings.bq_group_users_table}` gu ON h.name = gu.user"
-            group_where = "AND gu.group_id = @group_id"
+            group_join = "JOIN group_users gu ON LOWER(TRIM(h.name)) = LOWER(TRIM(gu.name))"
+            group_where = "AND gu.group_id = %(group_id)s"
             params['group_id'] = group_id
-            
+
         query = f"""
-        SELECT 
+        SELECT
             h.id,
             h.name,
             h.coin_id,
@@ -184,16 +215,16 @@ async def get_user_ownership_history(
             c.country,
             c.series,
             c.value
-        FROM `{bigquery_service.client.project}.{bigquery_service.dataset_id}.{settings.bq_history_table}` h
+        FROM history h
         {group_join}
-        JOIN `{bigquery_service.client.project}.{bigquery_service.dataset_id}.{bigquery_service.table_id}` c 
+        JOIN catalog c
             ON h.coin_id = c.coin_id
-        WHERE h.name = @name {group_where}
+        WHERE LOWER(TRIM(h.name)) = LOWER(TRIM(%(name)s)) {group_where}
         ORDER BY h.created_at DESC, h.date DESC
         """
-        
+
         history = await bigquery_service._get_cached_or_query(query, params)
-        
+
         return {
             "user": user_name,
             "group_id": group_id,

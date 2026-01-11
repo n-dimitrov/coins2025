@@ -5,7 +5,7 @@ import csv
 import io
 import logging
 from datetime import datetime
-from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
+from app.services.neon_service import get_neon_service
 from app.services.history_service import HistoryService
 from app.models.coin import Coin
 from app.models.history import History, HistoryCreate
@@ -13,12 +13,11 @@ from app.security import get_admin_dependency
 import pandas as pd
 import uuid
 from datetime import timezone
-from google.cloud import bigquery
 from app.config import settings
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/admin")
-bigquery_service = get_bq_provider()
+bigquery_service = get_neon_service()
 history_service = HistoryService()
 
 # Admin authentication dependency

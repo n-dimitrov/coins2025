@@ -32,13 +32,16 @@ for warning in security_warnings:
     else:
         logger.warning(warning)
 
-# Initialize BigQueryService before importing routers so modules that lazily
-# request the service (via get_bigquery_service) will find it initialized.
-from app.services.bigquery_service import BigQueryService, init_bigquery_service
+# Initialize Neon PostgreSQL service before importing routers
+if not settings.database_url:
+    logger.error("DATABASE_URL environment variable not set for Neon database")
+    raise ValueError("DATABASE_URL is required when using Neon database")
 
-# Create and initialize the service instance for the process
-_bq_instance = BigQueryService()
-init_bigquery_service(_bq_instance)
+from app.services.neon_service import NeonService, init_neon_service
+
+_db_instance = NeonService()
+init_neon_service(_db_instance)
+logger.info("NeonService initialized successfully")
 
 # Import routers
 from app.routers import coins, health, pages, ownership, groups, admin
@@ -154,13 +157,12 @@ app.mount("/static", SmartCacheStaticFiles(directory="static"), name="static")
 # Include routers based on configuration
 logger.info("Configuring application routes...")
 
-# Always include safe, read-only endpoints
+# Always include safe, read-only endpoints (API routes first - must be before pages router)
 app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(coins.router, prefix="/api", tags=["coins"])
-app.include_router(pages.router, tags=["pages"])
 
 # Groups router for basic group information (read operations are safe)
-app.include_router(groups.router, tags=["groups"])
+app.include_router(groups.router, prefix="/api", tags=["groups"])
 
 # Conditionally include admin endpoints
 if settings.enable_admin_endpoints:
@@ -172,9 +174,12 @@ else:
 # Conditionally include ownership endpoints
 if settings.enable_ownership_endpoints:
     logger.info("Including ownership endpoints (authentication required)")
-    app.include_router(ownership.router, tags=["ownership"])
+    app.include_router(ownership.router, tags=["ownership"])  # ownership.router already has /api/ownership prefix
 else:
     logger.info("Ownership endpoints disabled")
+
+# Pages router MUST be included LAST because it has a catch-all /{group_name} pattern
+app.include_router(pages.router, tags=["pages"])
 
 # Log final configuration
 logger.info(f"API Documentation: {'Enabled' if settings.enable_docs else 'Disabled'}")

@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
+from app.services.neon_service import get_neon_service
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,21 +15,21 @@ async def readiness_check():
     """Readiness check - this can be more complex."""
     return {"status": "ready", "service": "My EuroCoins API"}
 
-@router.get("/health/bigquery")
-async def bigquery_health():
-    """Check BigQuery connection."""
+@router.get("/health/database")
+async def database_health():
+    """Check Neon PostgreSQL connection."""
     try:
-        service = get_bq_provider()
+        service = get_neon_service()
         stats = await service.get_stats()
         return {
             "status": "healthy",
-            "bigquery": "connected",
+            "database": "connected",
             "total_coins": stats.get("total_coins", 0)
         }
     except Exception as e:
-        logger.error(f"BigQuery health check failed: {str(e)}")
+        logger.error(f"Database health check failed: {str(e)}")
         return {
             "status": "unhealthy",
-            "bigquery": "disconnected",
+            "database": "disconnected",
             "error": str(e)
         }

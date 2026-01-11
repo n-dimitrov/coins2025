@@ -1,22 +1,36 @@
 from typing import Optional, Dict, Any, List
 import logging
-from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
+from uuid import UUID
+from datetime import datetime
+from app.services.neon_service import get_neon_service
 
 logger = logging.getLogger(__name__)
 
+def _serialize_for_json(obj: Any) -> Any:
+    """Convert non-JSON-serializable objects to JSON-compatible types."""
+    if isinstance(obj, UUID):
+        return str(obj)
+    elif isinstance(obj, datetime):
+        return obj.isoformat()
+    elif isinstance(obj, dict):
+        return {k: _serialize_for_json(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [_serialize_for_json(item) for item in obj]
+    return obj
+
 class GroupService:
     def __init__(self):
-        # Use cached provider to avoid repeated BigQuery client initializations
-        # Don't obtain the BigQueryService at import time. Resolve it lazily
+        # Use cached provider to avoid repeated client initializations
+        # Don't obtain the service at import time. Resolve it lazily
         # on first use so the service can be initialized at FastAPI startup.
-        self.bigquery_service = None
+        self.database_service = None
 
     @property
-    def bq(self) -> BigQueryService:
-        """Lazily return the initialized BigQueryService instance."""
-        if self.bigquery_service is None:
-            self.bigquery_service = get_bq_provider()
-        return self.bigquery_service
+    def bq(self):
+        """Lazily return the initialized Neon database service instance."""
+        if self.database_service is None:
+            self.database_service = get_neon_service()
+        return self.database_service
     
     async def validate_group(self, group_key: str) -> Optional[Dict[str, Any]]:
         """Validate if group exists by group_key and return raw group data.
@@ -56,11 +70,11 @@ class GroupService:
             canonical_group_key = group.get('group_key') or group.get('group') or group_key
 
             context = {
-                'id': group['id'],
+                'id': str(group['id']),  # Convert UUID to string for JSON serialization
                 'name': group.get('name'),
                 'group_key': canonical_group_key,
-                'members': members,
-                'stats': stats
+                'members': _serialize_for_json(members),
+                'stats': _serialize_for_json(stats)
             }
 
             logger.debug(f"Group context created: {context}")

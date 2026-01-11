@@ -2,17 +2,10 @@ import os
 from typing import Optional, List
 
 class Settings:
-    # Google Cloud
-    google_cloud_project: str = os.getenv("GOOGLE_CLOUD_PROJECT", "coins2025")
-    # Only set credentials path if explicitly provided (not needed in Cloud Run)
-    google_application_credentials: Optional[str] = os.getenv("GOOGLE_APPLICATION_CREDENTIALS") if os.getenv("GOOGLE_APPLICATION_CREDENTIALS") else None
-
-    # BigQuery
-    bq_dataset: str = os.getenv("BQ_DATASET", "db")
-    bq_table: str = os.getenv("BQ_TABLE", "catalog")
-    bq_history_table: str = os.getenv("BQ_HISTORY_TABLE", "history")
-    bq_groups_table: str = os.getenv("BQ_GROUPS_TABLE", "groups")
-    bq_group_users_table: str = os.getenv("BQ_GROUP_USERS_TABLE", "group_users")
+    # Neon PostgreSQL
+    database_url: Optional[str] = os.getenv("DATABASE_URL")  # postgresql://user:password@host/dbname
+    database_pool_size: int = int(os.getenv("DATABASE_POOL_SIZE", "20"))
+    database_timeout: int = int(os.getenv("DATABASE_TIMEOUT", "30"))
 
     # App Settings
     app_env: str = os.getenv("APP_ENV", "development")
@@ -53,6 +46,8 @@ class Settings:
                 warnings.append("WARNING: API docs enabled in production")
             if not self.require_admin_auth:
                 warnings.append("CRITICAL: Admin authentication disabled in production")
+            if not self.database_url:
+                warnings.append("CRITICAL: DATABASE_URL not set in production")
 
         if self.enable_admin_endpoints and not self.admin_api_key:
             warnings.append("WARNING: Admin endpoints enabled without API key")

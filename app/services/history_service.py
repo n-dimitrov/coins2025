@@ -9,8 +9,7 @@ import uuid
 import io
 from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
-from google.cloud import bigquery
-from app.services.bigquery_service import BigQueryService, get_bigquery_service as get_bq_provider
+from app.services.neon_service import get_neon_service
 from app.models.history import History, HistoryCreate
 from app.config import settings
 
@@ -18,14 +17,10 @@ logger = logging.getLogger(__name__)
 
 class HistoryService:
     """Service for managing history operations with enhanced schema support."""
-    
+
     def __init__(self):
-        # Use cached provider to avoid repeated BigQuery client initializations
-        self.bigquery_service = get_bq_provider()
-    
-    def get_enhanced_history_schema(self) -> List[bigquery.SchemaField]:
-        """Get the enhanced history schema - delegates to BigQueryService for consistency."""
-        return self.bigquery_service._get_history_schema()
+        # Use cached provider to avoid repeated client initializations
+        self.database_service = get_neon_service()
     
     def process_history_csv_dataframe(self, df: pd.DataFrame, created_by: str = 'admin') -> pd.DataFrame:
         """
@@ -77,12 +72,12 @@ class HistoryService:
     async def validate_and_check_duplicates(self, history_list: List[HistoryCreate]) -> Dict[str, Any]:
         """
         Validate history entries and check for duplicates.
-        
+
         Returns:
             Dictionary with 'new_entries' and 'duplicate_entries' lists
         """
         # Get existing history for duplicate checking
-        existing_history = await self.bigquery_service.get_all_history()
+        existing_history = await self.database_service.get_all_history()
         existing_keys = {
             f"{h['name']}_{h['id']}_{h['date'].strftime('%Y-%m-%d %H:%M:%S')}" 
             for h in existing_history
@@ -114,17 +109,17 @@ class HistoryService:
     
     async def bulk_import_history(self, history_list: List[HistoryCreate], created_by: str = 'admin') -> int:
         """
-        Bulk import history entries using the BigQuery service method.
+        Bulk import history entries using the Neon service method.
         This follows the same pattern as tools/import_history.py
         """
         logger.info(f"Starting bulk import of {len(history_list)} history entries")
-        
-        # Use the existing BigQuery service method which handles:
-        # - Table creation with enhanced schema
+
+        # Use the existing Neon service method which handles:
+        # - Table operations with schema
         # - UUID generation
         # - Proper timestamp handling
         # - Error handling
-        imported_count = await self.bigquery_service.import_history_batch(history_list)
+        imported_count = await self.database_service.import_history_batch(history_list)
         
         logger.info(f"Bulk import completed: {imported_count} records imported")
         return imported_count
@@ -184,7 +179,7 @@ class HistoryService:
         # If a specific user is requested, use optimized method
         if name:
             # get_user_owned_coins returns current owned coins for the user
-            owned = await self.bigquery_service.get_user_owned_coins(name)
+            owned = await self.database_service.get_user_owned_coins(name)
             if not owned:
                 return pd.DataFrame(columns=['name', 'id', 'date'])
 
@@ -206,7 +201,7 @@ class HistoryService:
 
         # No specific user: export all currently active ownerships
         # We'll query the history table to get latest active records per (name, coin_id)
-        history_data = await self.bigquery_service.get_all_history()
+        history_data = await self.database_service.get_all_history()
         if not history_data:
             return pd.DataFrame(columns=['name', 'id', 'date'])
 
