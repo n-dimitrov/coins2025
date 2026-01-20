@@ -40,15 +40,15 @@ class Settings:
         warnings = []
 
         if self.is_production:
-            if not self.admin_api_key:
-                warnings.append("CRITICAL: ADMIN_API_KEY not set in production")
+            # In production, admin endpoints must be disabled
+            if self.enable_admin_endpoints:
+                warnings.append("CRITICAL: Admin endpoints must be disabled in production")
             if self.enable_docs:
                 warnings.append("WARNING: API docs enabled in production")
-            if not self.require_admin_auth:
-                warnings.append("CRITICAL: Admin authentication disabled in production")
             if not self.database_url:
                 warnings.append("CRITICAL: DATABASE_URL not set in production")
 
+        # Only require API key if admin endpoints are actually enabled
         if self.enable_admin_endpoints and not self.admin_api_key:
             warnings.append("WARNING: Admin endpoints enabled without API key")
 

@@ -7,6 +7,34 @@ import os
 import json
 import pandas as pd
 import argparse
+import re
+
+def parse_volume_to_int(volume_str):
+    """Parse volume string to integer"""
+    if not volume_str or volume_str.strip() == '':
+        return None
+
+    # Remove 'coins' and extra whitespace
+    cleaned = volume_str.lower().replace('coins', '').strip()
+
+    # Handle different formats
+    # Format: "1 million", "30 million", "2.49 million"
+    million_match = re.search(r'([\d.]+)\s*million', cleaned)
+    if million_match:
+        num = float(million_match.group(1))
+        return int(num * 1_000_000)
+
+    # Format: "100,000", "1,000,000" (with commas) or "100 000", "1 000 000" (with spaces)
+    # Extract all digits and separators, then remove separators
+    num_match = re.search(r'([\d,\s]+)', cleaned)
+    if num_match:
+        num_str = num_match.group(1).replace(',', '').replace(' ', '')
+        try:
+            return int(num_str)
+        except ValueError:
+            pass
+
+    return None
 
 options = Options()
 options.add_argument("Accept=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
@@ -71,20 +99,31 @@ for coin in coins:
     # Vatican means Vatican City
     if country == "Vatican":
         country = "Vatican City"
-    featrue = coin.find_element(By.XPATH, './/p[1]')
-    description = coin.find_element(By.XPATH, './/p[2]')
-    volume = coin.find_element(By.XPATH, './/p[3]')
+
     image_url = coin.find_element(By.XPATH, './/img').get_attribute('src')
 
-    feature = featrue.text
-    if (len(featrue.text.split(':')) > 1):
-        feature = featrue.text.split(':')[1].strip()
-    descr = description.text
-    if (len(description.text.split(':')) > 1):
-        descr = description.text.split(':')[1].strip()
-    vol = volume.text
-    if (len(volume.text.split(':')) > 1):
-        vol = volume.text.split(':')[1].strip()
+    # Find paragraphs by their bold labels instead of position
+    feature = ""
+    descr = ""
+    vol = ""
+
+    try:
+        feature_elem = coin.find_element(By.XPATH, './/p[strong[contains(text(), "Feature:")]]')
+        feature = feature_elem.text.split(':', 1)[1].strip() if ':' in feature_elem.text else feature_elem.text
+    except NoSuchElementException:
+        pass
+
+    try:
+        desc_elem = coin.find_element(By.XPATH, './/p[strong[contains(text(), "Description:")]]')
+        descr = desc_elem.text.split(':', 1)[1].strip() if ':' in desc_elem.text else desc_elem.text
+    except NoSuchElementException:
+        pass
+
+    try:
+        vol_elem = coin.find_element(By.XPATH, './/p[strong[contains(text(), "Issuing volume:")]]')
+        vol = vol_elem.text.split(':', 1)[1].strip() if ':' in vol_elem.text else vol_elem.text
+    except NoSuchElementException:
+        pass
 
     images = []
     multiples = coin.find_elements(By.XPATH, '//div[@class="flickity-slider"]')
@@ -105,6 +144,7 @@ for coin in coins:
             image_url = multiple.find_element(By.XPATH, './/img').get_attribute('src')
             images.append(image_url)
 
+    # Store original volume text in JSON (parsing happens during CSV generation)
     if (len(images)==0):
         coin_json = {
             "country": country,
@@ -227,6 +267,9 @@ for y in ccdata:
                         ccode = three_letters[c]
                     _id = "CC" + y + ccode + "-A-" + coinidex + "-200"
 
+                    # Parse volume to integer for CSV
+                    volume_int = parse_volume_to_int(volume) if volume else None
+
                     row = {
                         "type": "CC",
                         "year": y,
@@ -236,7 +279,7 @@ for y in ccdata:
                         "id": _id,
                         "feature": feature,
                         "image": image,
-                        "volume": volume if volume is not None else ""
+                        "volume": volume_int if volume_int is not None else ""
                     }
                     newrows.append(row)
         else:
@@ -263,6 +306,9 @@ for y in ccdata:
                 coinidex = "CC" + str(index)
                 _id = "CC" + y + ccode + "-A-" + coinidex + "-200"
 
+                # Parse volume to integer for CSV
+                volume_int = parse_volume_to_int(volume) if volume else None
+
                 row = {
                     "type": "CC",
                     "year": y,
@@ -272,14 +318,31 @@ for y in ccdata:
                     "id": _id,
                     "feature": feature,
                     "image": image,
-                    "volume": volume if volume is not None else ""
+                    "volume": volume_int if volume_int is not None else ""
                 }
                 newrows.append(row)
 
     df = pd.DataFrame(newrows)
     if not df.empty:
         df = df[["type", "year", "country", "series", "value", "id", "image", "feature", "volume"]]
-        df.to_csv(output_csv, index=False)
+        # Write CSV with custom formatting - only quote feature column
+        with open(output_csv, 'w', newline='', encoding='utf-8') as f:
+            # Write header
+            f.write(','.join(df.columns) + '\n')
+            # Write data rows
+            for _, row in df.iterrows():
+                values = [
+                    str(row['type']),
+                    str(row['year']),
+                    str(row['country']),
+                    str(row['series']),
+                    str(row['value']),
+                    str(row['id']),
+                    str(row['image']),
+                    f'"{row["feature"]}"',  # Only feature is quoted
+                    str(row['volume']) if row['volume'] else ''
+                ]
+                f.write(','.join(values) + '\n')
         print(f"Data saved to {output_csv}")
     else:
         print("No rows to save to CSV")

@@ -214,12 +214,13 @@ credentials/
 **/service_account.json
 
 # Project-specific files
-# Keep .env templates but ignore active .env
-!.env.development
-!.env.production
-!.env.public
+# Ignore all .env files with sensitive credentials
+.env
 .env.local
 .env.temp
+.env.development
+.env.production
+.env.public
 
 # Google Cloud deployment logs
 gcloud_logs/

@@ -3,6 +3,7 @@
 venv
 __pycache__
 *.pyc
+.env
 .env.development
 .env.local
 node_modules
@@ -13,7 +14,7 @@ docs/
 README.md
 *.md
 scripts/
-data/
 .gitignore
 Dockerfile
 .dockerignore
+credentials/

@@ -13,15 +13,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - APP_ENV=production
       - PORT=8080
       - HOST=0.0.0.0
-      - GOOGLE_CLOUD_PROJECT=coins2025
     env_file:
-      - .env
+      - .env.production
     volumes:
-      # Mount credentials for Google Cloud
-      - ./credentials:/app/credentials:ro
       # Optional: Mount data directory for local files
       - ./data:/app/data:ro
     healthcheck:

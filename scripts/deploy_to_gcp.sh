@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Deploy My EuroCoins to Google Cloud Platform - Public Site
-# This script is a wrapper around the new deploy.sh script for public site deployment
+# Deploy My EuroCoins to Google Cloud Platform - Production
+# This is a simplified wrapper for production deployment with preset settings
 
 set -e  # Exit on any error
 
@@ -12,9 +12,17 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}🌐 My EuroCoins - Public Site Deployment to GCP${NC}"
-echo "================================================="
+echo -e "${GREEN}🚀 My EuroCoins - Production Deployment to Google Cloud${NC}"
+echo "============================================================"
 echo ""
+
+# Production settings (hardcoded)
+DEPLOYMENT_TYPE="cloud-run"
+PROJECT_ID="coins2025"
+SERVICE_NAME="my-eurocoins"
+REGION="us-central1"
+PORT="8080"
+ENVIRONMENT="production"
 
 # Check if we're in the right directory
 if [[ ! -f "main.py" ]]; then
@@ -22,9 +30,9 @@ if [[ ! -f "main.py" ]]; then
     exit 1
 fi
 
-# Check if the new deploy.sh script exists
+# Check if the deploy.sh script exists
 if [[ ! -f "scripts/deploy.sh" ]]; then
-    echo -e "${RED}❌ scripts/deploy.sh not found. Please ensure the new deployment script exists.${NC}"
+    echo -e "${RED}❌ scripts/deploy.sh not found.${NC}"
     exit 1
 fi
 
@@ -35,52 +43,66 @@ if ! gcloud auth list --filter=status:ACTIVE --format="value(account)" | grep -q
     gcloud auth login
 fi
 
-# Get current project or prompt user to set one
-PROJECT_ID=$(gcloud config get-value project 2>/dev/null || echo "")
-
-if [ -z "$PROJECT_ID" ]; then
-    echo -e "${YELLOW}📝 No project set. Please enter your Google Cloud project ID:${NC}"
-    read -p "Enter your Google Cloud Project ID: " PROJECT_ID
-    gcloud config set project $PROJECT_ID
+# Verify project exists
+echo -e "${BLUE}📋 Verifying Google Cloud project...${NC}"
+if ! gcloud projects describe $PROJECT_ID &>/dev/null; then
+    echo -e "${RED}❌ Project '$PROJECT_ID' not found or not accessible${NC}"
+    exit 1
 fi
 
 echo -e "${GREEN}✅ Using project: ${PROJECT_ID}${NC}"
+echo ""
 
 # Enable required APIs
-echo -e "${BLUE}🔌 Enabling required APIs...${NC}"
-gcloud services enable run.googleapis.com
-gcloud services enable bigquery.googleapis.com
+echo -e "${BLUE}🔌 Enabling required Google Cloud APIs...${NC}"
+gcloud services enable run.googleapis.com --project=$PROJECT_ID
+gcloud services enable cloudbuild.googleapis.com --project=$PROJECT_ID
 
 echo -e "${GREEN}✅ APIs enabled${NC}"
 echo ""
 
-# Deploy using the new script with public configuration
-echo -e "${BLUE}🚀 Deploying public read-only site to Cloud Run...${NC}"
-echo -e "${YELLOW}📋 Configuration:${NC}"
-echo "   🌐 Type: Cloud Run"
-echo "   🔒 Mode: Public (read-only, no admin access)"
-echo "   📍 Service: my-eurocoins"
-echo "   📍 Region: us-central1"
+# Show deployment configuration
+echo -e "${BLUE}📋 Production Deployment Configuration:${NC}"
+echo "   📦 Type:        Cloud Run"
+echo "   🌍 Environment: Production"
+echo "   ☁️  Project:     $PROJECT_ID"
+echo "   📍 Service:     $SERVICE_NAME"
+echo "   📍 Region:      $REGION"
+echo "   🚪 Port:        $PORT"
+echo ""
+echo -e "${YELLOW}⚠️  Admin Access: COMPLETELY DISABLED${NC}"
+echo "   • No admin endpoints"
+echo "   • No API documentation"
+echo "   • Strict CORS"
+echo "   • Production security enabled"
 echo ""
 
-# Call the new deploy script with public configuration
+echo ""
+echo -e "${BLUE}🚀 Starting production deployment...${NC}"
+echo ""
+
+# Call deploy.sh with production settings
 ./scripts/deploy.sh \
-    --type cloud-run \
-    --env public \
+    --type $DEPLOYMENT_TYPE \
     --project "$PROJECT_ID" \
-    --service my-eurocoins \
-    --region us-central1 \
-    --port 8080
+    --service $SERVICE_NAME \
+    --region $REGION \
+    --port $PORT
 
 echo ""
-echo -e "${GREEN}🎉 Public site deployment completed!${NC}"
+echo -e "${GREEN}🎉 Production deployment completed!${NC}"
 echo ""
-echo -e "${BLUE}🌐 Public Site Features:${NC}"
-echo "   ✅ Coin catalog browsing"
-echo "   ✅ Group viewing"
-echo "   ✅ Public pages accessible"
-echo "   🚫 Admin features disabled (secure for public)"
-echo "   🚫 API documentation hidden"
-echo "   🚫 Ownership modifications blocked"
+echo -e "${BLUE}📊 Deployment Information:${NC}"
+echo "   Service URL: https://console.cloud.google.com/run/detail/$REGION/$SERVICE_NAME?project=$PROJECT_ID"
 echo ""
-echo -e "${BLUE}ℹ️  You can manage your deployment at: https://console.cloud.google.com/run${NC}"
+echo -e "${BLUE}🔍 Monitor Your Deployment:${NC}"
+echo "   View logs:"
+echo "   gcloud logging read 'resource.type=\"cloud_run_revision\" AND resource.labels.service_name=\"$SERVICE_NAME\"' --limit 50 --project=$PROJECT_ID"
+echo ""
+echo "   Check service status:"
+echo "   gcloud run services describe $SERVICE_NAME --region $REGION --project=$PROJECT_ID"
+echo ""
+echo "   Test health endpoint:"
+echo "   curl https://\$(gcloud run services describe $SERVICE_NAME --region $REGION --format='value(status.url)' --project=$PROJECT_ID)/api/health"
+echo ""
+echo -e "${GREEN}✅ Production deployment ready!${NC}"

@@ -32,7 +32,7 @@ steps:
     - '--min-instances'
     - '0'
     - '--set-env-vars'
-    - 'APP_ENV=production,GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
+    - 'APP_ENV=production'
 
 images:
   - gcr.io/$PROJECT_ID/my-eurocoins:latest

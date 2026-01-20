@@ -40,7 +40,6 @@ PROJECT_ID=""
 SERVICE_NAME="myeurocoins"
 REGION="us-central1"
 PORT="8080"
-ADMIN_API_KEY=""
 
 # Help function
 show_help() {
@@ -57,16 +56,15 @@ Deployment Types:
 
 Options:
   -t, --type TYPE           Deployment type (cloud-run, docker, app-engine, server)
-  -e, --env ENVIRONMENT     Environment (production, public) [default: production]
+  -e, --env ENVIRONMENT     Environment (production) [default: production]
   -p, --project PROJECT_ID  Google Cloud project ID
   -s, --service SERVICE     Service name [default: myeurocoins]
   -r, --region REGION       Deployment region [default: us-central1]
   --port PORT               Server port [default: 8080]
-  --admin-key KEY           Admin API key (required for production)
   -h, --help                Show this help
 
 Examples:
-  $0 --type cloud-run --project coins2025 --admin-key "your-secret-key"
+  $0 --type cloud-run --project coins2025
   $0 --type docker
   $0 --type server --env public
 EOF
@@ -97,10 +95,6 @@ while [[ $# -gt 0 ]]; do
             ;;
         --port)
             PORT="$2"
-            shift 2
-            ;;
-        --admin-key)
-            ADMIN_API_KEY="$2"
             shift 2
             ;;
         -h|--help)
@@ -136,10 +130,7 @@ if [[ ! -f "main.py" ]]; then
     exit 1
 fi
 
-if [[ "$ENVIRONMENT" == "production" && -z "$ADMIN_API_KEY" ]]; then
-    print_error "Production deployment requires --admin-key parameter"
-    exit 1
-fi
+# Note: Admin is completely disabled in production, no admin key needed
 
 # Pre-deployment setup
 print_status "Setting up deployment environment..."
@@ -148,11 +139,8 @@ print_status "Setting up deployment environment..."
 if [[ "$ENVIRONMENT" == "production" ]]; then
     cp .env.production .env
     print_success "Production environment configured"
-elif [[ "$ENVIRONMENT" == "public" ]]; then
-    cp .env.public .env
-    print_success "Public read-only environment configured"
 else
-    print_error "Invalid environment: $ENVIRONMENT"
+    print_error "Invalid environment: $ENVIRONMENT (only 'production' supported)"
     exit 1
 fi
 
@@ -164,10 +152,6 @@ PORT=$PORT
 HOST=0.0.0.0
 APP_ENV=$ENVIRONMENT
 EOF
-
-if [[ -n "$ADMIN_API_KEY" ]]; then
-    echo "ADMIN_API_KEY=$ADMIN_API_KEY" >> .env
-fi
 
 # Validate dependencies
 print_status "Validating dependencies..."
@@ -185,8 +169,7 @@ fastapi==0.104.1
 uvicorn[standard]==0.24.0
 jinja2==3.1.2
 python-multipart==0.0.6
-google-cloud-bigquery==3.12.0
-google-auth==2.23.4
+psycopg[binary]==3.1.12
 python-dotenv==1.0.0
 pydantic==2.5.0
 starlette==0.27.0
@@ -267,6 +250,7 @@ EOF
 venv
 __pycache__
 *.pyc
+.env
 .env.development
 .env.local
 node_modules
@@ -277,16 +261,24 @@ docs/
 README.md
 *.md
 scripts/
-data/
 .gitignore
 Dockerfile
 .dockerignore
+credentials/
 EOF
             print_success ".dockerignore created"
         fi
 
         # Build and deploy
         print_status "Building and deploying to Cloud Run..."
+
+        # Extract database URL from environment for Cloud Run
+        DATABASE_URL=$(grep "^DATABASE_URL=" .env.production | cut -d'=' -f2-)
+
+        if [[ -z "$DATABASE_URL" ]]; then
+            print_error "DATABASE_URL not found in .env.production"
+            exit 1
+        fi
 
         gcloud run deploy $SERVICE_NAME \
             --source . \
@@ -297,7 +289,7 @@ EOF
             --memory 1Gi \
             --cpu 1 \
             --max-instances 10 \
-            --set-env-vars "APP_ENV=$ENVIRONMENT,ENABLE_OWNERSHIP_ENDPOINTS=true,REQUIRE_ADMIN_AUTH=false" \
+            --set-env-vars "APP_ENV=$ENVIRONMENT,DATABASE_URL=$DATABASE_URL,DATABASE_POOL_SIZE=5,DATABASE_TIMEOUT=30,CACHE_DURATION_MINUTES=15,LOG_LEVEL=WARNING,HOST=0.0.0.0,ENABLE_ADMIN_ENDPOINTS=false,ENABLE_OWNERSHIP_ENDPOINTS=true,ENABLE_DOCS=false,REQUIRE_ADMIN_AUTH=true,STRICT_CORS=true" \
             --timeout 300
 
         # Get service URL
